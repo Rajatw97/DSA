@@ -1,0 +1,14 @@
+import java.math.BigInteger;
+public class LargeFactorial {
+    public String solve(int A) {
+
+        BigInteger prod=new BigInteger("1");
+
+        for(long i=A;i>1;i--){
+            prod=prod.multiply(BigInteger.valueOf(i));
+        }
+        
+        return prod+"";
+        
+    }
+}
