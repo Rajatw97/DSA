@@ -1,0 +1,39 @@
+public class Solution {
+   // Use reference variables pointing to start & end index of Row & Column.
+    public ArrayList<Integer> spiralOrder(final List<ArrayList<Integer>> A) {
+    
+        ArrayList<Integer> result=new ArrayList<Integer>();
+        int rowstart=0,columnstart=0,rowend=A.size(),columnend=A.get(0).size();
+
+        while(columnstart<columnend && rowstart<rowend){
+
+        for( int i=rowstart;i<columnend;i++){
+           
+                result.add(A.get(rowstart).get(i));
+        }
+        rowstart++;
+
+        for( int i=rowstart;i<rowend;i++){
+      
+                result.add(A.get(i).get(columnend-1));
+        }
+        columnend--;
+        
+        if(rowstart<rowend){
+        for( int i=columnend;i>columnstart;i--){
+            
+                result.add(A.get(rowend-1).get(i-1));
+        }
+        rowend--;
+        }
+        if(columnstart<columnend){
+        for( int i=rowend;i>rowstart;i--){
+          
+                result.add(A.get(i-1).get(columnstart));
+        }
+        columnstart++;
+        }
+        }
+        return result;
+    }
+}
