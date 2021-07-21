@@ -1,7 +1,9 @@
-// Variation of Kadane's Algorithm
-// Q. Find out the maximum sum sub-array of non negative numbers from A. Conditions:
-// 1. If there is a tie, then compare with segment's length and return segment which has maximum length.
-// 2.If there is still a tie, then return the segment with minimum starting index.
+
+Q. Find out the maximum sum sub-array of non negative numbers from A. Conditions:
+ 1. If there is a tie, then compare with segment's length and return segment which has maximum length.
+ 2.If there is still a tie, then return the segment with minimum starting index.
+ 
+Approach: Variation of Kadane's Algorithm 
 
 import java.util.*;
 public class Solution {
@@ -11,8 +13,7 @@ public class Solution {
         int left=0,right=0,leftindex=-1,rightindex=-1;
         long sum=0,result=0;
         for(int i=0;i<A.size();i++){
-
-            if(A.get(i)>=0){
+                if(A.get(i)>=0){
                 sum+=A.get(i);
                 if(sum>result || (sum==result && rightindex-leftindex<=right-left)){   
                     result=sum;
