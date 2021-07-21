@@ -1,0 +1,18 @@
+//Given a 2D-array, you can move in any direction(8 directions possible). You are given a sequence of points and the order in which you need to cover the points.
+//Give the minimum number of steps in which you can achieve it. You start from the first point.
+// I/P:  A = [0, 1, 1]  B = [0, 1, 2]
+// O/P: 2
+
+public class Solution {
+    public int coverPoints(ArrayList<Integer> A, ArrayList<Integer> B) {
+
+        int steps=0,row=0,column=0;
+        for(int i=0;i<A.size()-1;i++){
+            row=Math.abs(A.get(i)-A.get(i+1));
+            column=Math.abs(B.get(i)-B.get(i+1));
+            steps+=Math.max(row,column);
+    
+        }
+        return steps;
+    }
+}
