@@ -1,0 +1,23 @@
+//Given an integer array A of size N.
+//You can pick B elements from either left or right end of the array A to get maximum sum.
+//Find and return this maximum possible sum.
+// I/P: A = [5, -2, 3 , 1, 2]
+// B : 3
+// O/P : 8
+// Approach is to find min sum of N-B elements using Window Sliding technique and subtract it from total sum. 
+public class Solution {
+    public int solve(ArrayList<Integer> A, int B) {
+        int sum=0,totalsum=0;
+        for(int i=0;i<A.size()-B;i++){
+            sum+=A.get(i);           
+            totalsum+=A.get(i);
+        }
+        int minSum=sum;
+        for(int i=A.size()-B;i<A.size();i++){
+                sum=sum+A.get(i)-A.get(i-A.size()+B);
+                minSum=Math.min(sum,minSum);
+                totalsum+=A.get(i);
+        }
+        return totalsum-minSum;
+    }
+}
