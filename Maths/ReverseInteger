@@ -1,0 +1,23 @@
+Q Given a signed 32-bit integer x, return x with its digits reversed. If reversing x causes the value to go outside the signed 32-bit integer range [-231, 231 - 1], then return 0.
+
+Approach: For handling large integers use String manipulation.
+
+Soln :
+
+   class Solution {
+    public int reverse(int x) {
+        try{
+        StringBuffer str1=new StringBuffer(String.valueOf(x));
+           String str=str1.reverse().toString();
+            if(x<0)
+                str="-"+str.substring(0,str.length()-1);
+            int y= Integer.parseInt(str.toString());
+            if (y>Integer.MAX_VALUE)
+                return 0;    
+         return y;
+        
+    }catch(Exception e){}
+     return 0;  
+    }
+    
+}
