@@ -1,0 +1,20 @@
+Q. Find the factorial of a large number?
+
+Approach: For large numbers use Big integer class and the functions present in it.
+
+Solution: 
+
+import java.math.BigInteger;
+public class LargeFactorial {
+    public String solve(int A) {
+
+        BigInteger prod=new BigInteger("1");
+
+        for(long i=A;i>1;i--){
+            prod=prod.multiply(BigInteger.valueOf(i));
+        }
+        
+        return prod+"";
+        
+    }
+}
