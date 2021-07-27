@@ -1,0 +1,21 @@
+Q.Given  n= no of friends, k= Friend who loose the game and leaves the circle.
+  Find the winner of the game?
+  
+  
+Solution:
+
+class Solution {
+    public int findTheWinner(int n, int k) {
+     
+        return josephus(n,k)+1;
+        
+    }
+    
+    int josephus(int n, int k){
+        
+        if(n==1)
+            return 0;
+        
+        return (josephus(n-1,k)+k)%n;
+    }
+}
