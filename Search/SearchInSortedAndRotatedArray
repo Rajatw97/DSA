@@ -1,0 +1,40 @@
+Q. Given the array nums after the rotation and an integer target, return the index of target if it is in nums, or -1 if it is not in nums.
+
+class Solution {
+    
+    
+    public int search(int[] nums, int target) {
+        
+        int start=0,end=nums.length-1;
+        
+        
+        while(start<=end){
+            
+            int mid=(start+end)/2;     
+         
+            if(nums[mid]==target)
+                return mid;
+            else
+            if (nums[mid]>=nums[0]){
+                //left half sorted
+                
+                if(target<nums[mid] && nums[start]<=target){
+                    //Target lies in first half
+                    end=mid-1;
+                }
+                else 
+                    start=mid+1;
+                
+            }
+            else{ //right half sorted
+                
+                if(target>nums[mid] && nums[end]>=target)
+                    start=mid+1;
+                else
+                    end=mid-1;
+            }
+        }
+        return -1;
+        
+    }
+}
