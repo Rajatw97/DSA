@@ -1,0 +1,28 @@
+Q. Given an integer array nums that may contain duplicates, return all possible subsets (the power set).
+
+The solution set must not contain duplicate subsets. Return the solution in any order.
+
+
+class Solution {
+    
+   Set<List<Integer>> list=new HashSet<>();
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        
+        Arrays.sort(nums);
+        recurseSubset(nums,new ArrayList<>(),0);
+        return list.stream().distinct().collect(Collectors.toList());
+    }
+    
+    void recurseSubset(int[] nums, List<Integer> current, int index){
+        
+        if(index==nums.length)
+        { 
+            list.add(new ArrayList<>(current));
+         
+            return;
+        }
+        recurseSubset(nums,new ArrayList<>(current),index+1);
+        current.add(nums[index]);
+        recurseSubset(nums,new ArrayList<>(current),index+1);
+    }
+}
