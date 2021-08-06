@@ -1,0 +1,39 @@
+Q. Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i].
+
+Approach:
+
+1. Calculate product of entire array then traverse and divide product by current element.
+
+2. Create prefix and suffix array so that it contains all elements before and after it respectively. Then find product of those 2 to get the answer for each index.
+  // prefix[i]=prefix[i-1]*arr[i-1],  suffix[i]= suffix[i+1]*arr[i+1] , ans[i]= pefix[i]*suffix[i]
+
+3.(Most optimised) Similar to 2nd approach without using any extra space.
+
+
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        
+        int curr=1;
+        int[] ans =new int[nums.length];
+        Arrays.fill(ans,1);
+        for(int i=0;i<nums.length;i++){
+        
+            ans[i]*=curr;
+            curr*=nums[i];            
+            
+        }
+        
+        curr=1;
+        
+        for(int j=nums.length-1;j>=0;j--){
+            
+            ans[j]*=curr;
+            curr*=nums[j];
+        }
+        
+        return ans;
+    
+    }
+    
+    
+}
