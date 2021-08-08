@@ -1,5 +1,7 @@
 Q. Find the kth largest element
 
+Approach: Sorting, MaxHeap
+
 //Quickselect algorithm
 
 class Solution {
