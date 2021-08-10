@@ -1,0 +1,5 @@
+Different types of problems in Hashing and the pattern used to solve them are :-
+
+1. SubArray Sum, Longest subarray - Prefix sum + Hashing
+2. Union, Intersection - Simple use of HashSet  and Hashmap
+3. Frequency or Index related-  Use HashMap
