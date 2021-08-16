@@ -17,8 +17,6 @@ class BrowserHistory {
     }
     
     public void visit(String url) {
-        if (browser.next != null)
-			browser.next.prev = null; 
         browser.next=new Node(url, browser);        
         browser=browser.next;
     }
