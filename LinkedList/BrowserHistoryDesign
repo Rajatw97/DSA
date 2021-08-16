@@ -1,0 +1,65 @@
+Q. You have a browser of one tab where you start on the homepage and you can visit another url, get back in the history number of steps or move forward in the history number of steps.
+   Implement the BrowserHistory class:
+
+BrowserHistory(string homepage) Initializes the object with the homepage of the browser.
+void visit(string url) Visits url from the current page. It clears up all the forward history.
+string back(int steps) Move steps back in history. If you can only return x steps in the history and steps > x, you will return only x steps. Return the current url after moving back in history at most steps.
+string forward(int steps) Move steps forward in history. If you can only forward x steps in the history and steps > x, you will forward only x steps. Return the current url after forwarding in history at most steps.
+
+class BrowserHistory {
+
+    Node browser;
+    
+    public BrowserHistory(String homepage) {
+
+         browser=new Node(homepage, null);
+         
+    }
+    
+    public void visit(String url) {
+        if (browser.next != null)
+			browser.next.prev = null; 
+        browser.next=new Node(url, browser);        
+        browser=browser.next;
+    }
+    
+    public String back(int steps) {
+    
+        while(steps-- >0 && browser.prev!=null){
+            browser=browser.prev;
+        }
+        return browser.val;
+    
+    }
+    
+    public String forward(int steps) {
+        
+
+        while(steps-- > 0 && browser.next!=null){
+            browser=browser.next;
+          
+        }
+        return browser.val;
+    
+}
+}
+ 
+   public class Node {
+        String val;
+        Node prev;
+        Node next;
+ 
+        public Node(String val, Node prev) {
+            this.val = val;
+            this.prev = prev;
+            next = null;
+        }
+    }
+
+/**
+ * Your BrowserHistory object will be instantiated and called as such:
+ * BrowserHistory obj = new BrowserHistory(homepage);
+ * obj.visit(url);
+ * String param_2 = obj.back(steps);
+ * String param_3 = obj.forward(steps);
+ */
