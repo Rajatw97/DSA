@@ -1,0 +1,55 @@
+Q. Given an array nums which consists of non-negative integers and an integer m, you can split the array into m non-empty continuous subarrays.
+   Write an algorithm to minimize the largest sum among these m subarrays.
+   
+Input: nums = [7,2,5,10,8], m = 2
+Output: 18
+Explanation:
+There are four ways to split nums into two subarrays.
+The best way is to split it into [7,2,5] and [10,8],
+where the largest sum among the two subarrays is only 18.
+
+Approach: 
+  For m=1 largest value will be sum of array and for m=N largest value woulde be the max element in the array.
+  So the answer lies within [max,sum] range. Do binary search on this range with condition of m and find answer.
+  
+Observation:  Kind of similar to chocolate distribution problem where you find range and do binary search on it with check on no of childrens.
+
+class Solution {
+    public int splitArray(int[] nums, int m) {
+      
+        int max=nums[0], sum=0;
+        
+        for(int i=0;i<nums.length;i++)
+        {   
+            sum+=nums[i];
+            max=Math.max(nums[i],max);
+        }
+        
+        return binSearch(nums,max,sum,m);
+        
+    }
+    
+    int binSearch(int[] nums,int start, int end, int m){
+          
+            while(start<end)
+            {
+            int pieces=1,sum=0;    
+            int mid= (start+end)/2;
+            for(int i=0;i<nums.length;i++){
+                if(sum+nums[i]<=mid)
+                    sum+=nums[i];
+                else{
+                    pieces++;
+                    sum=nums[i];
+                    }
+            }
+            if(pieces<=m){
+                end=mid;
+            }
+            else
+               start=mid+1;
+            }    
+        return end;
+        }
+        
+}
