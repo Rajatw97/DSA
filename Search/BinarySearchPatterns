@@ -1,0 +1,5 @@
+To identify if your problem contains binary search look for following pattern in the problem:
+
+1. Given array is sorted in any order. Eg: Ceiling, Floor
+2. Bitonic array (array containing both asc and desc order) Eg- Peak Element, Mountain Array, Search in sorted and rotated array
+3. Array is not sorted but you need to distribute in fixed no of parts, so find range in which your answer can lie and then call binary search. Eg- Choc Distr, Split Array Largest Sum
