@@ -1,0 +1,31 @@
+Q. Given an unsorted integer array nums, return the smallest missing positive integer.
+
+Approach: You have to traverse and see from 1 to n everytime to find out the missing number, so apply cycle sort and find index which doesnt match with value. 
+
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        
+        int i=0;
+        while(i<nums.length){
+            
+            int corr_ind=nums[i]-1;
+            if(nums[i]>0 && nums[i] <=nums.length && nums[i]!=nums[corr_ind])
+                swap(nums,i,corr_ind);
+            else
+                i++;
+        }
+        
+        for(i=0;i<nums.length;i++){
+            if(nums[i]!=i+1)
+                return i+1;
+        }
+        return nums.length+1;
+    }
+    
+     void swap(int[] nums, int firstIndex, int secondIndex){
+        
+        int temp=nums[secondIndex];
+        nums[secondIndex]=nums[firstIndex];
+        nums[firstIndex]=temp;
+    }
+}
