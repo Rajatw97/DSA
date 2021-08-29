@@ -1,0 +1,37 @@
+Q. You have a set of integers s, which originally contains all the numbers from 1 to n. Unfortunately.
+Due to some error, one of the numbers in s got duplicated to another number in the set.
+Find the number that occurs twice and the number that is missing and return them in the form of an array.
+
+Input: nums = [1,2,2,4]
+Output: [2,3]
+
+Approach: Cycle Sort
+Missing Index=i+1
+Duplicate number: nums[missing index]
+
+class Solution {
+    public int[] findErrorNums(int[] nums) {
+        
+        int i=0;
+        while(i<nums.length){
+            int corr_index=nums[i]-1;
+            if(nums[i]!=nums[corr_index])
+                swap(nums,i,corr_index);
+            else
+                i++;
+        }
+        
+        for(int j=0;j<nums.length;j++){
+            if(nums[j]!=j+1)
+                return new int[] {nums[j],j+1};
+        }
+        return new int[] {-1,-1};
+    } 
+ 
+    void swap(int[] nums, int firstIndex, int secondIndex){
+        
+        int temp=nums[secondIndex];
+        nums[secondIndex]=nums[firstIndex];
+        nums[firstIndex]=temp;
+    }
+}
