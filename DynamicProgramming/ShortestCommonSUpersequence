@@ -1,0 +1,56 @@
+Q. Given two strings str1 and str2, return the shortest string that has both str1 and str2 as subsequences. If there are multiple valid strings, return any of them.
+
+Input: str1 = "abac", str2 = "cab"
+Output: "cabac"
+
+Approach: Length of minimum supersequence = length of s1 + length of s2 - common char in order(LCS)
+          So find LCS string and then travel both the Strings while comparing with LCS string.
+class Solution {
+    public String shortestCommonSupersequence(String str1, String str2) {
+        
+        int p1=0,p2=0;
+        String ans="";
+        
+        String lcs= longestCommonSubsequence(str1,str2);
+    
+        for(char c: lcs.toCharArray()){
+            
+            while(p1<str1.length() && str1.charAt(p1)!=c)
+                ans+=str1.charAt(p1++);
+            
+            while(p2<str2.length() && str2.charAt(p2)!=c)
+                ans+=str2.charAt(p2++);
+            
+            ans+=c;
+            ++p1;
+            ++p2;
+        }
+        
+        if(p1 < str1.length())
+            ans += str1.substring(p1);
+        if(p2 < str2.length())
+            ans += str2.substring(p2);
+        
+        return ans;
+    }
+    
+     public String longestCommonSubsequence(String text1, String text2) {
+       
+        String[][] dp= new String[text1.length()+1][text2.length()+1];
+        
+        for(int i=0;i<=text1.length();i++)
+        {
+            for(int j=0;j<=text2.length();j++){
+                
+                if(i==0 || j==0)
+                    dp[i][j]="";
+                else if(text1.charAt(i-1) == (text2.charAt(j-1)))
+                    dp[i][j]= dp[i-1][j-1] + text1.charAt(i-1) ;
+                else
+                    dp[i][j]=dp[i-1][j].length()>dp[i][j-1].length()?dp[i-1][j]:dp[i][j-1];
+            }
+        }
+        
+        return dp[text1.length()][text2.length()];
+    }
+}
