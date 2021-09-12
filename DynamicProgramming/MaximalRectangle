@@ -1,0 +1,84 @@
+Q. Given a rows x cols binary matrix filled with 0's and 1's, find the largest rectangle containing only 1's and return its area.
+
+Input: matrix = [["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]
+Output: 6
+
+Approach: Based on  max area of a histogram.
+
+class Solution {
+    public int maximalRectangle(char[][] matrix) {
+        
+        if(matrix.length==0)
+            return 0;
+        
+        int row=matrix.length, coln=matrix[0].length;
+        int[][] mat= new int [row][coln];
+        
+        for(int i=0;i<row;i++){
+            for(int j=0;j<coln;j++)
+                mat[i][j]=matrix[i][j]=='1'? 1: 0;
+        }
+        int maxValue=Integer.MIN_VALUE, area=0;
+        for(int i=0;i< row;i++){
+            
+            if(i==0)
+                area=largestRectangleArea(mat[0]);
+            else
+            {
+                for(int j=0;j<coln;j++){
+                    if(mat[i][j]==1)
+                        mat[i][j]+=mat[i-1][j];
+                }
+                area=largestRectangleArea(mat[i]);
+            }
+            maxValue=Math.max(area,maxValue);
+            
+        }
+        
+        return maxValue;
+        
+    }
+    
+    public int largestRectangleArea(int[] heights) {
+        
+        int[] left=new int[heights.length];
+        int[] right=new int[heights.length];
+        
+        Stack<Integer> stack=new Stack<>();
+        
+        for(int i=0;i<heights.length;i++){
+            
+            if(stack.empty())
+                left[i]=0;
+             
+            else{ 
+                while(!stack.empty() && heights[stack.peek()]>=heights[i])
+                        stack.pop();
+                left[i]=stack.empty() ? 0: 1+stack.peek();
+               }
+             stack.push(i);
+            }
+        
+        while(!stack.empty())
+            stack.pop();
+        
+        for(int i=heights.length-1;i>=0;i--){
+            
+            if(stack.empty())
+                right[i]=heights.length-1;    
+            else{ 
+                while(!stack.empty() && heights[stack.peek()] >= heights[i])
+                        stack.pop();
+                right[i]=stack.empty() ? heights.length-1: stack.peek()-1; 
+                }
+            stack.push(i);
+            }
+        int maxArea=0;
+        for(int i=0;i<heights.length;i++){
+            
+            maxArea=Math.max(maxArea,(right[i]-left[i]+1)* heights[i]);
+        }
+        
+        return maxArea;
+    }
+}
