@@ -1,0 +1,40 @@
+ 
+ class Solution{
+ 
+ public static void main(String[] args){
+
+        Scanner scan= new Scanner(System.in);
+        System.out.println("Enter no of vertices and edges");
+        int V= scan.nextInt();
+        int E=scan.nextInt();
+        int[][] edge=new int[V][V];
+        System.out.println("edges:"+E +", V:"+V);
+        System.out.println("Enter the edges");
+        for(int i=0;i<E;i++){
+            int firstVertex= scan.nextInt();
+            int secondVertex=scan.nextInt();
+            edge[firstVertex][secondVertex]=1;
+            edge[secondVertex][firstVertex]=1;
+        }
+        System.out.println("Bfs: ");
+        bfsAdjMatrix(edge,new boolean[V],V,0);
+    }
+    
+    void bfsAdjMatrix(int[][] edge, boolean[] visited, int V, int start ){
+
+        Queue<Integer> vertices=new LinkedList<>();
+        vertices.add(start);
+        visited[start]=true;
+
+        while(!vertices.isEmpty()){
+
+          int curr=  vertices.poll();
+          System.out.print(curr+ " ");
+          for(int i=0;i<V;i++) {
+              if (edge[curr][i] == 1 && !visited[i])
+              { vertices.add(i);
+                visited[i] = true;
+              }
+          }
+        }
+    }
