@@ -38,3 +38,14 @@
           }
         }
     }
+    
+  For disconnected Graphs:  Call disconnectedComponents function in main instead of calling dfs directly.
+  
+      void disconnectedComponents(int[][] edge,boolean[] visited, int V, int start){
+
+        for(int i=0;i<V;i++){
+            if(!visited[i]) {
+                bfsAdjMatrix(edge, visited, V, i);
+            }
+            }
+    }
