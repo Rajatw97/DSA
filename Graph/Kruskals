@@ -1,0 +1,77 @@
+I/P: 
+Enter no of vertices and edges
+6 11
+edges:11, V:6
+Enter the edges and wt
+0 1 2
+1 3 1
+0 2 4
+2 4 9
+4 5 5
+3 5 7
+4 3 11
+2 5 10
+0 3 3
+2 1 8
+2 3 6
+O/P: MST:
+Edge{source=1, dest=3, weight=1}
+Edge{source=0, dest=1, weight=2}
+Edge{source=0, dest=2, weight=4}
+Edge{source=4, dest=5, weight=5}
+Edge{source=3, dest=5, weight=7}
+
+public class Kruskals {
+
+      class Edge {
+
+        int source;
+        int dest;
+        int weight;
+        
+        }
+
+
+    void inputKruskals(int V, int E){
+        Scanner scan=new Scanner(System.in);
+        Edge[] edges=new Edge[E];
+        for(int i=0;i<E;i++){
+
+            edges[i]=new Edge(scan.nextInt(),scan.nextInt(),scan.nextInt());
+        }
+
+        kruskals(edges,V,E);
+    }
+    void kruskals(Edge[] input,int V,int E){
+
+        Arrays.sort(input,(a,b)->a.getWeight()-b.getWeight());
+        Edge[] output=new Edge[E];
+        int count=0, i=0;
+        int[] parent = new int[V];
+        for (int j = 0; j < V; j++)
+            parent[j] = j;
+        while (count!=V-1){
+            Edge curr=input[i];
+            int sourceParent = findParent(curr.getSource(),parent);
+            int destParent = findParent(curr.getDest(),parent);
+            if(sourceParent!=destParent)
+            {
+                output[count]=curr;
+                parent[sourceParent]=destParent;
+                count++;
+            }
+            i++;
+        }
+
+        for(int k=0;k<V-1;k++)
+            System.out.println(output[k]);
+
+    }
+
+    int findParent(int V,int[] parent){
+        if(parent[V]==V)
+            return V;
+        return findParent(parent[V],parent);
+    }
+
+}
