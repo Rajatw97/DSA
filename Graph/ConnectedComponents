@@ -1,0 +1,33 @@
+I/P: Enter no of vertices and edges
+4 4
+edges:4, V:4
+Enter the edges
+0 1
+1 2
+3 3
+2 1
+
+O/p: [0, 1, 2] [3]  
+
+ void connectedComponents(int[][] edge,boolean[] visited, int V, int start){
+        List<List<Integer>> list= new ArrayList<>();
+        List<Integer> sublist;
+        for(int i=0;i<V;i++){
+            if(!visited[i]) {
+                sublist= dfsAdjMatrix(edge, visited, V, i,new ArrayList<>());
+                list.add(new ArrayList<>(sublist));
+                sublist.clear();
+            }
+        }
+        list.forEach(System.out::println);
+    }
+    
+    List<Integer> dfsAdjMatrix(int[][] edge, boolean[] visited, int V, int start, List<Integer> sublist){
+        visited[start]=true;
+        sublist.add(start);
+        for(int i=0;i<V;i++){
+            if(edge[start][i]==1 && !visited[i])
+               dfsAdjMatrix(edge,visited,V,i,sublist);
+        }
+        return sublist;
+    }
