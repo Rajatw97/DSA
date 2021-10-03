@@ -1,0 +1,21 @@
+Note: Not a recursive problem
+
+Q.Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+Input: s = "([)]"
+Output: false
+
+Note: Not much efficient, better solution with Stack.
+
+class Solution {
+    public boolean isValid(String s) {
+      
+          int length;
+
+        do {
+            length = s.length();
+            s = s.replace("()", "").replace("{}", "").replace("[]", "");
+        } while(length != s.length());
+    
+        return s.length() == 0;
+    }
+}
