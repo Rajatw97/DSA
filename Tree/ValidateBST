@@ -1,0 +1,22 @@
+Q. Given the root of a binary tree, determine if it is a valid binary search tree (BST).
+
+I/P:Input: root = [5,1,4,null,null,3,6]
+Output: false
+
+class Solution {
+    public boolean isValidBST(TreeNode root) {     
+        if(root==null)
+            return true;       
+        return (checkBST(root.left,Long.MIN_VALUE,root.val) && checkBST(root.right, root.val,Long.MAX_VALUE));
+    }
+    
+    boolean checkBST(TreeNode curr, long min, long max){
+        
+        if(curr==null)
+            return true;
+        if(curr.val>min && curr.val<max)
+           return (checkBST(curr.left,min,curr.val) && checkBST(curr.right, curr.val,max));
+        
+        return false;
+    }
+}
