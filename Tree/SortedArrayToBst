@@ -1,0 +1,22 @@
+Q. Given an integer array nums where the elements are sorted in ascending order, convert it to a height-balanced binary search tree.
+
+
+class Solution {
+    
+    public TreeNode sortedArrayToBST(int[] nums) {
+        return recursiveBst(nums,0,nums.length-1);
+    }
+    
+    public TreeNode recursiveBst(int[] nums, int low, int high){
+        if(low>high){
+            return null;
+        }
+        int mid=(low+high)/2; 
+        TreeNode root=new TreeNode(nums[mid]);
+        root.left=recursiveBst(nums,low,mid-1);
+        root.right=recursiveBst(nums,mid+1,high);
+        return root;
+    }
+        
+    
+}
