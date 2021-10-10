@@ -1,0 +1,30 @@
+
+
+class Tree
+{
+    //Function to return list containing elements of left view of binary tree.
+    ArrayList<Integer> list=new ArrayList<>();
+    boolean[] visited=new boolean[1001]; // can be initialsied by calculating depth
+    ArrayList<Integer> leftView(Node root)
+    {
+      return leftViewList(root,0);
+    }
+    
+     ArrayList<Integer> leftViewList(Node root, int level){
+         
+         if(root==null)
+            return list;
+            
+        if(!visited[level])
+        {
+            visited[level]=true;
+            list.add(root.data);
+        }
+        
+        leftViewList(root.left,level+1);
+        leftViewList(root.right,level+1);
+        
+        return list;
+     }
+    
+}
