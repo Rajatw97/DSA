@@ -1,6 +1,6 @@
 Q. Given the root of a binary search tree, and an integer k, return the kth smallest value (1-indexed) of all the values of the nodes in the tree.
 
-Approach:Apply Iterative inorder traversal
+Approach 1:Apply Iterative inorder traversal
 
 class Solution {
     public int kthSmallest(TreeNode root, int k) {
@@ -16,5 +16,33 @@ class Solution {
      }
      return root.val;
  
+    }
+}
+
+Approach 2: Recurvie solution
+
+class Solution {
+    
+    int element=-1;
+    public int kthSmallest(TreeNode root, int k) {
+        element=k;
+        return solve(root);
+        
+    }
+    
+    int solve(TreeNode root){
+        
+        if(root==null)
+            return 0;
+        
+        int left= solve(root.left);
+        if(left!=0)
+            return left;
+        element-=1;
+        if(element==0)
+            return root.val;
+        
+        return solve(root.right);  
+        
     }
 }
