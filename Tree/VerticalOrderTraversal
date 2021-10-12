@@ -1,0 +1,36 @@
+Q. Given the root of a binary tree, calculate the vertical order traversal of the binary tree.
+
+Input: root = [3,9,20,null,null,15,7]
+Output: [[9],[3,15],[20],[7]]
+
+class Solution {
+    
+    Map<Integer,List<Integer>> map=new TreeMap<>();
+    public List<List<Integer>> verticalTraversal(TreeNode root) {
+        
+        solve(root,0);
+        List<List<Integer>> result= new ArrayList<>();
+        for(List<Integer> it:map.values())
+            result.add(it);
+        
+        return result;
+    }
+    
+    void solve(TreeNode root, int level){
+        
+        if(root==null)
+            return;
+       
+        if(map.containsKey(level)){
+            List<Integer> list=map.get(level);
+            list.add(root.val);
+            
+        }
+        else
+            map.put(level,new ArrayList<Integer>(List.of(root.val)));
+        
+        solve(root.left,level-1);
+        solve(root.right,level+1);
+        
+    }
+}
