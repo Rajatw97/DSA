@@ -1,0 +1,70 @@
+Q.The n-queens puzzle is the problem of placing n queens on an n x n chessboard such that no two queens attack each other.
+
+Input: n = 4
+Output: [[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]]
+
+
+class Solution {
+    List<List<String>> result=new ArrayList<>();
+    public List<List<String>> solveNQueens(int n) {
+        
+         helper(new boolean[n][n],0);
+         return result;
+    }
+    
+    void helper(boolean[][] board, int row){
+        
+        
+        if(row==board.length){
+            display(board);
+            return;
+        }
+        for(int col=0;col<board.length;col++){
+            
+            if(isSafe(board,row,col)){
+                board[row][col]=true;
+                helper(board,row+1);
+                board[row][col]=false;
+            }
+        }   
+        
+    }
+    
+    void display(boolean[][] board){
+        List<String> list=new ArrayList<>();
+        for(boolean[] row:board){
+            String str="";
+            for(boolean element:row){
+                if(element)
+                    str+="Q";
+                else
+                    str+=".";
+            }
+            list.add(str);
+        }
+        result.add(list);
+    }
+    
+    boolean isSafe(boolean[][] board, int row, int col){
+        
+        for(int i=0;i<row;i++){
+            if(board[i][col])
+                return false;
+        }
+        
+        int maxLeft=Math.min(row,col);
+        
+        for(int i=1;i<=maxLeft;i++){
+            if(board[row-i][col-i])
+                return false;
+        }
+        
+        int maxRight=Math.min(row,board.length-col-1);
+        
+        for(int i=1;i<=maxRight;i++){
+            if(board[row-i][col+i])
+                return false;
+        }
+        return true;    
+    }
+}
