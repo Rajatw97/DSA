@@ -1,0 +1,42 @@
+Q.Given the head of a singly linked list and two integers left and right where left <= right,
+reverse the nodes of the list from position left to position right, and return the reversed list.
+
+Input: head = [1,2,3,4,5], left = 2, right = 4
+Output: [1,4,3,2,5]
+
+class Solution {
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        
+        if(left==right)
+            return head;
+        
+        ListNode prev=null, curr=head;
+        
+        for(int i=0; curr!=null && i<left-1;i++){
+            prev=curr;
+            curr=curr.next;
+        }
+        
+        ListNode outerListStart=prev;
+        ListNode subListEnd=curr;
+        
+        ListNode next=curr.next;
+        
+        for(int i=0;i<right-left+1 && curr!=null;i++){
+            
+            curr.next=prev;
+            prev=curr;
+            curr=next;
+            if(next!=null)
+            next=next.next;
+        }
+        
+        if(outerListStart!=null)
+            outerListStart.next=prev;
+        else
+            head=prev;
+        subListEnd.next=curr;
+        
+        return head;
+    }
+}
