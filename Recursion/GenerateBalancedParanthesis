@@ -22,7 +22,7 @@ class Solution {
             if(open!=0)
                 solve(open-1,close,curr+'(');    
         
-            if(close>open)
+            if(close!=0 && close!=open)
                 solve(open,close-1,curr+')');                      
         
     }
