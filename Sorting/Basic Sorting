@@ -1,0 +1,73 @@
+
+
+1. Bubble Sort :  Bubble up the max element to the last in each iteration, Comparison based (arr[j],arr[j+1]) 
+   Time : O(n2)
+
+
+class Solution
+{
+    //Function to sort the array using bubble sort algorithm.
+	public static void bubbleSort(int arr[], int n)
+    {
+        //code here
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n-1-i;j++){
+                
+                if(arr[j]>arr[j+1]){
+                    int temp=arr[j];
+                    arr[j]=arr[j+1];
+                    arr[j+1]=temp;
+                }
+            }
+        }
+    }
+}
+
+Tip: A efficient approach can be to take boolean and check if inner loop does not perform any swap then array sorted so just break.
+
+2. Selection Sort: Select an element and put it at its correct position. SO you can select min/max element and in each iteration just put it at correct index and reduce no of elements.
+
+class Solution
+{
+	
+	void selectionSort(int arr[], int n)
+	{	    
+	    for(int i=0;i<n;i++){
+	        int maxIndex=0; 
+	        for(int j=0;j<n-i;j++){
+	            if(arr[j]>arr[maxIndex]){
+	                maxIndex=j;
+	            }
+	        }
+	        int temp=arr[n-i-1];
+	        arr[n-i-1]=arr[maxIndex];
+	        arr[maxIndex]=temp;
+	        
+	    }
+	}
+}
+
+3. Insertion Sort: Try to Sort the array partially i.e. sort till index no i(0,1,2...n). For every index you are at, put that element at correct index in the LHS.
+
+class Solution
+{
+ 
+  public void insertionSort(int arr[], int n)
+  {
+   for(int i=0;i<n-1;i++){
+       for(int j=i+1;j>0;j--){       
+           if(arr[j]<arr[j-1]){               
+               int temp=arr[j];
+               arr[j]=arr[j-1];
+               arr[j-1]=temp;
+           }
+           else
+            break;
+       }
+     }   
+  }
+}
+
+
+
+
