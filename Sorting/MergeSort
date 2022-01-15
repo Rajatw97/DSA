@@ -1,0 +1,54 @@
+Merge Sort: Divide and Conquer
+
+
+class Solution
+{
+    void merge(int arr[], int s, int m, int e)
+    { 
+       int[] result = new int[e - s];
+
+        int i = s;
+        int j = m;
+        int k = 0;
+
+        while (i < m && j < e) {
+            if (arr[i] < arr[j]) {
+                result[k] = arr[i];
+                i++;
+            } else {
+                result[k] = arr[j];
+                j++;
+            }
+            k++;
+        }
+        while (i < m) {
+            result[k] = arr[i];
+            i++;
+            k++;
+        }
+
+        while (j < e) {
+            result[k] = arr[j];
+            j++;
+            k++;
+        }
+
+        for (int l = 0; l < result.length; l++) {
+            arr[s+l] = result[l];
+        }
+    }
+    void mergeSort(int arr[], int s, int e)
+    {
+       
+         if (e - s == 1) {
+            return;
+        }
+        int mid = (s + e) / 2;
+        mergeSort(arr, s, mid);
+        mergeSort(arr, mid, e);
+        merge(arr, s, mid, e);
+    }
+}
+
+ 
+    
