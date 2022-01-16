@@ -1,0 +1,40 @@
+
+
+
+class Solution
+{
+    
+    static void quickSort(int arr[], int low, int high)
+    {
+        if(low<high){
+            
+            int pIndex=partition(arr,low,high);
+            quickSort(arr,low,pIndex-1);
+            quickSort(arr,pIndex+1,high);
+        }
+    }
+    static int partition(int arr[], int start, int end)
+    {
+       int pivot=arr[end],curr=start-1;
+       
+       while(start<end){
+           
+        if(arr[start]<pivot)
+        {
+            curr++;
+            swap(arr,start,curr);
+        }                
+        start++;
+       }
+       swap(arr, curr + 1, end);
+       return (curr + 1);
+      
+    } 
+    
+    static void swap(int arr[], int start,int end){
+        
+        int temp=arr[start];
+        arr[start]=arr[end];
+        arr[end]=temp;
+    }
+}
