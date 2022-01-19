@@ -2,6 +2,10 @@ Q. Given an array containing N integers and an integer K., Your task is to find 
 
 Appraoch: Main case to handle is when prefix sum will repeat then your index will be updated which we dont want, so only insert when prefix sum is not present.
 
+Variatons:
+1. Longest subarray with equal 0s and 1s - Just replace 0 with -1 and problem will get converted to longest subarray with 0 sum.
+2. Longest common span with same sum in binary array- Create a temp array storing differnece of 2 arrays, now problem is converted to longest subarray with 0 sum.
+
 class Solution{
     
     public static int lenOfLongSubarr (int arr[], int n, int s) {
