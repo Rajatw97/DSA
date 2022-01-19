@@ -1,0 +1,27 @@
+Q. Given an array of positive and negative numbers. Find if there is a subarray (of size at-least one) with 0 sum.
+
+Appraoch: To keep track of pfreix sum and if the prefix sum is already present that means sum of elements in between will be zero.
+class Solution{
+  
+    static boolean findsum(int arr[],int n)
+    {
+       Set<Integer> hs=new HashSet<Integer>();
+       int prefix_sum=0;
+       
+       for(int i=0;i<n;i++){
+           
+            prefix_sum+=arr[i];
+           
+            if(prefix_sum==0)
+                return true;
+            
+            if(hs.contains(prefix_sum))
+                return true;
+                
+            hs.add(prefix_sum);
+           
+       }
+       
+       return false;
+    }
+}
