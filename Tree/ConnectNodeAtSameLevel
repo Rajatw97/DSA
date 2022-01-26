@@ -1,0 +1,78 @@
+Q. Given a binary tree, connect the nodes that are at same level. You'll be given an addition nextRight pointer for the same.
+
+Initially, all the nextRight pointers point to garbage values. Your function should set these pointers to point next right for each node.
+       10                       10 ------> NULL
+      / \                       /      \
+     3   5       =>     3 ------> 5 --------> NULL
+    / \     \               /  \           \
+   4   1   2          4 --> 1 -----> 2 -------> NULL
+
+ Approach:
+ 1. levelorder traversal(Queue)
+ 2. Preorder traversal with constant space
+
+
+/*
+    Node class is Defined as follows:
+    class Node{
+        int data;
+        Node left;
+        Node right;
+        Node nextRight;
+        Node(int data){
+            this.data = data;
+            left=null;
+            right=null;
+            nextRight = null;
+        }
+    }
+    */
+    
+class Solution
+{
+    //Function to connect nodes at same level.
+    public void connect(Node root)
+    {
+        if(root==null)
+            return;
+        
+        while(root!=null){
+            
+            Node temp=root;
+            while(temp!=null){
+                
+                if(temp.left!=null){
+                    if(temp.right!=null)
+                        temp.left.nextRight=temp.right;
+                    else
+                        temp.left.nextRight=getRight(temp);
+                }
+                if(temp.right!=null)
+                    temp.right.nextRight=getRight(temp);
+                
+                temp=temp.nextRight;
+            }    
+            
+            if(root.left!=null)
+                root=root.left;
+            else if(root.right!=null)
+                root=root.right;
+            else
+                root=getRight(root);
+                
+        }
+        
+    }
+    
+    public Node getRight(Node root){
+        
+        Node temp=root.nextRight;
+        while(temp!=null){
+            if(temp.left!=null) return temp.left;
+            else if(temp.right!=null) return temp.right;
+            temp=temp.nextRight;
+        }
+         return null;
+    }
+    
+}
