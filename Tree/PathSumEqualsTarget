@@ -17,9 +17,7 @@ class Solution {
         if(root.left==null && root.right==null && value==0)           
             return true;
            
-        if(solve(root.left,value))
-            return true;
-       return solve(root.right,value);
+     return  solve(root.left,value) || solve(root.right,value);
         
     }
 }
