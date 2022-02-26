@@ -91,6 +91,8 @@ class Main
     
  Question 3: Shortest Distance in undirected graph with Weight
  Approach: Dijkstra algorithm
+ 
+ Limitation: Dijkstra only works with positive edge weights. If edge wt is negative it will form a loop. 
 
 
 I/P: 
