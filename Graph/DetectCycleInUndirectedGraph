@@ -54,3 +54,35 @@ class Solution {
         return false;
     }
 }
+
+2. Using DFS
+
+ class Solution {
+    
+    public boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj) {
+       
+        boolean[] visited=new boolean[V];
+        Arrays.fill(visited,false);
+        for(int i=0;i<V;i++){
+            if(!visited[i])
+                if(hasCycle(visited,adj,i,-1))
+                    return true;
+            
+        }
+        return false;
+    }
+    
+    boolean hasCycle(boolean[] visited, ArrayList<ArrayList<Integer>> adj, int start, int parent) {
+        
+       visited[start]=true;
+       for(Integer itr: adj.get(start)){
+            if(!visited[itr])
+              {  if(hasCycle(visited,adj,itr,start))
+                    return true;
+              }
+            else if (parent!=itr)   
+                return true;
+       }
+        return false;
+    }
+}
