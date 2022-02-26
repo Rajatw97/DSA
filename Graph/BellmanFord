@@ -1,0 +1,60 @@
+Bellman Ford: Used for finding shortest path in graph with negative edges with condition that it is not forming a negative cycle in the directed graph.
+But It can help in detecting negative cycle.
+
+Algorithm:
+
+ Relax edges n-1 times
+ 
+ By Relax we mean: if(dist[u]+wt<dist[v]) then dist[v]=dist[u]+wt
+ 
+ After this you should have shortest distance so to detect negative cycle relax one more time and if distance gets reduced that means it has cycle.
+ 
+ Intuition behing Algorithm: 
+ 
+  Why (N-1) relaxations? 
+     Eg: a->b->c->d->e
+     For n=5 nodes max length is 4.
+     In first loop only edge ab gets updated, then next time ab,bc. Sly ab,bc,cd ->ab,bc,cd,de. Therefore we are sure that in 4 iterations all vertices will get updated.
+     
+   class Node 
+{
+	private int u;
+  private int v;
+  private int weight;
+    
+  Node(int u, int v, int w) { u = u; v = v; weight = w; }
+}
+ 
+
+class Main
+{
+    void bellmanFord(ArrayList<Node> edges, int N, int src)
+    {
+        int dist[] = new int[N];
+        for(int i = 0;i<N;i++) dist[i] = 10000000; 
+
+        dist[src] = 0;
+
+    	for(int i = 1;i<=N-1;i++) {
+    		for(Node node : edges) {
+    			if(dist[node.getU()] + node.getWeight() < dist[node.getV()]) {
+    				dist[node.getV()] = dist[node.getU()] + node.getWeight(); 
+    			}
+    		}
+    	}
+
+    	int fl = 0; 
+    	for(Node node: edges) {
+    		if(dist[node.getU()] + node.getWeight() < dist[node.getV()]) {
+    			fl = 1;
+    			System.out.println("Negative Cycle"); 
+    			break;
+    		}
+    	}
+
+    	if(fl == 0) {
+    		for(int i = 0;i<N;i++) {
+    			System.out.println(i + " " + dist[i]); 
+    		}
+    	}
+    }
