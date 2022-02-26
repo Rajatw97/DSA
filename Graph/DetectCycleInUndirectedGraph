@@ -1,0 +1,56 @@
+Q. Given an undirected graph with V vertices and E edges, check whether it contains any cycle or not. 
+
+1. Using BFS
+
+class Solution {
+    
+    class Node{
+        
+        int first;
+        int second;
+        
+        Node(int first, int second){
+            this.first=first;
+            this.second=second;
+        };
+    }
+  
+    public boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj) {
+        // Code here
+        
+        boolean[] visited=new boolean[V];
+        Arrays.fill(visited,false);
+        for(int i=0;i<V;i++){
+            if(!visited[i])
+                if(hasCycle(visited,adj,i))
+                    return true;
+            
+        }
+        return false;
+    }
+    
+    boolean hasCycle(boolean[] visited, ArrayList<ArrayList<Integer>> adj, int start) {
+        
+       
+        Queue<Node> queue=new LinkedList<>();
+        queue.add(new Node(start,-1));
+        visited[start]=true;
+        
+        while(!queue.isEmpty()){
+            
+            int value=queue.peek().first;
+            int par=queue.peek().second;
+            queue.poll();
+            for(Integer itr:adj.get(value)){
+                if(!visited[itr]){
+                    queue.add(new Node(itr,value));
+                    visited[itr]=true;
+                }
+                else if(par!=itr)
+                    return true;
+            }
+            
+        }
+        return false;
+    }
+}
