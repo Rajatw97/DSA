@@ -1,0 +1,39 @@
+Topological Sort: linear ordering of vertices s.t. for each edge u->v, u appears before v in that ordering.
+
+Eg: Edges: 5->0, 5->2, 2->3, 3->1, 4->0, 4->1 . Then Topological sort can be: 5 4 2 3 1 0, 4 5 2 3 1 0 etc
+
+Topological Sort can be found only in DAC Graphs. Reason: We cant order if graph is acyclic as for each edge both  from u->v or v->u is possible and for acyclic we cant order as
+for edges: u->v, v-> w, w->u. We cant order them. Therefore, Topological sort is done only in DAC graphs.
+
+class Solution
+{
+    
+    static int[] topoSort(int V, ArrayList<ArrayList<Integer>> adj) 
+    {
+       boolean[] visited=new boolean[V];
+       Stack<Integer> st=new Stack<>();
+        for(int i=0;i<V;i++){
+            
+            if(!visited[i])
+                dfstopo(i,adj,visited,st);
+                    
+        }
+        
+        int[] topo=new int[V];
+        int index=0;
+        while(!st.isEmpty()){
+            topo[index++]=st.pop();
+        }
+        return topo;
+    }
+    static void dfstopo(int start, ArrayList<ArrayList<Integer>> adj,boolean[] visited,Stack<Integer> st){
+        
+        visited[start]=true;
+        for(Integer itr:adj.get(start)){
+            
+            if(!visited[itr])
+                dfstopo(itr,adj,visited,st);
+        }
+        st.push(start);
+    } 
+}
