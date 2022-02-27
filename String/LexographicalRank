@@ -1,0 +1,30 @@
+Q. Given a string with unique characters, S find the rank of the string amongst all its permutations sorted lexicographically.
+
+class Solution{
+    static int rank(String S){
+        // code here
+        
+        int[] arr=new int[256];
+        long[] fact=new long[26];
+        fact[0]=1;fact[1]=1;
+        for(int i=2;i<26;i++)
+            fact[i]=fact[i-1]*i;
+        
+        for(int j=0;j<S.length();j++){
+            arr[S.charAt(j)]++;
+        }
+        int smaller=0,output=0;
+        for(int k=0;k<S.length();k++){
+            smaller=0;
+            for(int j=0;j<256;j++){
+                if(j==S.charAt(k))
+                    break;
+                if(arr[j]!=0)
+                    smaller++;
+            }
+            arr[S.charAt(k)]=0;
+            output += smaller*fact[S.length()-k-1];
+        }
+        return output+1;
+    }
+}
