@@ -1,5 +1,15 @@
 Q. Given a Directed Graph with V vertices (Numbered from 0 to V-1) and E edges, check whether it contains any cycle or not.
 
+For a graph with N nodes and E edges:
+ Time Complexity: O(N+E)
+ Space Complexity:O(N+E) +O(N) +O(n) in case of Adj list(visited array+ queue)
+                  O(N2) in case of Adj Matrix
+ For a graph with N nodes and E edges:
+ Time Complexity: O(N+E)
+ Space Complexity:O(N+E) +O(2N) +O(N) in case of Adj list(2visited array+ aux space)
+                  O(N2) in case of Adj Matrix
+ 
+
 
     class DriverClass {
      public static void main(String[] args) {
