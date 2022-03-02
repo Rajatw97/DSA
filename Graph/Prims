@@ -19,6 +19,8 @@ O/p:
 2:3:3
 3:4:5
 
+Time Complexity: O(N2)
+
 public class Prims {
 
     void input(int V, int E){
@@ -75,3 +77,8 @@ public class Prims {
         return minV;
     }
 }
+
+Note:
+Optimisation: Above takes O(N2) complexity, you can optimise it to find min vertex in O(logN) time using priority queues instead of running a loop.
+After this time complexity is reduced to(NlogN)
+
