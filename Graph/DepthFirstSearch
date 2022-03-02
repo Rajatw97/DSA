@@ -1,4 +1,8 @@
-
+For a graph with N nodes and E edges:
+ Time Complexity: O(N+E)
+ Space Complexity:O(N+E) +O(N) +O(n) in case of Adj list(visited array+ Aux space)
+                  O(N2) in case of Adj Matrix
+ 
 
 class Solution{
 
