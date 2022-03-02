@@ -1,65 +1,68 @@
-import java.util.HashMap;
-import java.util.*;
-public class Solution
+ Q. Given a binary tree and a node called target. Find the minimum time required to burn the complete binary tree if the target is set on fire.
+ It is known that in 1 second all nodes connected to a given node get burned.That is its left child, right child, and parent.
+
+
+class Solution
 {
-    private static BinaryTreeNode<Integer> bfsToMapParents(BinaryTreeNode<Integer> root,
-                                                       HashMap<BinaryTreeNode<Integer>, BinaryTreeNode<Integer>> mpp, int start) {
-        Queue<BinaryTreeNode<Integer>> q = new LinkedList<>();
-        q.offer(root);
-        BinaryTreeNode<Integer> res = new BinaryTreeNode<>(-1);
-        while(!q.isEmpty()) {
-            BinaryTreeNode<Integer> node = q.poll();
-            if(node.data == start) res = node;
-            if(node.left != null) {
-                mpp.put(node.left, node);
-                q.offer(node.left);
-            }
-            if(node.right != null) {
-                mpp.put(node.right, node);
-                q.offer(node.right);
-            }
-        }
+ static Node res=null;
+    public static int minTime(Node root, int target) 
+    {
+        HashMap<Node,Node> hm=new HashMap<>();
+        Node targetNode = bfsToMapParents(root, hm, target);
+      
+         int maxi = findMaxDistance(hm, targetNode);
+        return maxi;
+    }
+    
+    
+    private static Node bfsToMapParents(Node root, HashMap<Node,Node> hm, int target) {
+        if(root==null)
+            return null;
+        
+        bfsToMapParents(root.left,hm,target);
+        if(root.data==target)
+            res=root;
+        bfsToMapParents(root.right,hm,target);
+        if(root.left!=null)
+            hm.put(root.left,root);
+        if(root.right!=null)
+            hm.put(root.right,root);
+        
         return res;
     }
-    private static int findMaxDistance(HashMap<BinaryTreeNode<Integer>, BinaryTreeNode<Integer>> mpp, BinaryTreeNode<Integer> target) {
-        Queue<BinaryTreeNode<Integer>> q = new LinkedList<>();
-        q.offer(target);
-        HashMap<BinaryTreeNode<Integer>,Integer> vis = new HashMap<>();
+    private static int findMaxDistance(HashMap<Node, Node> mpp, Node target) {
+        Queue<Node> q = new LinkedList<>();
+        q.add(target);
+        HashMap<Node,Integer> vis = new HashMap<>();
         vis.put(target, 1);
-        int maxi = 0;
+        int maxi = 0,fl=0;
         
         while(!q.isEmpty()) {
-            int sz = q.size();
-            int fl = 0;
-            
-            for(int i = 0;i<sz;i++) {
-                BinaryTreeNode<Integer> node = q.poll();
+            fl=0;
+            int size=q.size();
+            for(int i=0;i<size;i++){
+                Node node = q.poll();
+                
                 if(node.left != null && vis.get(node.left) == null) {
                     fl = 1;
                     vis.put(node.left, 1);
-                    q.offer(node.left);
+                    q.add(node.left);
                 }
                 if(node.right != null && vis.get(node.right) == null) {
                     fl = 1;
                     vis.put(node.right, 1);
-                    q.offer(node.right);
+                    q.add(node.right);
                 }
 
                 if(mpp.get(node) != null && vis.get(mpp.get(node)) == null) {
                     fl = 1;
                     vis.put(mpp.get(node), 1);
-                    q.offer(mpp.get(node));
+                    q.add(mpp.get(node));
                 }
             }
-            if(fl == 1) maxi++;
+                if(fl == 1) maxi++;
+            }
+             return maxi;
         }
-        return maxi;
-    }
-    public static int timeToBurnTree(BinaryTreeNode<Integer> root, int start)
-    {
-        HashMap<BinaryTreeNode<Integer>, BinaryTreeNode<Integer>> mpp = new HashMap<>();
-        BinaryTreeNode<Integer> target = bfsToMapParents(root, mpp, start);
-        int maxi = findMaxDistance(mpp, target);
-        return maxi;
-    }
+       
 }
