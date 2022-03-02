@@ -11,6 +11,7 @@ Initially, all the nextRight pointers point to garbage values. Your function sho
  1. levelorder traversal(Queue)
  2. Preorder traversal with constant space
 
+Time complexity: O(n* max nodes in a level)
 
 /*
     Node class is Defined as follows:
