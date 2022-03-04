@@ -1,0 +1,52 @@
+Q. Given two strings s and t of lengths m and n respectively, return the minimum window substring of s such that every character in t (including duplicates)
+is included in the window. If there is no such substring, return the empty string "".
+
+Input: s = "ADOBECODEBANC", t = "ABC"
+Output: "BANC"
+
+class Solution {
+    public String minWindow(String s, String t) {
+        
+        if(s.isEmpty() || t.isEmpty() || s==null || t==null)
+            return "";
+        
+        Map<Character, Integer> hm=new HashMap<>();
+        
+        for(int i=0;i<t.length();i++)
+            hm.put(t.charAt(i),hm.getOrDefault(t.charAt(i),0)+1);
+        
+        int i=0,j=0,count=hm.size(),min=s.length(),left=0,right=s.length();
+        
+        while(j<s.length()){
+            
+            char curr= s.charAt(j++);
+            
+            if(hm.containsKey(curr))
+            { 
+                hm.put(curr,hm.get(curr)-1);
+                if(hm.get(curr)==0)
+                    count-=1;
+            }
+            
+            if(count>0)
+                continue;
+            
+            while(count==0){
+                
+                char ch=s.charAt(i++);
+                if(hm.containsKey(ch)){
+                     hm.put(ch,hm.get(ch)+1);
+                     if(hm.get(ch)>0)
+                        count+=1;
+                }                   
+            }
+            if(j-i<min){
+                left=i;
+                right=j;
+                min=j-i;
+            }
+            
+        }
+        return min==s.length()?"":s.substring(left-1,right);
+    }
+}
