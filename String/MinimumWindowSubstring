@@ -1,6 +1,11 @@
 Q. Given two strings s and t of lengths m and n respectively, return the minimum window substring of s such that every character in t (including duplicates)
 is included in the window. If there is no such substring, return the empty string "".
 
+N:S.length()
+M=t.length()
+Time complexity: O(2N+M):O(N+M)
+Space Complexity:O(M)
+
 Input: s = "ADOBECODEBANC", t = "ABC"
 Output: "BANC"
 
