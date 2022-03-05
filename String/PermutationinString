@@ -1,0 +1,41 @@
+Q. Given two strings s1 and s2, return true if s2 contains a permutation of s1, or false otherwise.
+In other words, return true if one of s1's permutations is the substring of s2.
+Input: s1 = "ab", s2 = "eidbaooo"
+Output: true
+
+Time Complexity: O(alphabetsize*len(s))
+
+class Solution {
+    public boolean checkInclusion(String p, String s) {
+        
+        if(p.length()>s.length())
+            return false;
+        int[] hashS=new int[26];
+        int[] hashP=new int[26];
+        Arrays.fill(hashS,0);
+        Arrays.fill(hashP,0);
+    
+        for(int i=0;i<p.length();i++){
+            hashS[s.charAt(i)-'a']+=1;
+            hashP[p.charAt(i)-'a']+=1;
+        }
+    
+        int left=0,right=p.length()-1;
+        while(right<s.length()){
+            
+            if(Arrays.equals(hashS,hashP)) 
+                return true;
+           
+            right+=1;
+            if(right!=s.length())
+                hashS[s.charAt(right)-'a']+=1;
+            hashS[s.charAt(left)-'a']-=1;
+            left+=1;
+        }
+        return false;
+    }
+}
+
+
+        
+       
