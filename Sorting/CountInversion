@@ -1,0 +1,54 @@
+class Solution
+{
+  
+    static long inversionCount(long arr[], long N)
+    {
+        return mergeSort(arr,0,N-1);
+    }
+    
+    static long mergeSort(long arr[], long start, long end){
+        
+        long count=0;
+        if(start<end){
+            
+            long mid= (start+end)/2;
+            
+            count+= mergeSort(arr,start,mid);
+            count+=mergeSort(arr,mid+1,end);
+            count+=mergeCount(arr,start,mid,end);
+        }
+            return count;
+    }
+    
+       long int mergeCount( long arr[], long start, long mid, long end){
+          
+          long n=mid-start+1, m=end-mid;
+          
+          long[] left=new long[(int)n];
+          long[] right=new long[(int)m];
+          
+          for(int i=0;i<n;i++)
+                left[i]=arr[(int)start+i];
+        
+          for(int j=0;j<m;j++)
+                right[j]=arr[(int)mid+1+j];
+                
+          int i=0, j=0, k=(int)start, swaps=0;
+          
+          while(i<n && j<m){
+              
+              if(left[i]<=right[j])
+                arr[k++]=left[i++];
+              else{
+                arr[k++]=right[j++];
+                swaps+=n-i;
+              }
+          }  
+          while (i < left.length)
+                arr[k++] = left[i++];
+          while (j < right.length)
+                arr[k++] = right[j++];
+          
+          return swaps;
+      }
+}
