@@ -29,3 +29,6 @@ class Solution {
         return dp[text1.length()][text2.length()];
     }
 }
+
+SImilar Question: Minimum Cost to make 2 Strings identical.
+In that just find lcs and then calculate cost : (l1-lcs)*c1 + (l2-lcs)*c2
