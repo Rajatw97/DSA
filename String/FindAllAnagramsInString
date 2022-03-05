@@ -1,0 +1,35 @@
+Q. Given two strings s and p, return an array of all the start indices of p's anagrams in s. You may return the answer in any order.
+Input: s = "cbaebabacd", p = "abc"
+Output: [0,6]
+
+
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        
+        if(p.length()>s.length())
+            return new ArrayList<>();
+        int[] hashS=new int[26];
+        int[] hashP=new int[26];
+        Arrays.fill(hashS,0);
+        Arrays.fill(hashP,0);
+        List<Integer> list=new ArrayList<>();
+        for(int i=0;i<p.length();i++){
+            hashS[s.charAt(i)-'a']+=1;
+            hashP[p.charAt(i)-'a']+=1;
+        }
+    
+        int left=0,right=p.length()-1;
+        while(right<s.length()){
+            
+            if(Arrays.equals(hashS,hashP)) 
+                list.add(left);
+           
+            right+=1;
+            if(right!=s.length())
+                hashS[s.charAt(right)-'a']+=1;
+            hashS[s.charAt(left)-'a']-=1;
+            left+=1;
+        }
+        return list;
+    }
+}
