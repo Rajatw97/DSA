@@ -1,0 +1,55 @@
+
+Q. Given an unsorted array Arr[] of N integers and an integer X, find floor and ceiling of X in Arr[0..N-1].
+
+N = 8, X = 7
+Arr[] = {5, 6, 8, 9, 6, 5, 5, 6}
+Output: 6 8
+
+class Solve {
+    Pair getFloorAndCeil(int[] arr, int n, int x) {
+       
+       Pair output=new Pair(); 
+       Arrays.sort(arr);
+       output.floor= floor(arr,0,n-1,x);
+       output.ceil=ceil(arr,0,n-1,x);
+       return output;
+    }
+    
+    int floor(int[] arr,int start, int end, int x){
+        
+        if(x<arr[start])
+            return -1;
+            
+        while(start<=end){
+            
+            int mid=(start+end)/2;
+            
+            if(arr[mid]>x)
+                end=mid-1;
+            else if(arr[mid]<x)
+                start=mid+1;
+            else
+                return arr[mid];
+        }
+        return arr[end];
+    }
+    
+    int ceil(int[] arr,int start, int end, int x){
+        
+        if(x>arr[end])  
+            return -1;
+            
+        while(start<=end){
+            
+            int mid=(start+end)/2;
+            
+            if(arr[mid]>x)
+                end=mid-1;
+            else if(arr[mid]<x)
+                start=mid+1;
+            else
+                return arr[mid];
+        }
+        return arr[start];
+    }
+}
