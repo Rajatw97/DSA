@@ -1,0 +1,37 @@
+Q. Given a string s, rearrange the characters of s so that any two adjacent characters are not the same.
+   Return any possible rearrangement of s or return "" if not possible.
+   Input: s = "aab"
+   Output: "aba"
+
+
+class Solution {
+    public String reorganizeString(String s) {
+        
+        Map<Character,Integer> hm=new HashMap<>();
+        
+        for(char ch:s.toCharArray())
+            hm.put(ch,hm.getOrDefault(ch,0)+1);
+        
+        PriorityQueue<Character> pq=new PriorityQueue<>((a,b)->hm.get(b)-hm.get(a));
+        
+        for(Character itr:hm.keySet())
+            pq.add(itr);
+        
+        
+        StringBuilder result=new StringBuilder();
+        char block=pq.poll();
+       
+        result.append(block);
+        hm.put(block,hm.get(block)-1);       
+        while(!pq.isEmpty()){
+            char temp=pq.poll();
+            result.append(temp);
+            hm.put(temp,hm.get(temp)-1);  
+            if(hm.get(block)>0)
+                pq.add(block);
+            block=temp;
+        }
+        
+        return hm.get(block)>0?"":result.toString();
+    }
+}
