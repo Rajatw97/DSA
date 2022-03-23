@@ -1,0 +1,69 @@
+Q. Print all nodes that are at distance K from target Node.
+
+Apporach: Similar to time to burn tree problem
+
+class Solution {
+    
+    
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+        
+        HashMap<TreeNode,TreeNode> hm=new HashMap<>();
+        bfsToMapParents(root, hm, target.val);
+        Queue<TreeNode> q = new LinkedList<>();
+        List<Integer> result=new ArrayList<>();
+        HashMap<TreeNode,Integer> vis = new HashMap<>();
+        q.add(target);
+        vis.put(target, 1);
+        int level=0;
+        while(!q.isEmpty()) {
+           
+            int size=q.size();
+            if(level==k)
+                break;
+            level++;
+            for(int i=0;i<size;i++){
+                TreeNode node = q.poll();
+                
+                if(node.left != null && vis.get(node.left) == null) {
+                  
+                    vis.put(node.left, 1);
+                    q.add(node.left);
+                }
+                if(node.right != null && vis.get(node.right) == null) {
+                    
+                    vis.put(node.right, 1);
+                    q.add(node.right);
+                }
+
+                if(hm.get(node) != null && vis.get(hm.get(node)) == null) {
+                   
+                    vis.put(hm.get(node), 1);
+                    q.add(hm.get(node));
+                }
+            }
+        }  
+            while(!q.isEmpty())
+                {   
+                    TreeNode curr=q.poll();
+                    result.add(curr.val);
+                }     
+                
+             
+             
+         return result;
+    }
+    
+    
+     private static void bfsToMapParents(TreeNode root, HashMap<TreeNode,TreeNode> hm, int target) {
+        if(root==null)
+            return ;
+        
+        bfsToMapParents(root.left,hm,target);
+        bfsToMapParents(root.right,hm,target);
+        if(root.left!=null)
+            hm.put(root.left,root);
+        if(root.right!=null)
+            hm.put(root.right,root);
+    }
+
+}
