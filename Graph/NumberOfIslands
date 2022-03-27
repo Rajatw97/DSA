@@ -1,0 +1,53 @@
+Q. You are given a 2-dimensional array/list having N rows and M columns, which is filled with ones(1) and zeroes(0). 1 signifies land, and 0 signifies water.
+   A cell is said to be connected to another cell, if one cell lies immediately next to the other cell,
+   in any of the eight directions (two vertical, two horizontal, and four diagonals).
+   A group of connected cells having value 1 is called an island. Your task is to find the number of such islands present in the matrix.
+   
+Input:  4 5
+        0 1 1 0 0
+        1 0 0 1 0
+        0 0 1 0 0
+        1 0 0 0 1
+        
+Sample Output: 3
+    
+
+
+
+
+static void mark_current_island(int[] [] matrix,int x,int y,int r,int c)
+    {
+        if(x<0 || x>=r || y<0 || y>=c || matrix[x][y]!=1)
+            return;
+ 
+         matrix[x][y] = '2';
+      
+        mark_current_island(matrix,x+1,y,r,c);  
+        mark_current_island(matrix,x,y+1,r,c);  
+        mark_current_island(matrix,x-1,y,r,c);  
+        mark_current_island(matrix,x,y-1,r,c);
+        mark_current_island(matrix,x+1,y+1,r,c);  
+        mark_current_island(matrix,x-1,y-1,r,c);  
+        mark_current_island(matrix,x-1,y+1,r,c);  
+        mark_current_island(matrix,x+1,y-1,r,c);  
+    }
+    public static int getTotalIslands(int[][] grid) 
+	{
+       int rows = grid.length;
+        if(rows==0)     
+            return 0;
+        int cols = grid[0].length;
+        int no_of_islands = 0;
+        for(int i=0;i<rows;++i)
+        {
+            for(int j=0;j<cols;++j)
+            {
+                if(grid[i][j]==1)
+                {
+                    mark_current_island(grid,i,j,rows,cols);
+                    no_of_islands += 1;
+                }
+            }
+        }
+        return no_of_islands;
+    }
