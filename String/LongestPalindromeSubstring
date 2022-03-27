@@ -2,44 +2,34 @@ Q. Given a string, find the longest substring which is palindrome.
 Input: Given string :"forgeeksskeegfor", 
 Output: "geeksskeeg"
 
-public class LongestPalinSubstring {
- 
-    static int longestPalSubstr(String str)
-    {
-     
-        int n = str.length();
-        boolean table[][] = new boolean[n][n];
- 
-        int maxLength = 1;
-        for (int i = 0; i < n; ++i)
-            table[i][i] = true;
- 
-        // check for sub-string of length 2.
-        int start = 0;
-        for (int i = 0; i < n - 1; ++i) {
-            if (str.charAt(i) == str.charAt(i + 1)) {
-                table[i][i + 1] = true;
-                start = i;
-                maxLength = 2;
-            }
-        }
- 
-        // Check for lengths greater than 2.
-        for (int k = 3; k <= n; ++k) {
-            for (int i = 0; i < n - k + 1; ++i) {
-                int j = i + k - 1;
-                if (table[i + 1][j - 1]
-                    && str.charAt(i) == str.charAt(j)) {
-                    table[i][j] = true;
- 
-                    if (k > maxLength) {
-                        start = i;
-                        maxLength = k;
+int longestpalindrome(String str){
+
+ boolean[][] dp = new boolean[str.length()][str.length()];
+        int len = 0;
+        for(int g = 0; g < dp.length; g++){
+            for(int i = 0, j = g; j < dp[0].length; i++, j++){
+                if(g == 0){
+                    dp[i][j] = true;
+                } else if(g == 1){
+                    if(str.charAt(i) == str.charAt(j)){
+                        dp[i][j] = true;
+                    } else {
+                        dp[i][j] = false;
                     }
+                } else {
+                    if(str.charAt(i) == str.charAt(j)){
+                        dp[i][j] = dp[i + 1][j - 1];
+                    } else {
+                        dp[i][j] = false;
+                    }
+                }
+
+                if(dp[i][j] && (g + 1) > len){
+                    len = g + 1;
                 }
             }
         }
-      
-        return maxLength;
+
+        System.out.println(len);
     }
 }
