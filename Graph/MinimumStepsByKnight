@@ -1,0 +1,61 @@
+Q. Given a square chessboard, the initial position of Knight and position of a target. Find out the minimum steps a Knight will take to reach the target position.
+ The initial and the target position coordinates of Knight have been given according to 1-base indexing.
+ 
+ N=6
+knightPos[ ] = {4, 5}
+targetPos[ ] = {1, 1}
+ 
+ public int minStepToReachTarget(int KnightPos[], int TargetPos[], int N)
+    {
+        
+        if(KnightPos[0]==TargetPos[0] && KnightPos[1]==TargetPos[1])
+            return 0;
+            
+         KnightPos[0]-=1;
+         KnightPos[1]-=1;
+         TargetPos[0]-=1;
+         TargetPos[1]-=1;
+        boolean[][] visited=new boolean[N][N];    
+        Queue<Pair> q=new LinkedList<>();
+        q.add(new Pair(KnightPos[0],KnightPos[1]));
+        visited[KnightPos[0]][KnightPos[1]]=true;
+        
+         int[] nextX={1 ,1,-1,-1, 2,-2, 2, -2};
+         int[] nextY={2,-2, 2, -2, 1 ,1,-1,-1};
+       
+        int count=0;
+        while(!q.isEmpty()){
+            int size=q.size();
+            count++;
+            while(size-->0){
+                
+                Pair pop= q.poll();
+               
+                for(int i=0;i<nextX.length;i++){
+                    
+                    int newX=nextX[i]+pop.start;
+                    int newY=nextY[i]+pop.end;
+                    
+                    if(newX==TargetPos[0] && newY==TargetPos[1])
+                        return count;
+                        
+                    if(isValid(newX,newY,visited)){
+                        visited[newX][newY]=true;
+                        q.add(new Pair(newX,newY));
+                    }
+                }
+                
+            }
+        }
+        
+        return count;
+    }
+    
+    boolean isValid(int r, int c, boolean[][] visited){
+        
+        if(r<0 ||c<0|| r>=visited.length || c>=visited.length)
+            return false;
+        
+        return true;
+    }
+}
