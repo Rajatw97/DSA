@@ -1,0 +1,28 @@
+Q> You are given an array of n pairs pairs where pairs[i] = [lefti, righti] and lefti < righti.
+  A pair p2 = [c, d] follows a pair p1 = [a, b] if b < c. A chain of pairs can be formed in this fashion.
+  Return the length longest chain which can be formed.
+  T:O(n2)
+  S:O(n)
+
+class Solution {
+    public int findLongestChain(int[][] pairs) {
+        
+        int result=1;
+        int[] lis=new int[pairs.length+1];
+        
+        Arrays.fill(lis,1);
+        Arrays.sort(pairs,(a, b) -> Integer.compare(a[1], b[1]));
+        
+        for(int i=1;i<pairs.length;i++){
+            for(int j=0;j<i;j++){
+                
+                if(pairs[i][0] > pairs [j][1] && lis[i] <=lis[j] )
+                {    lis[i]=1+lis[j];
+                     result=Math.max(result,lis[i]);
+                }
+            }
+        }
+        
+        return result;
+    }
+}
