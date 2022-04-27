@@ -1,0 +1,32 @@
+Q> There are n cities. Some of them are connected, while some are not. If city a is connected directly with city b,
+and city b is connected directly with city c, then city a is connected indirectly with city c.
+A province is a group of directly or indirectly connected cities and no other cities outside of the group.
+
+Input: isConnected = [[1,0,0],[0,1,0],[0,0,1]]
+Output: 3
+
+Appraoch: DFS
+
+class Solution {
+    public int findCircleNum(int[][] isConnected) {
+        int V=isConnected.length;
+        boolean[] visited=new boolean[V];
+        int count=0;
+        for(int i=0;i<V;i++){
+            if(!visited[i]) {
+                dfsAdjMatrix(isConnected, visited, V, i);      
+                count++;
+            }
+        }
+        return count;
+    }
+    
+      void dfsAdjMatrix(int[][] edge,boolean[] visited,int V, int start){
+           
+            visited[start]=true;
+            for(int i=0;i<V;i++){
+                if(edge[start][i]==1 && !visited[i])
+                    dfsAdjMatrix(edge,visited,V,i);
+            }
+        }
+}
