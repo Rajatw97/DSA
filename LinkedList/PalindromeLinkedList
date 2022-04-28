@@ -1,0 +1,49 @@
+Q> Given the head of a singly linked list, return true if it is a palindrome.
+
+
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+        
+        if(head==null || head.next==null)
+            return true;
+        
+        ListNode mid=middleNode(head);
+        ListNode secondHead=reverseList(mid);
+    
+        while(secondHead!=null){
+            if(head.val!=secondHead.val)
+                return false;
+            head=head.next;
+            secondHead=secondHead.next;
+        }
+        return true;
+    }
+    
+    public ListNode middleNode(ListNode head) {
+        
+        ListNode slow=head,fast=head;
+        
+        try{    
+        
+        while(fast!=null && fast.next!=null){
+            slow=slow.next;
+            fast=fast.next.next;
+        }
+        }catch(Exception e){}
+        
+        return slow;
+            
+    }
+    public ListNode reverseList(ListNode head) {
+        
+        ListNode prevNode=null,currNode=head,nextNode=null;
+        
+        while(currNode!=null){
+            nextNode=currNode.next;
+            currNode.next=prevNode;
+            prevNode=currNode;
+            currNode=nextNode;
+        }
+        return prevNode;
+    }
+}
