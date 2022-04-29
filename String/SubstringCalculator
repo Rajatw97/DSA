@@ -1,0 +1,33 @@
+Q> Given a String s, a sub-string is defined as a non-empty string that can be obtained by applying following operation
+
+Remove zero or 1 character from left side of s
+Remove zero or 1 character from right side of s
+Remove zero or 1 character from left & right side of s
+Find how many distinct sub-string possible.
+
+public class Main {
+    
+    //new hashset
+    public static Set<String> seen = new HashSet();
+    
+    public static int backtrack(String s, int cnt){
+        if(seen.contains(s) || s.length() == 0)
+            return 0;
+        
+        if(!seen.contains(s))
+            seen.add(s.toString());
+        
+        if(s.length() == 1)
+            return 1;
+        
+       return (1 + backtrack(s.substring(0, s.length()-1), cnt)    +
+                   backtrack(s.substring(1, s.length()), cnt))     + 
+                   backtrack(s.substring(1, s.length()-1), cnt);
+
+    }
+    
+    
+    public static void main(String[] args) {
+        System.out.println(backtrack("abcde", 0));
+    }
+}
