@@ -1,0 +1,75 @@
+class GFG
+{
+
+ private static List<List<Integer>> adj;
+ 
+    GFG(int N)
+    {
+        this.N = N;
+        adj = new ArrayList<>(N);
+ 
+        for (int i = 0; i < N; i++)
+            adj.add(new ArrayList<>());
+    }
+    void addChild(int v, int w)
+    {
+        adj.get(v).add(w);
+    }
+
+    private int getMinIteration()
+    {
+        
+        if (N == 0 || N == 1)
+            return 0;
+        int[] mintItr = new int[N];
+       
+        getMinIterUtil(0, mintItr);
+        return mintItr[0];
+    }
+
+    private void getMinIterUtil(int u, int[] minItr)
+    {
+        if (adj.get(u).size() == 0)
+            return;
+        minItr[u] = adj.get(u).size();
+ 
+        Integer[] minItrTemp = new Integer[minItr[u]];
+ 
+        int k = 0;
+ 
+        Iterator itr = adj.get(u).iterator();
+ 
+        while (itr.hasNext())
+        {
+            int currentChild = (int) itr.next();
+            getMinIterUtil(currentChild, minItr);
+            minItrTemp[k++] = minItr[currentChild];
+        }
+ 
+        Arrays.sort(minItrTemp, Collections.reverseOrder());
+ 
+        for (k = 0; k < adj.get(u).size(); k++)
+        {
+            int temp = minItrTemp[k] + k + 1;
+            minItr[u] = Math.max(minItr[u], temp);
+        }
+    }
+
+    public static void main(String args[])
+    {
+        
+        GFG testCase1 = new GFG(17);
+        testCase1.addChild(0, 1);
+        testCase1.addChild(0, 2);
+        testCase1.addChild(0, 3);
+        testCase1.addChild(0, 4);
+        testCase1.addChild(0, 5);
+        testCase1.addChild(0, 6);
+        testCase1.addChild(1, 7);
+        testCase1.addChild(1, 8);
+        testCase1.addChild(1, 9);
+ 
+        System.out.println("TestCase 1 - Minimum Iteration: " +
+                                  testCase1.getMinIteration());
+    }
+ }
