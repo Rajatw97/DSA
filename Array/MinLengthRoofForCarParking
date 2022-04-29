@@ -1,0 +1,18 @@
+ou are given an List of positions of cars as to where they are parked. You are also given an integer K. 
+ The cars needs to be covered with a roof. You have to find the minimum length of roof that takes to cover K cars.
+ 
+ Input : 12,6,5,2      K = 3
+ Output : 5
+ 
+ Approach: SLiding window
+ 
+ int min_roof_length(parking_spots, k){
+ 
+    parking_spots.sort()
+    int ans=Integer.MAX_VALUE;
+    for(int i=0;i< parking_spots-k+1;i++)
+        ans = Math.min(ans, parking_spots[i + k - 1] - parking_spots[i] + 1);
+   
+    return ans
+    
+    }
