@@ -1,0 +1,33 @@
+Q> You have to find two non-overlapping sub-arrays of arr each with a sum equal target.
+There can be multiple answers so you have to find an answer where the sum of the lengths of the two sub-arrays is minimum.
+Return the minimum sum of the lengths of the two required sub-arrays, or return -1 if you cannot find such two sub-arrays.
+
+Input: arr = [3,2,2,4,3], target = 3
+Output: 2
+
+class Solution {
+    public int minSumOfLengths(int[] arr, int target) {
+        
+        int sum=0,j=0;
+        int[] dp=new int [arr.length];
+        Arrays.fill(dp,Integer.MAX_VALUE);
+        for(int i=0;i<arr.length;i++){
+            sum+=arr[i];
+            while(sum>target)
+                sum-=arr[j++];
+            if(sum==target)
+                dp[i]=i-j+1;
+        }
+        int res=Integer.MAX_VALUE;
+        for(int i=0;i<dp.length;i++){
+            if(dp[i]<Integer.MAX_VALUE){
+                int left=i-dp[i];
+                if(left>=0)
+                    res=Math.min(res,dp[i]+dp[left]);
+            }
+            if(i-1>=0)
+                dp[i]=Math.min(dp[i],dp[i-1]);
+        }
+        return res>arr.length?-1:res;
+    }
+}
