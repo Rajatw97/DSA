@@ -43,5 +43,5 @@ class Solution {
         while(index<end)
             swap(nums,index++,end--);
 
-    }
+    } 
 }
