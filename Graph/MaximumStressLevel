@@ -1,0 +1,62 @@
+Given a weighted undirected graph with N nodes and M edges. The stress level of a path between two nodes is defined as the
+weight of the edge with the maximum value present in the path.
+Given a source node “source” and destination node “destination”. Find the path with minimum stress level. If no such path exists, return -1.
+
+Input Format: N = 5, M = 6, 
+graph_from = {1, 1, 1, 2, 4, 5}, 
+graph_to = {2, 4, 5, 3, 3, 3}, 
+graph_weight = {10, 3, 4, 5, 2, 6}, 
+source = 1, destination = 3
+
+import java.util.Scanner;
+
+public class Telegram {
+    static int solve(int m, int n, int[] from, int[] to, int[] stress, int src, int dest){
+        int [][] graph = new int[n+1][n+1];
+        for(int i = 0; i < m; i++){
+            graph[from[i]][to[i]] = stress[i];
+        }
+
+        //max_stress[index] --> max_stress on the path from (source.....index)
+        int []max_stress = new int[n+1];
+        for(int i = 0; i < n+1; i++)
+            max_stress[i] = Integer.MAX_VALUE;
+
+        dfs(graph, src, max_stress, 0);
+        return max_stress[dest];
+    }
+    static void dfs(int [][] graph, int src, int []max_stress, int value){
+        max_stress[src] = Math.min(value, max_stress[src]);
+        for(int i = 0; i < graph.length; i++){
+            if(graph[src][i] == 0)
+                continue;
+            int val = Math.max(value, graph[src][i]);
+            dfs(graph, i, max_stress, val);
+        }
+
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int N = scanner.nextInt();
+        int M = scanner.nextInt();
+        int []from = new int[M];
+        int []to = new int[M];
+        int []weights = new int[M];
+        int src, dest;
+
+        for(int i = 0; i < M; i++){
+            from[i] = scanner.nextInt();
+        }
+        for(int i = 0; i < M; i++){
+            to[i] = scanner.nextInt();
+        }
+        for(int i = 0; i < M; i++){
+            weights[i] = scanner.nextInt();
+        }
+        src = scanner.nextInt();
+        dest = scanner.nextInt();
+
+        System.out.println(solve(M, N, from, to , weights, src, dest));
+    }
+}
