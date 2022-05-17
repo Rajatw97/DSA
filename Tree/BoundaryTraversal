@@ -1,0 +1,61 @@
+Q. You have been given a binary tree of integers. Your task is to print the boundary nodes of this binary tree in Anti-Clockwise direction starting from the root node. 
+
+I/P: 1 2 3 4 5 6 7 -1 -1 -1 -1 -1 -1 -1 -1
+O/P: 1 2 4 5 6 7 3  
+
+
+public class Solution {
+	
+	public static ArrayList<Integer> traverseBoundary(TreeNode root){
+		
+		ArrayList<Integer> result=new ArrayList<>();
+		
+		if(root==null)
+			return result;
+		result.add(root.data);
+		leftOrder(root.left,result);
+		leaves(root,result);
+		rightOrder(root.right,result);
+		
+		return result;
+	}
+	
+	static void leftOrder(TreeNode curr,ArrayList<Integer> result ){
+		
+		while(curr!=null){
+			if(curr.left!=null && curr.right!=null)
+				result.add(curr.data);
+			if(curr.left!=null)
+				curr=curr.left;
+			else
+				curr=curr.right;
+		}
+	}
+	
+	static void rightOrder(TreeNode curr,ArrayList<Integer> result ){
+		ArrayList<Integer> rev=new ArrayList<>();
+		while(curr!=null){
+			if(curr.left!=null && curr.right!=null)
+				rev.add(curr.data);
+			if(curr.right!=null)
+				curr=curr.right;
+			else
+				curr=curr.left;
+		}
+		for(int i=rev.size()-1;i>=0;--i)
+			result.add(rev.get(i));
+	}
+	
+	static void leaves(TreeNode curr,ArrayList<Integer> result ){
+			
+			if(curr.left==null && curr.right==null)
+			{
+				result.add(curr.data);
+				return;
+			}
+			if(curr.left!=null)
+				leaves(curr.left,result);
+			if(curr.right!=null)
+				leaves(curr.right,result);				
+		}
+	}
