@@ -5,21 +5,27 @@
   stack = [5,4,9,20,1]
   
   
-  findStones(Stack<integer> st, int[] wellDiameters){
+ static int findStones(Stack<Integer> B, int[] A){
 
-    int	count=0;
-    int filledIndex =wellDiameters.length;
-    while(!st.isEmpty()){
-       int curr=st.pop(); 
-    for (int i=0;i< wellDiameters.length;i++){
-         if (i > filledIndex)
-            break;
-         if (curr < wellDiameters[i])
-            continue;
-         else
-            count +=1;
-            filledIndex = i -1;
-	     }
+     int mymin = A[0];
+     int count = 0;
+
+    for (int i = 0; i < A.length; i++)
+    {
+        if (A[i] < mymin) mymin = A[i];
+        if (A[i] > mymin) A[i] = mymin;               
+    }             
+    int curr=B.pop();
+    int size=B.size();
+    for (int i = A.length - 1; i >= 0; i--) 
+    {
+        
+        if (curr <= A[i])
+        {
+            count++;
+           curr=B.pop();
         }
-        System.out.println(count);
-	}
+        if (count == size) break;
+    }  
+    return count;
+    }
