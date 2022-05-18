@@ -1,0 +1,25 @@
+	Q> Given a stack of m stones of different Diameter and a Well that is of depth n with varying diameter at different depths.
+  find the number of maximum stones  can be placed in well.
+  
+  wellDiameters = [7,9,1,25,6,7]
+  stack = [5,4,9,20,1]
+  
+  
+  findStones(Stack<integer> st, int[] wellDiameters){
+
+    int	count=0;
+    int filledIndex =wellDiameters.length;
+    while(!st.isEmpty()){
+       int curr=st.pop(); 
+    for (int i=0;i< wellDiameters.length;i++){
+         if (i > filledIndex)
+            break;
+         if (curr < wellDiameters[i])
+            continue;
+         else
+            count +=1;
+            filledIndex = i -1;
+	     }
+        }
+        System.out.println(count);
+	}
