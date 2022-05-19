@@ -97,11 +97,11 @@ Q. Top view of binary tree
           ArrayList<Integer> list=new ArrayList<>();
           boolean[] visited=new boolean[1001];
 
-          public List<Integer> rightSideView(TreeNode root) {
+          public List<Integer> leftSideView(TreeNode root) {
               return rightViewList(root,0);
           }
     
-         ArrayList<Integer> rightViewList(TreeNode root, int level){
+         ArrayList<Integer> leftViewList(TreeNode root, int level){
                if(root==null)
                   return list;
               if(!visited[level])
@@ -109,8 +109,9 @@ Q. Top view of binary tree
                   visited[level]=true;
                   list.add(root.val);
               }
-              rightViewList(root.right,level+1);
-              rightViewList(root.left,level+1);
+	      leftViewList(root.left,level+1);
+              leftViewList(root.right,level+1);
+              
 
               return list;
            }
@@ -133,10 +134,10 @@ Q. Top view of binary tree
                   visited[level]=true;
                   list.add(root.val);
               }
+	      
+	      rightViewList(root.right,level+1);
               rightViewList(root.left,level+1);
-              rightViewList(root.right,level+1);
-             
-
+              
               return list;
            }
     }
