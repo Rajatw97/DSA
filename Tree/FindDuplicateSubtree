@@ -1,0 +1,32 @@
+Q> Given the root of a binary tree, return all duplicate subtrees.
+  For each kind of duplicate subtrees, you only need to return the root node of any one of them.
+  Two trees are duplicate if they have the same structure with the same node values.
+  
+  Input: root = [1,2,3,4,null,2,4,null,null,4]
+  Output: [[2,4],[4]]
+
+class Solution {
+    
+    public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
+       
+        Map<String, Integer>  hm=new HashMap<>();
+        List<TreeNode> result=new ArrayList<>();
+        traverse(root,hm,result);
+        return result;
+    }
+    
+    String traverse(TreeNode curr,Map<String, Integer> hm,List<TreeNode> result){
+        
+        if(curr==null) return "";
+        
+        int data = curr.val;
+        String left = traverse(curr.left,hm,result);
+        String right = traverse(curr.right,hm,result);
+        String temp = data+","+left+","+right;
+        if(hm.getOrDefault(temp, 0) == 1)
+            result.add(curr);
+        hm.put(temp, hm.getOrDefault(temp, 0)+1);
+		
+        return temp;   
+    }
+}
