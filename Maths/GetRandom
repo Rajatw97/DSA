@@ -6,7 +6,7 @@ TC: O(n)
 
 int get_random(int[][] ranges){
 
-int total=0,anser=0;
+int total=0,ans=0;
 
 for(int[] range in ranges)
     total=range[1]-range[0]+1;
@@ -15,13 +15,13 @@ int random=new Random().randInt(0, total-1);
 for(int[] range in ranges){
   int curr=range[1]-range[0]+1;
   if(random<curr){
-    answer=range[0]+random;
+    ans=range[0]+random;
     break;
     }
   else
     random-=curr;
     
 }
-return answer;
+return ans;
 
 }
