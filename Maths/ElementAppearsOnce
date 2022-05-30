@@ -1,0 +1,48 @@
+Q. Given an integer array nums where every element appears three times except for one, which appears exactly once. Find the single element and return it.
+  Input: nums = [2,2,3,2]
+  Output: 3
+
+TIme Complexity: O(NlogN+N) , n<=INT_MAX , therefore logN<32
+class Solution {
+    public int singleNumber(int[] nums) {
+        
+        int n=nums.length;
+        if(n<3)
+            return nums[0];
+        
+        Arrays.sort(nums);
+        if(nums[0]!=nums[1])
+            return nums[0];
+        int i=1;
+        while(i<n)
+        {
+            if(nums[i]!=nums[i-1])
+                return nums[i-1];
+            i+=3;
+        }
+        return nums[n-1]; 
+        
+    }
+}
+
+Efficient: O(n)
+
+class Solution {
+    public int singleNumber(int[] nums) {
+        // This problem can be translated to:
+        //      For every bit position, we cancel any 3-time 1 and 3-time 0 to a 0
+        //      Then we need to find equations that fits this: (assume we apply 3 1s)
+        //               Zero 1      First 1     Second 1    Third 1
+        // seenOnce        0            1           0           0
+        // seenTwice       0            0           1           0
+        int seenOnce = 0;
+        int seenTwice = 0;
+        
+        for(int num: nums) {
+            seenOnce = ~seenTwice & (seenOnce ^ num);
+            seenTwice = ~seenOnce & (seenTwice ^ num);
+        }
+        
+        return seenOnce;
+    }
+}
