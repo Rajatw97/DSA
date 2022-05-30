@@ -22,6 +22,6 @@ for(int[] range in ranges){
     random-=curr;
     
 }
-return asnwer;
+return answer;
 
 }
