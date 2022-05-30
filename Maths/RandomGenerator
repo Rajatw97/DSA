@@ -1,0 +1,44 @@
+Q> The contructor will be passed an integer n. generate is supposed to return a random number between 0 to n,
+but it is not supposed to return a number that it has already returned. If possiblities are exhauted, return -1.
+
+// "static void main" must be defined in a public class.
+public class Main {
+    public static void main(String[] args) {
+         
+        RandomGenerator r = new RandomGenerator(10);
+        System.out.println(r.generate());
+        System.out.println(r.generate());
+        System.out.println(r.generate());
+        
+        
+    }
+}
+ class RandomGenerator {
+
+    int size;
+    Map<Integer, Integer> map;
+	public RandomGenerator(int n) {
+        size = n;
+	    map = new HashMap<Integer, Integer>();
+    }
+	
+	public int generate() {
+		Random r = new Random();
+        int x = r.nextInt(size--);
+        
+        int res = map.containsKey(x) ? map.get(x)+1 : x+1;
+        if(x<size){ 
+            if(!map.containsKey(x)){ 
+                map.put(x,0);
+            }
+            if(map.containsKey(size)){
+                map.put(x,map.get(size)); 
+            }
+            else{
+                map.put(x,size);
+            }
+        }
+        
+        return res;
+	}
+}
