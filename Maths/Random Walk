@@ -1,0 +1,78 @@
+Q> Given 2 points in a 2d array of all 0s, generate a random walk and return the grid.
+Every time a random walk should be returned (the bigger the better, but not necessary). You can walk in the 4 directions up, down, left and right.
+While determining a solution, how would you make sure that a spiral path was not created,
+how would you make sure you always end up at the destination and not in either corners or way inside the path you'e making.
+
+
+eg.
+[
+[0 0 0 0]
+[0 0 0 0]
+[0 0 0 0]
+[0 0 0 0]
+]
+
+
+
+O/p: [0, 0]->[0, 1]->[1, 1]->[1, 2]->[2, 2]->[3, 2]->[3, 3]
+[0, 0]->[1, 0]->[1, 1]->[1, 2]->[1, 3]->[2, 3]->[2, 2]->[2, 1]->[3, 1]->[3, 2]->[3, 3]
+
+
+static int[][] dirs = {{1, 0},{0, 1},{-1, 0},{0, -1}};
+
+public static void main(String[] args) {
+	for(int i=0;i<10;i++) {
+		int[][] grid = {
+						{0, 0, 0, 0},
+						{0, 0, 0, 0},
+						{0, 0, 0, 0},
+						{0, 0, 0, 0},
+						};
+		int[] start = {0, 0}, end = {3, 3};
+		int cnt = 0;
+		List<int[]> res = ramdomWalk(grid, start, end);
+		for(int j=0;j<res.size();j++) {
+			System.out.print(Arrays.toString(res.get(j)) + (j == res.size() - 1 ? "" : "->"));
+		}
+		System.out.println();
+		System.out.println("-----------------------------------------");
+	}
+}
+
+private static List<int[]> ramdomWalk(int[][] grid, int[] start, int[] end) {
+	shuffleDirs();
+	boolean[][] visited = new boolean[grid.length][grid[0].length];
+	List<int[]> path = new ArrayList<>();
+	dfs(grid, visited, start, end, path);
+	return path;
+}
+
+private static void shuffleDirs() {
+	Random rand = new Random();
+	for(int i=0;i<dirs.length;i++) {
+		int j = rand.nextInt(i+1);
+		int[] t = dirs[i];
+		dirs[i] = dirs[j];
+		dirs[j] = t;
+	}		
+}
+
+private static boolean dfs(int[][] grid, boolean[][] visited, int[] cur, int[] end, List<int[]> res) {
+	if(cur[0] == end[0] && cur[1] == end[1]) {
+		res.add(new int[] {cur[0], cur[1]});
+		return true;
+	}
+	visited[cur[0]][cur[1]] = true;
+	res.add(new int[] {cur[0], cur[1]});
+	shuffleDirs();
+	for(int[] dir : dirs) {
+		int ni = cur[0] + dir[0];
+		int nj = cur[1] + dir[1];
+		if(ni >= 0 && ni < grid.length && nj >=0 && nj < grid[0].length && !visited[ni][nj])
+			if(dfs(grid, visited, new int[] {ni, nj}, end, res))
+				return true;
+	}
+	visited[cur[0]][cur[1]] = false;
+	res.remove(res.size() - 1);
+	return false;
+}
