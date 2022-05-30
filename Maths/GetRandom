@@ -1,0 +1,27 @@
+Q> Given some ranges you need to randomly generate a number such that it lies between those ranges.
+
+I/p: [[12,15],[1,5],[32,34]]
+
+TC: O(n)
+
+int get_random(int[][] ranges){
+
+int total=0,anser=0;
+
+for(int[] range in ranges)
+    total=range[1]-range[0]+1;
+    
+int random=new Random().randInt(0, total-1);
+for(int[] range in ranges){
+  int curr=range[1]-range[0]+1;
+  if(random<curr){
+    answer=range[0]+random;
+    break;
+    }
+  else
+    random-=curr;
+    
+}
+return asnwer;
+
+}
