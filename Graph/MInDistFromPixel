@@ -1,0 +1,63 @@
+Q> Given a 2d matrix with value 0 and -1. mat[i][j] == -1 is boundary pixel. Calculate the minimum distance of each node mat[i][j] from nearest boundary pixel.
+Distance is calculated as |x1-x2| + |y1-y2|
+E.g:
+  mat[i][j] =
+  0 0 0
+  0 -1 0
+  0 0 0
+  Output:
+  mat[i][j]
+  2 1 2
+  1 0 1
+  2 1 2
+
+
+public class Main {
+    public static void main(String[] args) {
+        int[][] matrix = new int[][]{{0,0,0},{0,-1,0},{0,0,0}};
+        int[][] res = shortestDistance(matrix);
+        for(int[] row : res) {
+            System.out.println(Arrays.toString(row));
+        }
+    }
+    
+    // Multi point BFS
+    // Time: O(M*N)
+    // Space: O(M*N)
+    private static int[][] shortestDistance(int[][] matrix) {
+        int m = matrix.length, n = matrix[0].length;
+
+        Queue<int[]> queue = new LinkedList<>();
+        int[][] result = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == -1) {
+                    queue.offer(new int[]{i, j});
+                    result[i][j] = 0;
+                } else {
+                    result[i][j] = Integer.MAX_VALUE;
+                }
+            }
+        }
+        int[][] dirs = new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0,-1}};
+
+        while (!queue.isEmpty()) {
+            int[] top = queue.poll();
+            int r = top[0];
+            int c = top[1];
+            for (int[] dir : dirs) {
+                int nr = r + dir[0];
+                int nc = c + dir[1];
+                if (valid(m, n, nr, nc) && result[nr][nc] > 1 + result[r][c]) {
+                    result[nr][nc] = 1 + result[r][c];
+                    queue.offer(new int[]{nr, nc});
+                }
+            }
+        }
+        return result;
+    }
+
+    private static boolean valid(int m, int n, int r, int c) {
+        return r >= 0 && r < m && c >= 0 && c < n;
+    }
+}
