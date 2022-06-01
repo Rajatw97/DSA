@@ -1,0 +1,65 @@
+Q>Given an m x n integers matrix, return the length of the longest increasing path in matrix.
+From each cell, you can either move in four directions: left, right, up, or down. You may not move diagonally or move outside
+the boundary (i.e., wrap-around is not allowed).
+Input: matrix = [[9,9,4],[6,6,8],[2,1,1]]
+Output: 4
+
+TC: O(n*m)
+
+class Solution {
+    int output=0;
+    public int longestIncreasingPath(int[][] matrix) {
+     
+        int[][]dp=new int[matrix.length][matrix[0].length];
+     
+        for(int r=0;r<matrix.length;r++){
+            for(int c=0;c<matrix[0].length;c++){
+                dfs(r,c,-1,matrix,dp);
+            }
+        }
+        return output;
+    }
+    
+    int dfs(int row,int col,int prev,int[][] matrix,int[][] dp){
+        
+        if(row<0 || col<0 ||row>=matrix.length || col>=matrix[0].length || matrix[row][col]<=prev)
+            return 0;
+        
+        if(dp[row][col]!=0)
+            return dp[row][col];
+        int res=1;
+        res=Math.max(res,1+dfs(row+1,col,matrix[row][col],matrix,dp));
+        res=Math.max(res,1+dfs(row,col+1,matrix[row][col],matrix,dp));
+        res=Math.max(res,1+dfs(row-1,col,matrix[row][col],matrix,dp));
+        res=Math.max(res,1+dfs(row,col-1,matrix[row][col],matrix,dp));
+        dp[row][col]=res;
+        output=Math.max(output,dp[row][col]);
+        return res;
+    }
+}
+
+
+Variation: Given a matrix of N rows and M columns. From m[i][j], we can move to m[i+1][j], if m[i+1][j] > m[i][j],
+or can move to m[i][j+1] if m[i][j+1] > m[i][j]. The task is print longest path length if we start from (0, 0).
+
+class Solution {
+    public int longestIncreasingPath(int[][] matrix) {
+        int[][]dp=new int[matrix.length][matrix[0].length];
+        dfs(0,0,-1,matrix,dp);
+        return dp[0][0];
+    }
+    
+    int dfs(int row,int col,int prev,int[][] matrix,int[][] dp){
+        
+        if(row<0 || col<0 ||row>=matrix.length || col>=matrix[0].length || matrix[row][col]<=prev)
+            return 0;
+        if(dp[row][col]!=0)
+            return dp[row][col];
+        int res=1;
+        res=Math.max(res,1+dfs(row+1,col,matrix[row][col],matrix,dp));
+        res=Math.max(res,1+dfs(row,col+1,matrix[row][col],matrix,dp));
+        dp[row][col]=res;
+        return res;
+    }
+}
+
