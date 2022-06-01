@@ -1,0 +1,75 @@
+Q> Given a robot cleaner in a room modeled as a grid. Each cell in the grid can be empty or blocked.
+The robot cleaner with 4 given APIs can move forward, back, turn left or turn right. Each turn it made is 90 degrees.
+When it tries to move into a blocked cell, its bumper sensor detects the obstacle and it stays on the current cell.
+
+Design an algorithm to clean the entire room using only the 4 given APIs shown below.
+TC:O(4^N)
+
+interface Robot {
+  // returns true if next cell is open and robot moves into the cell.
+  // returns false if next cell is obstacle and robot stays on the current cell.
+  boolean move();
+
+  // Robot will stay on the same cell after calling turnLeft/turnRight.
+  // Each turn will be 90 degrees.
+  void turnLeft();
+  void turnRight();
+
+  // Clean the current cell.
+  void clean();
+}
+
+class Solution {
+
+    public void cleanRoom(Robot robot) {
+        Set<String> set = new HashSet<>();
+        int dir = 0;   // 0: up, 90: right, 180: down, 270: left
+        backtrack(robot, set, 0, 0, dir);
+    }
+
+    public void backtrack(Robot robot, Set<String> set, int i, int j, int dir) {
+    	String tmp = i + "->" + j;
+    	if (set.contains(tmp)) {
+            return;
+        }
+        
+    	robot.clean();
+    	set.add(tmp);
+
+    	for (int n = 0; n < 4; n++) {
+    		if (robot.move()) {
+    			int x = i, y = j;
+    			switch (dir) {
+    				case 0:				
+    					x = i - 1;
+    					break;
+    				case 90:					
+    					y = j + 1;
+    					break;
+    				case 180:				
+    					x = i + 1;
+    					break;
+    				case 270:
+    					y = j - 1;
+    					break;
+    				default:
+    					break;
+    			}
+
+    			backtrack(robot, set, x, y, dir);
+     
+			    robot.turnLeft();
+    			robot.turnLeft();
+    			robot.move();
+    			robot.turnRight();
+    			robot.turnRight();
+
+    		} 
+    		robot.turnRight();
+    		dir += 90;
+    		dir %= 360;
+    	}
+
+    }
+    
+}
