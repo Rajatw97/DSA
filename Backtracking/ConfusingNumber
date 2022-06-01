@@ -6,48 +6,41 @@ numbers between 1 and N inclusive
 
 import java.util.*;
 import java.lang.*;
-public class Main
-{   
-    static int N=100;
-    static int count=0;
-    static Map<Character,Character> mappings =new HashMap<>(){{put('0', '0'); put('1', '1'); put('6', '9'); put('8', '8'); put('9', '6');}};
-    public static void main(String[] args) {
-
-          combos(1);
-          combos(6);
-          combos(8);
-          combos(9);
-       System.out.println(count);
+public class Main{
+   Map<Integer, Integer> map = new HashMap<>();
+     int res = 0;
+     public int confusingNumberII(int N) {
+        map.put(0, 0);
+        map.put(1, 1);
+        map.put(6, 9);
+        map.put(8, 8);
+        map.put(9, 6);
+        helper(N, 0);
+        return res;
     }
-	
-	  static boolean isConfusingNumber(int s){     
-            String strS = String.valueOf(s);
-            for(char d : strS.toCharArray()){  
-                if (!mappings.containsKey(d))
-                    return false;
-            }
-            
-            String reverseStr = new StringBuilder(strS).reverse().toString();
-            String finalStr = "";
-            for (char c : reverseStr.toCharArray()){
-                finalStr += mappings.get(c);
-            }
-        
-            if (!finalStr.equals(strS))
-                return true;
-        
-            return false;
-	  }
-	  
-	   static void combos(int n){
-            if (n > N)
-                return ;
-            
-            if (isConfusingNumber(n))
-                count += 1;
-            
-            n = n*10;
-            for (char key : mappings.keySet())
-                combos(n + (int)key);
+     private void helper(int N, long cur) {
+        if (isConfusingNumber(cur)) {
+            res++;
         }
-}
+
+        for (Integer i : map.keySet()) {
+          long next = cur * 10 + i;
+          if (next <= N && next != 0) {
+              helper(N, next);
+          }
+        }
+    }
+     private boolean isConfusingNumber(long n) {
+        long src = n;
+        long res = 0;
+        while (n > 0) {
+            res = res * 10 + map.get((int) n % 10); 
+            n /= 10;
+        }
+        return res != src;
+    }
+
+	public static void main(String[] args){
+	   int x= confusingNumberII(100);
+	   System.out.println(x);
+	}
