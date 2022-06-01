@@ -1,0 +1,53 @@
+Q> We can rotate digits by 180 degrees to form new digits. When 0, 1, 6, 8, 9 are rotated 180 degrees, they become 0, 1, 9, 8, 6 respectively.
+When 2, 3, 4, 5, and 7 are rotated 180 degrees, they become invalid. A confusing number is a number that when rotated 180 degrees becomes a different number
+with each digit valid.(Note that the rotated number can be greater than the original number.) Given a positive integer N, return the number of confusing
+numbers between 1 and N inclusive
+
+
+import java.util.*;
+import java.lang.*;
+public class Main
+{   
+    static int N=100;
+    static int count=0;
+    static Map<Character,Character> mappings =new HashMap<>(){{put('0', '0'); put('1', '1'); put('6', '9'); put('8', '8'); put('9', '6');}};
+    public static void main(String[] args) {
+
+          combos(1);
+          combos(6);
+          combos(8);
+          combos(9);
+       System.out.println(count);
+    }
+	
+	  static boolean isConfusingNumber(int s){     
+            String strS = String.valueOf(s);
+            for(char d : strS.toCharArray()){  
+                if (!mappings.containsKey(d))
+                    return false;
+            }
+            
+            String reverseStr = new StringBuilder(strS).reverse().toString();
+            String finalStr = "";
+            for (char c : reverseStr.toCharArray()){
+                finalStr += mappings.get(c);
+            }
+        
+            if (!finalStr.equals(strS))
+                return true;
+        
+            return false;
+	  }
+	  
+	   static void combos(int n){
+            if (n > N)
+                return ;
+            
+            if (isConfusingNumber(n))
+                count += 1;
+            
+            n = n*10;
+            for (char key : mappings.keySet())
+                combos(n + (int)key);
+        }
+}
