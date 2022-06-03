@@ -1,0 +1,22 @@
+Q>Given the root of a binary tree, return the length of the longest path, where each node in the path has the same value. This path may or may not pass through the root.
+Input: root = [5,4,5,1,1,5]
+Output: 2
+
+class Solution {
+    int result=0;
+    public int longestUnivaluePath(TreeNode root) {
+        if(root==null)
+            return 0;
+        maxPathDown(root,root.val);
+        return result;
+    }
+    
+      private int maxPathDown(TreeNode node, int val) {
+        if (node == null) return 0;
+        int left =  maxPathDown(node.left, node.val);
+        int right =  maxPathDown(node.right,node.val);
+        result = Math.max(result, left + right);
+        return val==node.val?Math.max(left, right) + 1:0;
+        
+    }
+}
