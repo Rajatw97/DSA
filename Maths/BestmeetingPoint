@@ -1,0 +1,46 @@
+Q>  A group of two or more people wants to meet and minimize the total travel distance.
+ You are given a 2D grid of values 0 or 1, where each 1 marks the home of someone in the group. 
+ Return min distance where distance is calculated using 'Manhattan Distance', where distance(p1, p2) = |p2.x - p1.x| + |p2.y - p1.y|.
+ 
+ I/P:
+ [  [1,0,0,0,1],
+    [0,0,0,0,0],
+    [0,0,1,0,0]
+]
+O/P:6
+TC:(O(n*m)
+
+public class Main {
+    public static int minTotalDistance(int[][] grid) {
+        List<Integer> rowValues=new ArrayList<>();
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]==1)
+                    rowValues.add(i);
+            }
+        }
+        List<Integer> colValues=new ArrayList<>();
+        for(int j=0;j<grid[0].length;j++){
+            for(int i=0;i<grid.length;i++){
+                if(grid[i][j]==1)
+                    colValues.add(j);
+            }
+        }
+        int xMedian=findMedian(rowValues);
+        int yMedian=findMedian(colValues);
+        int distance=0;
+        for(int i=0;i<rowValues.size();i++){
+            distance+=Math.abs(xMedian-rowValues.get(i))+Math.abs(yMedian-colValues.get(i));
+        }
+        return distance;
+    }
+    
+    static int findMedian(List<Integer> list){
+        int size=list.size();
+        if(size%2==0)
+            return (list.get(size/2)+list.get(size/2 -1))/2;
+        else
+            return list.get(size/2);
+        
+    }
+    
