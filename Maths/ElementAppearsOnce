@@ -42,7 +42,7 @@ class Solution {
             seenOnce = ~seenTwice & (seenOnce ^ num);
             seenTwice = ~seenOnce & (seenTwice ^ num);
         }
-        
+       
         return seenOnce;
     }
 }
