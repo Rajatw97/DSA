@@ -1,0 +1,62 @@
+Q> Given a screen of size H x W with each cell of the screen being either a 0 or a 1 where 0 indicates a free cell and 1 indicates an occupied cell.
+We wish to put an image of size h x w on the screen. check to see if it is possible to put the image on the screen. If possible return the coordinates
+of the cell that can be used as the top left of the rectangle that the imags will occupy. You are allowed to find any rectangle that can fit the image.
+Example :
+[
+0,1,0,1,1
+0,0,0,0,1
+1,1,0,0,1
+]
+image size 2 x 2
+return {1, 2} ( 0-based indexing )
+
+
+pair<int,int> placeImage(boolean[][] canvas, int h, int w)
+{
+    if(canvas.size() == 0)
+    {
+        return {NULL, NULL};
+    }
+    canvasHeigth = canvas.size();
+    canvasWidth = canvas[0].size();
+    
+    boolean[][]  wideCell=new boolean[canvasHeigth][canvasWidth];
+    
+    for(int row = 0; row < canvasHeigth; row++)
+    {
+        int emptyCells = 0;
+        for(int col = canvasWidth - 1; col >= 0; col--)
+        {
+            if(canvas[row][col] == 0) //emptyCell
+            {
+                emptyCells++;
+                if(emptyCells >= w)
+                   wideCell[row][col] = 1;
+            }
+            else emptyCells = 0;
+        }
+    }
+    
+    for(int col = 0; col < canvasWidth; col++)
+    {
+        int wideCells = 0;
+        for(int row = canvasHeigth - 1; row >= 0; row--)
+        {
+            if(wideCell[row][col] == 1) //wideCell
+            {
+                wideCells++;
+                if(wideCells >= h)
+                   return {row, col};
+            }
+            else wideCells = 0;
+        }
+    }
+      for(int row = 0; row < canvasHeigth; row++){
+         for(int col = 0; col < canvasWidth; col++){
+            if(wideCell[row][col]==1)
+              return {row,col};
+         }
+      }
+    return {NULL, NULL};
+}
+
