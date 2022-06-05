@@ -46,17 +46,12 @@ pair<int,int> placeImage(boolean[][] canvas, int h, int w)
             {
                 wideCells++;
                 if(wideCells >= h)
-                   return {row, col};
+                   return {row, col}; //Output
             }
             else wideCells = 0;
         }
     }
-      for(int row = 0; row < canvasHeigth; row++){
-         for(int col = 0; col < canvasWidth; col++){
-            if(wideCell[row][col]==1)
-              return {row,col};
-         }
-      }
+     
     return {NULL, NULL};
 }
 
