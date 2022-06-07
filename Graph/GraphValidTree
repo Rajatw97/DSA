@@ -1,0 +1,60 @@
+Q> "Given n nodes labeled from 0 to n-1 and a list of undirected edges (each edge is a pair of nodes), write a function to check 
+whether these edges make up a valid tree.
+
+Approach: DFS,BFS,Union-Set (best)
+
+class Solution {
+    public boolean validTree(int n, int[][] edges) {
+        UnionFind uf = new UnionFind(n);
+        for(int[] edge : edges){
+            if(!uf.union(edge[0], edge[1])) return false;
+        }
+        return uf.numOfComponets == 1;
+    }
+}
+
+/**
+ * UnionFind
+ */
+public class UnionFind {
+    private int[] parents;
+    private int[] rank;
+    int numOfComponets = 0;
+
+    public UnionFind(int n) {
+        parents = new int[n];
+        rank = new int[n];
+        numOfComponets = n;
+        for (int i = 0; i < parents.length; i++) {
+            parents[i] = i;
+            rank[i] = 0;
+        }
+    }
+
+    public int findParent(int cur) {
+        if(parent[curr]=curr)
+          return curr;
+       
+        return paren[curr]=findParent(parent[curr]);
+    }
+
+    public int findComponentRank(int cur) {
+        int parent = findParent(cur);
+        return rank[parent];
+    }
+
+    public voi union(int node1, int node2) {
+        int node1Parent = findParent(node1);
+        int node2Parent = findParent(node2);
+        
+        if (rank[node1Parent] > rank[node2Parent]) {
+            parents[node2Parent] = node1Parent;       
+        } else {
+            parents[node1Parent] = node2Parent;
+        }else{
+          parents[node1Parent] = node2Parent;
+          rank[node2Prent]++;
+        }    
+        return ;
+    }
+}
