@@ -1,0 +1,36 @@
+Q> Given a string S of length N, the task is to find the lexicographically smallest K-length subsequence from the string S 
+
+TC:O(N)
+Space:O(N)
+
+
+class Solution
+{
+
+  static void smallestSubsequence(char []S, int K)
+  {
+ 
+    int N = S.length;
+    Stack<Character> answer = new Stack<>();
+    for (int i = 0; i < N; ++i) {
+      if (answer.isEmpty()) {
+        answer.add(S[i]);
+      }
+      else {
+        while ((!answer.isEmpty())&& (S[i] < answer.peek()) && (answer.size() - 1 + N - i >= K)) {
+          answer.pop();
+        }
+        if (answer.isEmpty() || answer.size() < K) {
+          answer.add(S[i]);
+        }
+      }
+    }
+
+    String ret="";
+    while (!answer.isEmpty()) {
+      ret+=(answer.peek());
+      answer.pop();
+    }
+    ret = reverse(ret);
+    System.out.print(ret);
+  }
