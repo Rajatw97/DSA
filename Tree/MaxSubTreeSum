@@ -1,0 +1,22 @@
+Q>  Maximum subtree sum in a given binary tree.
+
+Approach : Post order traversal 
+
+
+class Solution{
+  int maxSum=Integer.MIN_VALUE:
+  int node=0;
+
+  int retSum(Node root){
+
+    if(root==null)
+      return 0;
+    int sum=retSum(root.left) + retSum(root.right) + root.data;
+    if(sum>ms){
+      maxSum=sum;
+      node=root.data;
+    }
+    return sum;
+  }
+
+}
