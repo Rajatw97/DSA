@@ -1,0 +1,87 @@
+
+class GFG {
+ 
+    static void printLargest( String[] arr)
+    {
+ 
+        Collections.sort(arr, new Comparator<String>()
+        {
+            @Override public int compare(String X, String Y)
+            {
+                String XY = X + Y;
+                String YX = Y + X;
+           
+                return XY.compareTo(YX) > 0 ? -1 : 1;
+            }
+        });
+ 
+        Iterator it = arr.iterator();
+ 
+        while (it.hasNext())
+            System.out.print(it.next());
+    }
+
+    public static void main(String[] args)
+    {
+ 
+        
+        String[] arr = new String[]();
+        arr.add("54");
+        arr.add("546");
+        arr.add("548");
+        arr.add("60");
+        printLargest(arr);
+    }
+}
+
+
+Approach:If string is not allowed
+
+bool myCompare(int x, int y)
+{
+    int xy = x, yx = y;
+    int countx = 0, county = 0;
+    // Count length of X
+    while (x > 0) {
+        countx++;
+        x /= 10;
+    }
+ 
+    // Count length of Y
+    while (y > 0) {
+        county++;
+        y /= 10;
+    }
+ 
+    x = xy;
+    y = yx;
+ 
+    while (countx--)
+        yx *= 10;
+ 
+    while (county--)
+        xy *= 10;
+ 
+    // Append x to y
+    yx += x;
+ 
+    // Append y to x
+    xy += y;
+ 
+    return xy > yx;
+}
+ 
+
+void printLargest(long long[] arr)
+{
+    sort(arr, myCompare);
+    for (int i = 0; i < arr.size(); i++)
+        System.out.println(arr[i]);
+}
+
+int main()
+{
+    long long[] arr=new long long[]{54,546,548,60};
+    printLargest(arr);
+    return 0;
+}
