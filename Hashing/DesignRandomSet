@@ -13,53 +13,38 @@ Output
 [null, true, false, true, 2, true, false, 2]
 
 
-class RandomizedSet {
+public class RandomizedSet {
 
+    Map<Integer, Integer> map = new HashMap<>();
+    List<Integer> list = new ArrayList<>();
+    Random rnd = new Random();
 
-    HashMap<Integer, Integer> hm;
-    List<Integer> ml;
-    int ind;
-    Random i;
-    /** Initialize your data structure here. */
-    public RandomizedSet() 
-    {
-        ind = 0;
-        i = new Random();
-        hm = new HashMap<Integer, Integer>();
-        ml = new ArrayList<Integer>();
-    }
-    
-    /** Inserts a value to the set. Returns true if the set did not already contain the specified element. */
-    public boolean insert(int val) 
-    {
-        if(hm.containsKey(val))
+    public boolean insert(int val) {
+        if(map.containsKey(val)) {
             return false;
-        hm.put(val, ind);
-        ml.add(ind, val);
-        ind++;
+        }
+        
+        map.put(val, list.size());
+        list.add(val);
         return true;
     }
     
-    /** Removes a value from the set. Returns true if the set contained the specified element. */
-    public boolean remove(int val) 
-    {
-        if(!hm.containsKey(val))
+    public boolean remove(int val) {
+        if(!map.containsKey(val)) {
             return false;
-        int i = hm.get(val);
-        hm.remove(val);
-        ind--;
-        if(ind != i)
-        {
-            hm.put(ml.get(ind), i);
-            ml.set(i, ml.get(ind));
+        }
+        
+        int idx = map.remove(val);
+        int last = list.remove(list.size() - 1);
+        if(val != last) {
+            list.set(idx, last);
+            map.put(last, idx);
         }
         return true;
     }
     
-    /** Get a random element from the set. */
-    public int getRandom() 
-    {
-        return ml.get(i.nextInt(ind));
+    public int getRandom() {
+        return list.get(rnd.nextInt(list.size()));
     }
 }
 
