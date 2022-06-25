@@ -1,0 +1,55 @@
+
+
+class Snapshot {
+    	Map<String, String> info; // attributes <"name", "John"> etc...
+    	public Snapshot() {
+    		info = new HashMap<>();
+    	}
+    	String get(String key) {
+    		return info.get(key);
+    	}
+    	void put(String key, String value) {
+    		info.put(key, value);
+    	}
+    }
+
+    
+    class SnapshottableMap {
+    	Map<Integer, Snapshot> snaps; // save all existing snapshot
+    	Snapshot curSnap; // temporary snapshot
+    	int snapId; // time 
+    	
+    	public SnapshottableMap () {
+    		snaps = new HashMap<>();
+    		curSnap = new Snapshot();
+    		snapId = 0;
+    	}
+    	void put(String key, String value) {
+    		curSnap.put(key, value);
+    	}
+    	
+    	String get(String key) {
+    		return curSnap.get(key);
+    	}
+    	
+    	Snapshot createSnapshot() {
+    		Snapshot s = new Snapshot();
+    		//deep copy curSnap to created Snapshot
+    		Map<String, String> info = curSnap.info;
+    		for (String key : info.keySet()) {
+    			s.put(key, info.get(key));
+    		}
+    		snaps.put(snapId, curSnap);
+    		snapId++;
+    		return s;
+    	}
+    	
+    	List<Snapshot> getSnapshots() {
+    		List<Snapshot> res = new ArrayList<>();
+    		for (int i = 0; i < snapId; i++) {
+        		Snapshot snapshot = snaps.get(snapId);
+        		res.add(snapshot);
+    		}
+    		return res;
+    	}
+    }
