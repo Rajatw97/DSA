@@ -1,0 +1,23 @@
+Q> You have been given an array/list ‘ARR’ consisting of ‘N’ positive integers. Your task is to return the Next Greater Element(NGE) for every element.
+
+class Solution {
+    public int[] nextGreaterElements(int[] nums) {
+        int[] output=new int[nums.length];
+        Stack<Integer> minStack=new Stack<>();
+        
+        for(int index=0;index<nums.length;index++){
+            
+            if(!minStack.isEmpty() && nums[index] >nums[minStack.peek()]){
+                int ind=minStack.pop();
+                output[ind]=nums[index];
+            }
+            minStack.push(index);
+        }
+        
+        while(!minStack.isEmpty()){
+            output[minStack.pop()]=-1;
+        }
+        return output;
+    }
+    
+}
