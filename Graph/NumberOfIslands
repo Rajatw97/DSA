@@ -21,7 +21,7 @@ static void mark_current_island(int[] [] matrix,int x,int y,int r,int c)
             return;
  
          matrix[x][y] = '2';
-      
+     
         mark_current_island(matrix,x+1,y,r,c);  
         mark_current_island(matrix,x,y+1,r,c);  
         mark_current_island(matrix,x-1,y,r,c);  
