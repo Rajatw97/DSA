@@ -1,0 +1,43 @@
+Q> Print Inorder traversal of Binary tree which left leaf node is connected to left sibling and right leaf node is connected to right sibling
+(i.e no node is null except the left of leftmost node and right of rightmost node).
+
+Approach: If you want same element appear twice then write simple inorder traversal.
+
+class Node{
+    
+    int val;
+    Node left;
+    Node right;
+    boolean visited;
+    Node(int val){this.val=val;
+        visited=false;
+    }
+}
+
+public class Main
+{   
+    static void inorder(Node curr){
+        if(curr==null)
+            return;
+        inorder(curr.left);
+        if(curr.visited==false){
+            System.out.println(curr.val);
+            curr.visited=true;
+        }
+        inorder(curr.right);
+    }
+    
+	public static void main(String[] args) {
+	
+	    Node root=new Node(5);
+	    root.left=new Node(3);
+	    root.right=new Node(8);
+	    root.left.left=new Node(1);
+	    root.left.right=new Node(4);
+	    root.right.left=new Node(6);
+	    root.right.right=new Node(9);
+	    root.left.left.right=root.left.right;
+	    root.right.right.left=root.right.left;
+	    inorder(root);
+	}
+}
