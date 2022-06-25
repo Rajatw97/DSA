@@ -49,7 +49,7 @@ class Solution {
             if(q.size()!=0)
                 minutes++;
         }
-        
+       
         return count==countOranges? minutes:-1;
     }
 }
