@@ -1,0 +1,39 @@
+Q> A string A is special if A = B + B (an empty string is also special)
+example "aa", "aabbaabb" are special, but "aba", "aabb" are not.
+Find smallest number of operations to change the given string into a special string
+
+I/P: "aba" -> 1 // remove 'b' and string becomes "aa"
+
+ private static int specialString(String s){
+        int min = Integer.MAX_VALUE;
+        int n = s.length();
+        for (int i =1; i < n; i++){
+            String s1 = s.substring(0,i);
+            String s2 = s.substring(i);
+            min= Math.min(min, minDistance(s1 , s2));
+        }  
+        return min;
+    }
+
+    private static int minDistance(String s1, String s2) {
+        int n = s1.length(), m = s2.length();
+        int[][] arr = new int[n+1][m+1];
+
+        for (int i =0; i <= n ; i++){
+            arr[i][0] = i;
+        }
+        for (int j =0; j <= m ; j++){
+            arr[0][j] = j;
+        }
+        for (int i = 1; i <= n; i++){
+            for (int j =1; j <= m ; j++){
+                if(s1.charAt(i-1) == s2.charAt(j-1)){
+                    arr[i][j] = arr[i-1][j-1];
+                }else {
+                    arr[i][j] = 1 + Math.min(arr[i-1][j-1] , Math.min(arr[i-1][j] , arr[i][j-1]));
+                }
+            }
+        }
+
+        return arr[n][m];
+    }
