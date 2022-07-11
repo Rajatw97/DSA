@@ -1,0 +1,28 @@
+class GFG {
+ 
+    // Program to convert the base of
+    // given binary number to base 6
+    public static void convertBase(String N)
+    {
+ 
+       
+        int decimal = 0;
+        for (int i = 0; i < N.length(); i++) {
+            decimal += Math.pow(2,i) *(N.charAt(i) - '0');
+        }
+        ArrayList<Integer> ans = new ArrayList<Integer>();
+        while (decimal > 0) {
+            ans.add(decimal % 6);
+            decimal = decimal / 6;
+        }
+        for (int i = ans.size() - 1; i >= 0; i--) {
+            System.out.print(ans.get(i));
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        String N = "100111";
+        convertBase(N);
+    }
+}
