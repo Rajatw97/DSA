@@ -4,7 +4,7 @@ Output: [[-2,2]]
 
 class Solution {
     public int[][] kClosest(int[][] points, int k) {
-        
+       
         Queue<int[]> q=new PriorityQueue<>((a,b)->{
            int x=a[0]*a[0]+a[1]*a[1];
            int y=b[0]*b[0]+b[1]*b[1];
