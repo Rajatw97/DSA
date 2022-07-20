@@ -29,7 +29,6 @@ int longestpalindrome(String str){
                 }
             }
         }
-
         System.out.println(len);
     }
 }
