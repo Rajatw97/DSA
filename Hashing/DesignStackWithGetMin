@@ -73,8 +73,7 @@ class MyStack
   
         System.out.println("Number Inserted: " + x);
     }
-};
-
+}
 public class Main
 {
     public static void main(String[] args)
