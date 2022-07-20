@@ -24,7 +24,7 @@ class Solution {
                 else
                     start++;
             }
-        }
+        } 
         return result.stream().collect(Collectors.toList());
     }
 }
