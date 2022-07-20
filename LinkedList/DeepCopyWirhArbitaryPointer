@@ -30,7 +30,7 @@ class Solution {
            temp.next=front;
             copy=copy.next;
             temp=front;
-            
+           
         }
         return result.next;
     }
