@@ -31,7 +31,7 @@ class Solution {
             }
             
         }
-        
+       
          List<List<String>> output=new ArrayList<>();
          for(ArrayList<String> val:result.values())
             output.add(val);
