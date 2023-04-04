@@ -1,0 +1,355 @@
+Q>5. First given a 2D array, output the results in interleaving fashion.
+Ex: [[1,2,3],[4,5],[6],[],[7,8,9]] ---> [1,4,6,7,2,5,8,3,9]
+
+Create a series of iterators
+
+Range: Takes start end and increment and outputs numbers between.
+RangeIterator(0, 10, 2) where 0 = start, 10 = end, increment = 2. Output should be [0,2,4,6,8,10]
+Interleaving: basically doing same as first
+Cycle: Takes in another iterator implemented above and keeps repeating the data once end is reached.	}
+
+
+public class Main {
+  public static void main(String[] args) {
+    int[][] arr = {{1,2,3},{4,5},{6},{},{7,8,9}};
+    List<Iterator<Integer>> iterators = new ArrayList<>();
+
+    // Create iterators for each subarray
+    for (int[] subArray : arr) {
+      Iterator<Integer> iterator = Arrays.stream(subArray).iterator();
+      iterators.add(iterator);
+    }
+
+    // Interleave the iterators
+    Iterator<Integer> interleavingIterator = new InterleavingIterator<>(iterators);
+
+    // Print the output
+    while (interleavingIterator.hasNext()) {
+      System.out.print(interleavingIterator.next() + " ");
+    }
+  }
+}
+
+class RangeIterator implements Iterator<Integer> {
+  private int start;
+  private int end;
+  private int increment;
+  private int current;
+
+  public RangeIterator(int start, int end, int increment) {
+    this.start = start;
+    this.end = end;
+    this.increment = increment;
+    this.current = start;
+  }
+
+  @Override
+  public boolean hasNext() {
+    return current <= end;
+  }
+
+  @Override
+  public Integer next() {
+    int value = current;
+    current += increment;
+    return value;
+  }
+}
+
+class InterleavingIterator<T> implements Iterator<T> {
+  private List<Iterator<T>> iterators;
+  private int currentIteratorIndex;
+
+  public InterleavingIterator(List<Iterator<T>> iterators) {
+    this.iterators = iterators;
+    this.currentIteratorIndex = 0;
+  }
+
+  @Override
+  public boolean hasNext() {
+    // Check if any of the iterators have more elements
+    for (Iterator<T> iterator : iterators) {
+      if (iterator.hasNext()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Override
+  public T next() {
+    // Get the next element from the current iterator
+    Iterator<T> currentIterator = iterators.get(currentIteratorIndex);
+    T element = currentIterator.next();
+
+    // Move to the next iterator and wrap around if necessary
+    currentIteratorIndex++;
+    if (currentIteratorIndex >= iterators.size()) {
+      currentIteratorIndex = 0;
+    }
+
+    return element;
+  }
+}
+
+class CycleIterator<T> implements Iterator<T> {
+  private Iterator<T> iterator;
+  private List<T> list;
+
+  public CycleIterator(Iterator<T> iterator) {
+    this.iterator = iterator;
+    this.list = new ArrayList<>();
+  }
+
+  @Override
+  public boolean hasNext() {
+    return true; // Always return true for a cycle iterator
+  }
+
+  @Override
+  public T next() {
+    if (!iterator.hasNext()) {
+      // Reset the iterator and add the elements to the list
+      iterator = list.iterator();
+      list.clear();
+    }
+
+    // Get the next element and add it to the list
+    T element = iterator.next();
+    list.add(element);
+
+    return element;
+  }
+}
+
+
+Variations:
+
+1. Simple Iterator from list:
+import java.util.*;
+
+public class SimpleIterator<T> implements Iterator<T> {
+  private List<T> list;
+  private int currentIndex;
+
+  public SimpleIterator(List<T> list) {
+    this.list = list;
+    this.currentIndex = 0;
+  }
+
+  @Override
+  public boolean hasNext() {
+    return currentIndex < list.size();
+  }
+
+  @Override
+  public T next() {
+    T element = list.get(currentIndex);
+    currentIndex++;
+    return element;
+  }
+}
+
+2. Iterator from another Iterator:
+import java.util.*;
+
+public class IteratorFromIterator<T> implements Iterator<T> {
+  private Iterator<T> iterator;
+
+  public IteratorFromIterator(Iterator<T> iterator) {
+    this.iterator = iterator;
+  }
+
+  @Override
+  public boolean hasNext() {
+    return iterator.hasNext();
+  }
+
+  @Override
+  public T next() {
+    return iterator.next();
+  }
+}
+
+3.Merge Iterator from list of iterators in Round Robin fashion:
+import java.util.*;
+
+public class RoundRobinIterator<T> implements Iterator<T> {
+  private List<Iterator<T>> iterators;
+  private int currentIndex;
+
+  public RoundRobinIterator(List<Iterator<T>> iterators) {
+    this.iterators = iterators;
+    this.currentIndex = 0;
+  }
+
+  @Override
+  public boolean hasNext() {
+    // Check if any of the iterators have more elements
+    for (Iterator<T> iterator : iterators) {
+      if (iterator.hasNext()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Override
+  public T next() {
+    // Get the next element from the current iterator
+    Iterator<T> currentIterator = iterators.get(currentIndex);
+    T element = currentIterator.next();
+
+    // Move to the next iterator and wrap around if necessary
+    currentIndex++;
+    if (currentIndex >= iterators.size()) {
+      currentIndex = 0;
+    }
+
+    return element;
+  }
+}
+
+4. Merge Iterator from iterator of iterators in Round Robin fashion:
+import java.util.*;
+
+public class IteratorOfIteratorsRoundRobin<T> implements Iterator<T> {
+  private Iterator<Iterator<T>> iteratorOfIterators;
+  private Iterator<T> currentIterator;
+
+  public IteratorOfIteratorsRoundRobin(Iterator<Iterator<T>> iteratorOfIterators) {
+    this.iteratorOfIterators = iteratorOfIterators;
+    this.currentIterator = iteratorOfIterators.next();
+  }
+
+  @Override
+  public boolean hasNext() {
+    // Check if the current iterator has more elements
+    if (currentIterator.hasNext()) {
+      return true;
+    }
+
+    // Check if there are more iterators in the iterator of iterators
+    if (iteratorOfIterators.hasNext()) {
+      currentIterator = iteratorOfIterators.next();
+      return hasNext(); // Recursively check the next iterator
+    }
+
+    return false;
+  }
+
+  @Override
+  public T next() {
+    // Call hasNext() to ensure that the current iterator has a next element
+    if (!hasNext()) {
+      throw new NoSuchElementException();
+    }
+
+    return currentIterator.next();
+  }
+}
+6. Merge Iterator from iterator of iterators one after another:
+import java.util.*;
+
+import java.util.*;
+
+public class IteratorOfIteratorsSequential<T> implements Iterator<T> {
+  private Iterator<Iterator<T>> iteratorOfIterators;
+  private Iterator<T> currentIterator;
+
+  public IteratorOfIteratorsSequential(Iterator<Iterator<T>> iteratorOfIterators) {
+    this.iteratorOfIterators = iteratorOfIterators;
+    this.currentIterator = iteratorOfIterators.next();
+  }
+
+  @Override
+  public boolean hasNext() {
+    // Check if the current iterator has more elements
+    if (currentIterator.hasNext()) {
+      return true;
+    }
+
+    // Check if there are more iterators in the iterator of iterators
+    while (iteratorOfIterators.hasNext()) {
+      currentIterator = iteratorOfIterators.next();
+      if (currentIterator.hasNext()) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  @Override
+  public T next() {
+    // Call hasNext() to ensure that the current iterator has a next element
+    if (!hasNext()) {
+      throw new NoSuchElementException();
+    }
+
+    return currentIterator.next();
+  }
+}
+
+7. Step Iterator using start / end / step => Handle scenarios:
+
+import java.util.*;
+
+public class StepIterator implements Iterator<Integer> {
+  private int start;
+  private int end;
+  private int step;
+  private int current;
+
+  public StepIterator(int start, int end, int step) {
+    this.start = start;
+    this.end = end;
+    this.step = step;
+    this.current = start;
+  }
+
+  @Override
+  public boolean hasNext() {
+    return current <= end;
+  }
+
+  @Override
+  public Integer next() {
+    int element = current;
+    current += step;
+    if (element > end) {
+      throw new NoSuchElementException();
+    }
+    return element;
+  }
+}
+
+8. Given a list of values, create an infinite cyclic iterator:
+
+import java.util.*;
+
+public class CyclicIterator<T> implements Iterator<T> {
+  private List<T> list;
+  private int currentIndex;
+
+  public CyclicIterator(List<T> list) {
+    this.list = list;
+    this.currentIndex = 0;
+  }
+
+  @Override
+  public boolean hasNext() {
+    return true;
+  }
+
+  @Override
+  public T next() {
+    T element = list.get(currentIndex);
+    currentIndex++;
+    if (currentIndex >= list.size()) {
+      currentIndex = 0;
+    }
+    return element;
+  }
+}
+
