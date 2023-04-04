@@ -1,0 +1,64 @@
+Q> https://leetcode.com/problems/design-in-memory-file-system/
+
+class FileSystem {
+    private Map<String, Integer> fileMap;
+    private Map<String, List<String>> dirMap;
+    private String root;
+
+    public FileSystem() {
+        fileMap = new HashMap<>();
+        dirMap = new HashMap<>();
+        root = "/";
+        dirMap.put(root, new ArrayList<>());
+    }
+
+    public List<String> ls(String path) {
+        List<String> res = new ArrayList<>();
+        if (fileMap.containsKey(path)) {
+            res.add(getFileName(path));
+            return res;
+        }
+        List<String> files = dirMap.get(path);
+        for (String file : files) {
+            res.add(getFileName(file));
+        }
+        Collections.sort(res);
+        return res;
+    }
+
+    public void mkdir(String path) {
+        if (!dirMap.containsKey(path)) {
+            String parent = getParentPath(path);
+            if (!dirMap.containsKey(parent)) {
+                mkdir(parent);
+            }
+            dirMap.put(path, new ArrayList<>());
+            dirMap.get(parent).add(path);
+        }
+    }
+
+    public void addContentToFile(String filePath, String content) {
+        String parent = getParentPath(filePath);
+        if (!dirMap.containsKey(parent)) {
+            mkdir(parent);
+        }
+        if (!fileMap.containsKey(filePath)) {
+            dirMap.get(parent).add(filePath);
+        }
+        fileMap.put(filePath, fileMap.getOrDefault(filePath, "") + content);
+    }
+
+    public String readContentFromFile(String filePath) {
+        return fileMap.get(filePath);
+    }
+
+    private String getParentPath(String path) {
+        int lastIndex = path.lastIndexOf("/");
+        return path.substring(0, lastIndex);
+    }
+
+    private String getFileName(String path) {
+        int lastIndex = path.lastIndexOf("/");
+        return path.substring(lastIndex + 1);
+    }
+}
