@@ -1,0 +1,26 @@
+Q> Given n dice each with m faces, numbered from 1 to m, find the number of ways to get sum X. X is the summation of values on each face when all the dice are thrown.
+
+class GFG {
+
+    public static long findWays(int m, int n, int x){
+
+    long[][] table = new long[n+1][x+1];
+    for(int j = 1; j <= m && j <= x; j++)
+        table[1][j] = 1;
+             
+    for(int i = 2; i <= n;i ++){
+                for(int j = 1; j <= x; j++){
+                    for(int k = 1; k < j && k <= m; k++)
+                        table[i][j] += table[i-1][j-k];
+                }
+        }
+         
+     for(int i = 0; i< n+1; i++){
+          for(int j = 0; j< x+1; j++)
+              System.out.print(dt[i][j] + " ");
+            System.out.println();
+    } 
+    return table[n][x];
+    }
+   
+}
