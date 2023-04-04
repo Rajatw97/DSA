@@ -1,0 +1,110 @@
+import java.util.*;
+
+public class ArbitrageDetection {
+
+    // Graph class to represent exchange rates between currencies
+    static class Graph {
+        int V, E;
+        Edge[] edges;
+        
+        // Edge class to represent an exchange rate between two currencies
+        static class Edge {
+            int src, dest;
+            double weight;
+            Edge() {
+                src = dest = 0;
+                weight = 0;
+            }
+        }
+
+        Graph(int v, int e) {
+            V = v;
+            E = e;
+            edges = new Edge[E];
+            for (int i = 0; i < E; ++i)
+                edges[i] = new Edge();
+        }
+
+        // Bellman-Ford algorithm to detect arbitrage opportunities
+        boolean detectArbitrage(double startAmount) {
+            double[] dist = new double[V];
+            Arrays.fill(dist, startAmount);
+            int[] prev = new int[V];
+            Arrays.fill(prev, -1);
+
+            // Relax all edges |V| - 1 times
+            for (int i = 1; i < V; ++i) {
+                for (int j = 0; j < E; ++j) {
+                    int u = edges[j].src;
+                    int v = edges[j].dest;
+                    double weight = edges[j].weight;
+                    if (dist[u] != Double.MAX_VALUE && dist[u] * weight > dist[v]) {
+                        dist[v] = dist[u] * weight;
+                        prev[v] = u;
+                    }
+                }
+            }
+
+            // Check for negative-weight cycles
+            for (int i = 0; i < E; ++i) {
+                int u = edges[i].src;
+                int v = edges[i].dest;
+                double weight = edges[i].weight;
+                if (dist[u] != Double.MAX_VALUE && dist[u] * weight > dist[v]) {
+                    // Negative-weight cycle found, report arbitrage opportunity
+                    System.out.println("Arbitrage opportunity found!");
+                    System.out.print("Path: ");
+                    int curr = v;
+                    Stack<Integer> path = new Stack<>();
+                    path.push(curr);
+                    while (prev[curr] != -1) {
+                        path.push(prev[curr]);
+                        curr = prev[curr];
+                    }
+                    while (!path.isEmpty()) {
+                        System.out.print(path.pop() + " -> ");
+                    }
+                    System.out.println(v);
+                    System.out.println("Profit: " + dist[v] / startAmount);
+                    return true;
+                }
+            }
+
+            // No arbitrage opportunity found
+            return false;
+        }
+    }
+
+    public static void main(String[] args) {
+        int V = 4; // number of currencies
+        int E = 6; // number of exchange rates
+        
+        // exchange rates between currencies
+        Graph graph = new Graph(V, E);
+        graph.edges[0].src = 0;
+        graph.edges[0].dest = 1;
+        graph.edges[0].weight = 0.5;
+        graph.edges[1].src = 1;
+        graph.edges[1].dest = 2;
+        graph.edges[1].weight = 2;
+        graph.edges[2].src = 2;
+        graph.edges[2].dest = 3;
+        graph.edges[2].weight = 0.5;
+        graph.edges[3].src = 3;
+        graph.edges[3].dest = 0;
+        graph.edges[3].weight = 0.55;
+        graph.edges[4].src = 0;
+        graph.edges[4].dest =
+        graph.edges[4].weight = 1.5;
+        graph.edges[5].src = 3;
+        graph.edges[5].dest = 1;
+        graph.edges[5].weight = 0.9;
+
+        // Detect arbitrage opportunities
+        double startAmount = 1.0; // amount to start with
+        boolean arbitrageFound = graph.detectArbitrage(startAmount);
+        if (!arbitrageFound) {
+            System.out.println("No arbitrage opportunity found");
+        }
+    }
+}
