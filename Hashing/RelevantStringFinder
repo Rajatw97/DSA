@@ -1,0 +1,39 @@
+Q> Give a list of string list, the inner list represents the related strings, and the question was to find the relevant string for each string.
+The most relevant string refers to the most common occurrences of other strings and this string.
+
+	Input:
+	[['Casper', 'Purple', 'Wayfair'],['Purple', 'Wayfair', 'Tradesy'],['Wayfair', 'Tradesy', 'Peloton']]
+  
+  Output:
+	{
+ 	  'Casper': ['Purple', 'Wayfair'],
+ 	  'Purple': ['Wayfair'],
+	   'Wayfair': ['Purple', 'Tradesy'],
+  	 'Tradesy': ['Wayfair'],
+	   'Peloton': ['Wayfair', 'Tradesy']
+   }
+
+
+public class RelevantStringFinder {
+    public static void main(String[] args) {
+        List<List<String>> inputList = new ArrayList<>();
+        inputList.add(Arrays.asList("Casper", "Purple", "Wayfair"));
+        inputList.add(Arrays.asList("Purple", "Wayfair", "Tradesy"));
+        inputList.add(Arrays.asList("Wayfair", "Tradesy", "Peloton"));
+
+        Map<String, List<String>> relevantMap = new HashMap<>();
+        for (List<String> innerList : inputList) {
+            for (String str : innerList) {
+                List<String> relevantList = relevantMap.getOrDefault(str, new ArrayList<>());
+                for (String s : innerList) {
+                    if (!s.equals(str) && !relevantList.contains(s)) {
+                        relevantList.add(s);
+                    }
+                }
+                relevantMap.put(str, relevantList);
+            }
+        }
+
+        System.out.println(relevantMap);
+    }
+}
