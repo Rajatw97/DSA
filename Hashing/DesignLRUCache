@@ -1,84 +1,5 @@
 Q> Design LRU cache
 
-class Node {
-    int key;
-    int val;
-    Node prev;
-    Node next;
-
-    public Node(int key, int val) {
-        this.key = key;
-        this.val = val;
-    }
-}
-
-// only need addToFront and Delete
-class LRUCache {
-
-    Map<Integer, Node> map;
-    Node head;
-    Node tail;
-    int capacity;
-
-    // initializ a <capacity> size data sctructure with two empty nodes pointing to each other (head and tail)
-    public LRUCache(int capacity) {
-        map = new HashMap<>();
-        head = new Node(-1, -1);
-        tail = new Node(-1, -1);
-        head.next = tail;
-        tail.prev = head;
-        this.capacity = capacity;
-    }
-
-    // move the current node to head, O(1)
-    public void moveToHead(Node curr) {
-        curr.next = head.next;
-        curr.prev = head;
-        head.next = curr;
-        curr.next.prev = curr;
-    }
-
-    // delete the current node, O(1)
-    public void delete(Node curr) {
-        curr.prev.next = curr.next;
-        curr.next.prev = curr.prev;
-    }
-
-    // when getting this node, delete it and move it to head because it is recently used, O(1)
-    public int get(int key) {
-        if(map.containsKey(key)) {
-            Node curr = map.get(key);
-            delete(curr);
-            moveToHead(curr);
-            return curr.val;
-        }
-        return -1;
-    }
-
-    // puts a new node if it doesn't already exist. Regardless of if it already exists, this node is brough to head
-    // because it is recently used. If capacity exceeds, remove the tail because it is the least used, O(1)
-    public void put(int key, int value) {
-        if(map.containsKey(key)) {
-            Node curr = map.get(key);
-            curr.val = value;
-            delete(curr);
-            moveToHead(curr);
-        }
-        else if(map.size()<capacity) {
-            map.put(key, new Node(key, value));
-            moveToHead(map.get(key));
-        }
-        else {
-            map.put(key, new Node(key, value));
-            map.remove(tail.prev.key);
-            delete(tail.prev);
-            moveToHead(map.get(key));
-        }
-    }
-}
-
-Optimal:
-
 class LRUCache {
 
    private LinkedHashMap<Integer, Integer> map;
@@ -106,3 +27,115 @@ class LRUCache {
         map.put(key, value);
     }
 }
+
+Advanced:  Design LRU cache with expiration time as first level of eviction then priority or item and then least recently used item.
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+public class LRUCache {
+    private int capacity;
+    private HashMap<String, CacheItem> cache;
+    private LinkedHashMap<String, CacheItem> lruCache;
+
+    // CacheItem class to represent cache entries
+    private class CacheItem {
+        String value;
+        int priority;
+        int expiry;
+        long lastAccessed;
+
+        public CacheItem(String value, int priority, int expiry) {
+            this.value = value;
+            this.priority = priority;
+            this.expiry = expiry;
+            this.lastAccessed = System.currentTimeMillis();
+        }
+    }
+
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        cache = new HashMap<>();
+        lruCache = new LinkedHashMap<>(capacity, 0.75f, true) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<String, CacheItem> eldest) {
+                return size() > capacity;
+            }
+        };
+    }
+
+    // Method to retrieve a value from the cache by key
+    public synchronized String get(String key) {
+        if (cache.containsKey(key)) {
+            CacheItem item = cache.get(key);
+            // Update last accessed time for LRU policy
+            item.lastAccessed = System.currentTimeMillis();
+            return item.value;
+        } else {
+            return null;
+        }
+    }
+
+    // Method to add a value to the cache with key, value, priority, and expiry
+    public synchronized void set(String key, String value, int priority, int expiry) {
+        if (cache.containsKey(key)) {
+            // If key already exists, update the value, priority, and expiry
+            CacheItem item = cache.get(key);
+            item.value = value;
+            item.priority = priority;
+            item.expiry = expiry;
+            // Update last accessed time for LRU policy
+            item.lastAccessed = System.currentTimeMillis();
+        } else {
+            // If key does not exist, create a new cache item and add it to the cache
+            CacheItem newItem = new CacheItem(value, priority, expiry);
+            cache.put(key, newItem);
+            lruCache.put(key, newItem);
+        }
+    }
+
+    // Method to evict expired items and items with least priority or least recently used
+public synchronized void evictItem(int currentTime) {
+    for (Map.Entry<String, CacheItem> entry : cache.entrySet()) {
+        String key = entry.getKey();
+        CacheItem item = entry.getValue();
+        if (item.expiry <= currentTime) {
+            // If item has expired, remove it from cache
+            cache.remove(key);
+            lruCache.remove(key);
+            break; // Removing one expired item suffices as per the problem statement
+        }
+    }
+
+    if (lruCache.size() > 0) {
+        // If there are items in the LRU cache, remove the one with the least priority
+        String leastPriorityKey = null;
+        int leastPriority = Integer.MAX_VALUE;
+        long leastRecentAccess = Long.MAX_VALUE;
+
+        for (Map.Entry<String, CacheItem> entry : lruCache.entrySet()) {
+            String key = entry.getKey();
+            CacheItem item = entry.getValue();
+            if (item.priority < leastPriority) {
+                leastPriority = item.priority;
+                leastPriorityKey = key;
+                leastRecentAccess = item.lastAccessed;
+            } else if (item.priority == leastPriority && item.lastAccessed < leastRecentAccess) {
+                // If multiple items have the same priority, remove the least recently used one
+                leastPriorityKey = key;
+                leastRecentAccess = item.lastAccessed;
+            }
+        }
+
+        // Remove item with least priority or least recently used from cache
+        if (leastPriorityKey != null) {
+            cache.remove(leastPriorityKey);
+            lruCache.remove(leastPriorityKey);
+        }
+    }
+}
+
+                  
+If you need to implement a cache with a priority feature, where the keys have an associated priority value, you can use a BST to store the cache entries sorted by
+priority. This can allow you to quickly retrieve the most prioritized entries or perform operations such as finding the minimum or maximum priority entry.
