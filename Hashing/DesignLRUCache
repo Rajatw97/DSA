@@ -30,23 +30,22 @@ class LRUCache {
 
 Advanced:  Design LRU cache with expiration time as first level of eviction then priority or item and then least recently used item.
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 public class LRUCache {
     private int capacity;
     private HashMap<String, CacheItem> cache;
     private LinkedHashMap<String, CacheItem> lruCache;
+    private PriorityQueue<CacheItem> evictionQueue; // New priority queue for eviction
 
     // CacheItem class to represent cache entries
     private class CacheItem {
+        String key;
         String value;
         int priority;
         int expiry;
         long lastAccessed;
 
-        public CacheItem(String value, int priority, int expiry) {
+        public CacheItem(String key, String value, int priority, int expiry) {
+            this.key = key;
             this.value = value;
             this.priority = priority;
             this.expiry = expiry;
@@ -63,6 +62,15 @@ public class LRUCache {
                 return size() > capacity;
             }
         };
+        evictionQueue = new PriorityQueue<>(capacity, (a, b) -> {
+            if (a.expiry != b.expiry) {
+                return Integer.compare(a.expiry, b.expiry);
+            } else if (a.priority != b.priority) {
+                return Integer.compare(a.priority, b.priority);
+            } else {
+                return Long.compare(a.lastAccessed, b.lastAccessed);
+            }
+        });
     }
 
     // Method to retrieve a value from the cache by key
@@ -88,51 +96,38 @@ public class LRUCache {
             // Update last accessed time for LRU policy
             item.lastAccessed = System.currentTimeMillis();
         } else {
-            // If key does not exist, create a new cache item and add it to the cache
-            CacheItem newItem = new CacheItem(value, priority, expiry);
+            // If key does not exist, create a new cache item and add it to the cache and eviction queue
+            CacheItem newItem = new CacheItem(key, value, priority, expiry);
             cache.put(key, newItem);
             lruCache.put(key, newItem);
+            evictionQueue.add(newItem);
         }
     }
 
     // Method to evict expired items and items with least priority or least recently used
 public synchronized void evictItem(int currentTime) {
-    for (Map.Entry<String, CacheItem> entry : cache.entrySet()) {
-        String key = entry.getKey();
-        CacheItem item = entry.getValue();
+    while (!evictionQueue.isEmpty()) {
+        CacheItem item = evictionQueue.peek();
         if (item.expiry <= currentTime) {
-            // If item has expired, remove it from cache
-            cache.remove(key);
-            lruCache.remove(key);
-            break; // Removing one expired item suffices as per the problem statement
+            // If item has expired, remove it from cache and eviction queue
+            cache.remove(item.key);
+            lruCache.remove(item.key);
+            evictionQueue.poll();
+        } else {
+            // If item has not expired, break out of the loop
+            break;
         }
     }
 
-    if (lruCache.size() > 0) {
-        // If there are items in the LRU cache, remove the one with the least priority
-        String leastPriorityKey = null;
-        int leastPriority = Integer.MAX_VALUE;
-        long leastRecentAccess = Long.MAX_VALUE;
-
-        for (Map.Entry<String, CacheItem> entry : lruCache.entrySet()) {
-            String key = entry.getKey();
-            CacheItem item = entry.getValue();
-            if (item.priority < leastPriority) {
-                leastPriority = item.priority;
-                leastPriorityKey = key;
-                leastRecentAccess = item.lastAccessed;
-            } else if (item.priority == leastPriority && item.lastAccessed < leastRecentAccess) {
-                // If multiple items have the same priority, remove the least recently used one
-                leastPriorityKey = key;
-                leastRecentAccess = item.lastAccessed;
-            }
-        }
-
-        // Remove item with least priority or least recently used from cache
-        if (leastPriorityKey != null) {
-            cache.remove(leastPriorityKey);
-            lruCache.remove(leastPriorityKey);
-        }
+    if (lruCache.size() > capacity) {
+        // If cache size exceeds capacity after evicting expired items,
+        // remove the least recently used item from cache and eviction queue
+        Map.Entry<String, CacheItem> eldestEntry = lruCache.entrySet().iterator().next();
+        String keyToRemove = eldestEntry.getKey();
+        CacheItem itemToRemove = eldestEntry.getValue();
+        cache.remove(keyToRemove);
+        evictionQueue.remove(itemToRemove);
+        lruCache.remove(keyToRemove);
     }
 }
 
