@@ -1,0 +1,60 @@
+Q>Given 4 crop option and n number plots with graph edges of path keep track that each adjacent or connected by edge should not be considered for same crop ,
+return a array for each n plots representing 4 crops .import java.util.ArrayList;
+
+T: O(n)
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class CropAssignment {
+
+    public int[] assignCrops(int n, int[][] edges) {
+        // Create adjacency list to represent graph
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        for (int i = 0; i < edges.length; i++) {
+            int u = edges[i][0];
+            int v = edges[i][1];
+            if (!graph.containsKey(u)) {
+                graph.put(u, new ArrayList<>());
+            }
+            if (!graph.containsKey(v)) {
+                graph.put(v, new ArrayList<>());
+            }
+            graph.get(u).add(v);
+            graph.get(v).add(u);
+        }
+
+        int[] cropOptions = new int[n + 1]; // Crop options for each plot (1-indexed)
+        boolean[] used = new boolean[5]; // Array to keep track of used crop options
+
+        // Assign crops to plots using depth-first search
+        dfs(1, graph, cropOptions, used);
+
+        return cropOptions;
+    }
+
+    private void dfs(int plot, Map<Integer, List<Integer>> graph, int[] cropOptions, boolean[] used) {
+        // Assign crops to adjacent plots
+        List<Integer> neighbors = graph.getOrDefault(plot, new ArrayList<>());
+        for (int neighbor : neighbors) {
+            if (cropOptions[neighbor] != 0) {
+                used[cropOptions[neighbor]] = true;
+            }
+        }
+
+        // Assign unused crop option to current plot
+        for (int i = 1; i <= 4; i++) {
+            if (!used[i]) {
+                cropOptions[plot] = i;
+                break;
+            }
+        }
+
+        // Recursively assign crops to neighboring plots
+        for (int neighbor : neighbors) {
+            if (cropOptions[neighbor] == 0) {
+                dfs(neighbor, graph, cropOptions, used);
+            }
+        }
+    }
+}
