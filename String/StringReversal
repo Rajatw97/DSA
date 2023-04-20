@@ -1,0 +1,54 @@
+
+Q> A series of num_operations are performed on a initial_string of length n that contains lowercase English letters only. In the ith Operation, the prefix of the string of length i is reversed. The final string thus formed is represented by final_string.
+Given the string final_string and an integer num_operations, find the initial_string on which the operations were performed.
+Ex:
+
+Suppose final_string="chakerrank" and num_operations=3.
+Then the initial_string will be "hackerrank".
+On the first operation, reverse "h" -> "hackerrank"
+Reverse "ha" -> "ahckerrank".
+Reverse "ahc" -> "chakerrank" which is equal to final_string.
+Hence the answer is "hackerrank".
+
+Constraints:
+Sample Input:
+final_string=bbaaaba
+num_operations=5
+Output: aababba
+• After operation 1, reverse the prefix of length =
+1: aababba -› initial_string = aababba
+• After operation 2, reverse the prefix of length =
+2: aababba -› initial_string = aababba
+• After operation 3, reverse the prefix of length =
+3: aababba -> initial_string = baaabba
+• After operation 4, reverse the prefix of length =
+4: baaabba -› initial_string = aaabbba
+• After operation 5, reverse the prefix of length =
+5: aaabbba -› initial_string = bbaaaba
+
+
+Solution:
+string getInitialString(string final_string, int num_operations) { 
+
+String temp = final_string;
+int flag = 0;
+int k = 0;
+for(int i = num_operations-1 ; i >= 0 ; i-=2){
+    temp[i] = final_string[k];
+    k++;
+    flag = i;
+}
+if(flag == 0){
+    for(int j = 1 ; j < num_operation ; j+=2){
+        temp[j] = final_string[k];
+        k++;
+    }
+}
+else{
+    for(int j = 0 ; j < num_operation ; j+=2){
+        temp[j] = final_string[k];
+        k++;
+    }
+}
+return temp;
+}
