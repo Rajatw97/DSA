@@ -132,14 +132,87 @@ public class SnakeTest {
     }
 }
 
-Variation: If snake goes out of the boundary it should wrap in from the opposite side of the screen.
+Additional questions: 
 
-1) Remove boundary check from isValid()
-2) Before calling isValid() in move() on line 46, modulo the coordinates:
+1)If snake goes out of the boundary it should wrap in from the opposite side of the screen.
+    a) Remove boundary check from isValid()
+    b) Before calling isValid() in move() on line 46, modulo the coordinates:
         row = (row + height) % height; // wrap around the row
         col = (col + width) % width; // wrap around the column
+2) How would you take care of concurrent button presses, i.e if someone presses up and right at the same time ?
+    a) If you dont want to process multiple direction, then use locks.
+    b) If you are ok with receiving multiple requests and want to process them then store the incoming dirn request in a queue and process from queue req by req.
 
-    
+    public class SnakeGame {
+        ...
+        private Queue<String> inputQueue; // Thread-safe queue to store user input
+
+    public SnakeGame(int width, int height, int[][] food) {
+        ...
+        this.inputQueue = new ConcurrentLinkedQueue<>();
+    }
+
+    public synchronized void move(String direction) {
+        inputQueue.offer(direction); // Add the direction to the input queue
+    }
+
+    private boolean isValid(int row, int col) {... } // unchanged
+
+    private int process(int row, int col) {... } // unchanged
+
+    private void handleInput() {
+        while (true) {
+            String direction = inputQueue.poll(); // Poll the input queue
+            if (direction != null) {
+                int[] head = snake.peekFirst();
+                int row = head[0];
+                int col = head[1];
+                switch (direction) {
+                    case "U":
+                        row--;
+                        break;
+                    case "D":
+                        row++;
+                        break;
+                    case "L":
+                        col--;
+                        break;
+                    case "R":
+                        col++;
+                        break;
+                }
+                if (isValid(row, col)) {
+                    process(row, col);
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        int width = 3;
+        int height = 2;
+        int[][] food = {{1, 2}, {0, 1}};
+
+        SnakeGame snake = new SnakeGame(width, height, food);
+
+        // Start the input handling thread
+        Thread inputThread = new Thread(snake::handleInput);
+        inputThread.start();
+
+        // Simulate user input by calling move()
+        snake.move("R");
+        snake.move("D");
+        snake.move("R");
+        snake.move("U");
+        snake.move("L");
+       / Wait for the input thread to finish
+        try {
+            inputThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+}
+
  
 
 
