@@ -1,0 +1,184 @@
+Q: Design rate limiter? 
+
+A brief about Rate limit: 
+It is used to limit the number of requests that a particular client can send to the backend server. Why do we need it is to avoid our server to overbuden and thus
+resulting in failure so to ensure that the traffic in the backend server doesn't exceed some threshold we can limit no of req a particular user is sending.
+Now there can be various different usecases for rate limitingt and based on which we would have to handle differently. For eg: lets say a product went viral so we will
+see a huge spike in number of requests or someone could be trying something malicious like launchind DDOS attack to bring down the server, so these needs to be handled
+deifferently. Also, The rate at which the traffic comes is not in our control, at any point of time we should be prepared to see a burst or spike in traffic.
+Using a database is not a good idea due to slowness of disk access. In memory cache is the way to go. Because it is quick and supports a time-based expiration
+technique, an in-memory cache is chosen for rat limiter.
+
+Now there are various algorithms with its own pros & cons which is used to implement rate limiter:
+
+1. Token bucket :
+Token bucket is a container that has pre-defined capacity. Tokens are put in the bucket at fixed rates periodically. Once the bucket is full, no more tokens are added.
+Pros:  
+a. Very simple and easy to implement, memory efficient.
+b. Allows spike in traffic or burst of traffic,  A request goes through as long as there are tokens left
+Cons: 
+a. Fine tuning of params
+Usecase: Stripe, EC2
+Redis: <user_id, {tokens, timestamp}> : Here tokens represent no of tokens left, init with max defined.
+Concurrency issue: Token bucket’s Redis operations atomic via Lua scripting.
+
+2. Leaky bucket :
+Leaky bucket also has a bucket with a finite capacity for each client. It uses a limited sized queue and process requests at a constant rate from queue in First-In-First-Out(FIFO) manner.. In case of request overflow, new requests are dropped. 
+Pros:
+a) Memory efficient given the limited queue size
+b) Requests are processed at a fized rate, therefore it is suitable for use cases where a stable outflow rate id required.
+Cons:
+1) A burst of traffic fills up the queue with old requests, and if they are not processed in time, recent requests will be rate limited.
+
+
+3. Fix window:
+It divides the timeline into fixed-size windows and assign a counter to each window. Each request, based on its arriving time, is mapped to a window. If the counter in the window has reached the limit, requests falling in this window should be rejected.
+Pros:
+a)  It ensures that most recent requests are served without being starved by old requests.
+Cons:
+a) At edge of a window, it can allow twice number of requests causing overload on server.
+Redis:  <userid_timestamp, no of req made> : Already atomic so no concurrency
+
+4. Sliding window:
+It is used to overcome the problem that we face in fixed window by instead of defining fixed window intervals, we keep sliding the intervals so that we check for reuqests in past minute only from whne the request came.
+Pros:
+a) Works very accurately
+Cons:
+b)  Consumes a lot of memorybecause even if a request is rejected , it's timestamp will still be stored in memory.
+Redis: Timestamp data is kept in sorted sets of Redis.
+
+5) Sliding window Counter:  
+A hybrid approach that combines the Fixed Window Counter algorithm and Sliding Window Logs algorithm.
+Formulae: Requests in current window + (Requests in the previous window * overlap percentage of the rolling window and previous window)
+Pros:
+a) Memory efficient. It smoothes out spikes in the traffic because the rate is based on the average rate of the previous window.
+Cons:
+a) It is an approximation of the actual rate because it assumes requests in the previous window are evenly distributed.
+
+Implementation:
+
+public interface RateLimiter {
+    boolean grantAccess();
+}
+public class TokenBucket implements RateLimiter {
+    private int bucketCapacity;
+    private int refreshRate;
+    private AtomicInteger currentCapacity;
+    private AtomicLong lastUpdatedTime;
+
+    public TokenBucket(int bucketCapacity, int refreshRate) {
+        this.bucketCapacity = bucketCapacity;
+        this.refreshRate = refreshRate;
+        currentCapacity = new AtomicInteger(bucketCapacity);
+        lastUpdatedTime = new AtomicLong(System.currentTimeMillis());
+    }
+
+    @Override
+    public boolean grantAccess() {
+        refreshBucket();
+        if(currentCapacity.get() > 0){
+            currentCapacity.decrementAndGet();
+            return true;
+        }
+        return false;
+    }
+
+    void refreshBucket(){
+        long currentTime = System.currentTimeMillis();
+        int additionalToken = (int) ((currentTime-lastUpdatedTime.get())/1000 * refreshRate);
+        int currCapacity = Math.min(currentCapacity.get()+additionalToken, bucketCapacity);
+        currentCapacity.getAndSet(currCapacity);
+        lastUpdatedTime.getAndSet(currentTime);
+    }
+}
+
+public class LeakyBucket implements RateLimiter {
+    BlockingQueue<Integer> queue;
+
+    public LeakyBucket(int capacity) {
+        this.queue = new LinkedBlockingQueue<>(capacity);
+    }
+
+    @Override
+    public boolean grantAccess() {
+        if(queue.remainingCapacity() > 0){
+            queue.add(1);
+            return true;
+        }
+        return false;
+    }
+}
+
+public class SlidingWindow implements RateLimiter {
+    Queue<Long> slidingWindow;
+    int timeWindowInSeconds;
+    int bucketCapacity;
+
+    public SlidingWindow(int timeWindowInSeconds, int bucketCapacity) {
+        this.timeWindowInSeconds = timeWindowInSeconds;
+        this.bucketCapacity = bucketCapacity;
+        slidingWindow = new ConcurrentLinkedQueue<>();
+    }
+
+    @Override
+    public boolean grantAccess() {
+        long currentTime = System.currentTimeMillis();
+        checkAndUpdateQueue(currentTime);
+        if(slidingWindow.size() < bucketCapacity){
+            slidingWindow.offer(currentTime);
+            return true;
+        }
+        return false;
+    }
+
+    private void checkAndUpdateQueue(long currentTime) {
+        if(slidingWindow.isEmpty()) return;
+
+        long calculatedTime = (currentTime - slidingWindow.peek())/1000;
+        while(calculatedTime >= timeWindowInSeconds){
+            slidingWindow.poll();
+            if(slidingWindow.isEmpty()) break;
+            calculatedTime = (currentTime - slidingWindow.peek())/1000;
+        }
+    }
+}
+
+public class UserBucketCreator {
+    Map<Integer, RateLimiter> bucketMap;
+
+    public UserBucketCreator() {
+        this.bucketMap = new HashMap<>();
+    }
+
+    public void addUserBucket(int userId, RateLimiter rateLimiter) {
+        bucketMap.put(userId, rateLimiter);
+    }
+
+    public void accessApplication(int userId) {
+        RateLimiter rateLimiter = bucketMap.get(userId);
+        if(rateLimiter.grantAccess()){
+            System.out.println(Thread.currentThread().getName() + " -> able to access the application");
+        } else {
+            System.out.println(Thread.currentThread().getName() + " -> Too many request, Please try after some time");
+        }
+    }
+}
+
+public class Appl {
+    public static void main(String[] args) {
+    
+    UserBucketCreator userBucketCreator = new UserBucketCreator();
+    userBucketCreator.addUserBucket(1, new TokenBucket(10, 10));
+    userBucketCreator.addUserBucket(2, new LeakyBucket(10));
+    userBucketCreator.addUserBucket(3, new SlidingWindow(10, 10));
+
+    ExecutorService executors = Executors.newFixedThreadPool(12);
+    for (int i = 0; i < 12; i++) {
+        executors.execute(() -> {
+            int userId = (int) (Math.random() * 3) + 1;
+            userBucketCreator.accessApplication(userId);
+        });
+    }
+    executors.shutdown();
+    }
+}
