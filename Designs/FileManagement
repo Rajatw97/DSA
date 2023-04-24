@@ -57,6 +57,7 @@ public PriorityQueue<Collection> queue = new PriorityQueue<Collection>((a,b)->{
 public void getTotalSize() {
     System.out.println("Total size of files processed: "+totalSizeProcessed);
 }
+//TC: O(KlogN)
 public void getTop(int N) {
     
     List<String> topN = new ArrayList<>();
@@ -75,7 +76,7 @@ public void getTop(int N) {
     queue.addAll(list);
     
 }
-    
+ // TC: O(log n)
  public void saveFiletoCollection(String collectionName,int fileSize) {
  
     if(Objects.isNull(collectionName)) 
@@ -129,7 +130,7 @@ Additional Questions:
    
    public class FileUtility {
    ...
-   
+   // TC:O(h + s log N + log N), where h is the height of the collection tree  s is the number of subcollections and N is the size of the priority queue
     public void saveFiletoCollection(String collectionName, int fileSize) {
         if (collectionName == null || collectionName.isEmpty()) {
             collectionName = "root";
