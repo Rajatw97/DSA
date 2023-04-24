@@ -66,6 +66,7 @@ public class KnightDefeatMonsters {
             if (enemies[i] < enemies[i - 1]) {
                 lastDefeated = i; // Update the last defeated monster index
             }
+	    
             // If the current monster is stronger than the previous one, Knight "A" has two options
             else {
                 // Option 1: Use might, reduce HP by the difference in strength and continue
