@@ -75,29 +75,25 @@ public void getTop(int N) {
     queue.addAll(list);
     
 }
-
-
-public void saveFiletoCollection(String collectionName,int fileSize) {
-    if(Objects.isNull(collectionName)) collectionName = "root";
     
+ public void saveFiletoCollection(String collectionName,int fileSize) {
+ 
+    if(Objects.isNull(collectionName)) 
+        collectionName = "root";
+        
+    Collection collection;
     if(map.containsKey(collectionName)) {
-
-        Collection collection = map.get(collectionName);
+        collection = map.get(collectionName);
         queue.remove(collection);
-        totalSizeProcessed = totalSizeProcessed + fileSize;
-        collection.addFile(new File(fileSize));
-        queue.add(collection);
-        map.put(collectionName,collection);
-
     } else {
-        Collection collection = new Collection(collectionName);
-        collection.addFile(new File(fileSize));
-        totalSizeProcessed = totalSizeProcessed + fileSize;
-        queue.add(collection);
-        map.put(collectionName,collection);
+         collection = new Collection(collectionName);
+    }  
+     totalSizeProcessed = totalSizeProcessed + fileSize;
+     collection.addFile(new File(fileSize));
+     queue.add(collection);
+     map.put(collectionName,collection);
+  }
 
-    }    
-}
 
 public static void main(String[] args) {
     
