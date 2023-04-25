@@ -184,3 +184,139 @@ public class Appl {
     executors.shutdown();
     }
 }
+
+
+Alternate design that includes ip/id:
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        UserBucketCreator userBucketCreator = new UserBucketCreator();
+        userBucketCreator.addUserBucket("192.168.1.1", new TokenBucket(4, 10));
+        userBucketCreator.addUserBucket("192.168.1.2", new TokenBucket(4,10));
+        userBucketCreator.addUserBucket("user1", new SlidingWindow(5, 10));
+
+        ExecutorService executors = Executors.newFixedThreadPool(12);
+        for (int i = 0; i < 12; i++) {
+            executors.execute(() -> {
+                int reandomKey = (int) (Math.random() * 12) + 1;
+                String key = reandomKey < 4 ? "192.168.1.1" : reandomKey < 8 ? "192.168.1.2" : "user1";
+                userBucketCreator.accessApplication(key);
+            });
+        }
+        executors.shutdown();
+    }
+}
+
+class UserBucketCreator {
+Map<String, RateLimiter> bucketMap; // Using a generic String key to support both IP address and User ID cases
+
+public UserBucketCreator() {
+    this.bucketMap = new HashMap<>();
+}
+
+public void addUserBucket(String key, RateLimiter rateLimiter) {
+    bucketMap.put(key, rateLimiter);
+}
+
+public void accessApplication(String key) {
+    RateLimiter rateLimiter = bucketMap.get(key);
+    if (rateLimiter.grantAccess(key)) {
+        System.out.println(Thread.currentThread().getName() + " -> able to access the application");
+    } else {
+        System.out.println(Thread.currentThread().getName() + " -> Too many requests, please try after some time");
+    }
+ }
+}
+
+ interface RateLimiter {
+    boolean grantAccess(String key); // Key can be either IP address or User ID depending on the implementation
+}
+
+ class TokenBucket implements RateLimiter {
+    private int bucketCapacity;
+    private int refreshRate;
+    private Map<String, Bucket> buckets; // We need to maintain separate buckets for each key (IP address or User ID)
+
+    public TokenBucket(int bucketCapacity, int refreshRate) {
+        this.bucketCapacity = bucketCapacity;
+        this.refreshRate = refreshRate;
+        buckets = new ConcurrentHashMap<>();
+    }
+
+    @Override
+    public boolean grantAccess(String key) {
+        refreshBucket(key);
+        Bucket bucket = buckets.get(key);
+        if(bucket.currentCapacity.get() > 0){
+            bucket.currentCapacity.decrementAndGet();
+            return true;
+        }
+        return false;
+    }
+
+    //when one thread is updating the currentCapacity the other thread can read the last updatedTime, it can result in race condition. so using synchronized
+    synchronized void refreshBucket(String key){
+        Bucket bucket = buckets.get(key);
+        if(bucket == null){
+            bucket = new Bucket();
+            buckets.put(key, bucket);
+        }
+        long currentTime = System.currentTimeMillis();
+        int additionalToken = (int) ((currentTime-bucket.lastUpdatedTime.get())/1000 * refreshRate);
+        int currCapacity = Math.min(bucket.currentCapacity.get()+additionalToken, bucketCapacity);
+        bucket.currentCapacity.getAndSet(currCapacity);
+        bucket.lastUpdatedTime.getAndSet(currentTime);
+    }
+
+    private class Bucket {
+        private AtomicInteger currentCapacity;
+        private AtomicLong lastUpdatedTime;
+
+        public Bucket() {
+            currentCapacity = new AtomicInteger(bucketCapacity);
+            lastUpdatedTime = new AtomicLong(System.currentTimeMillis());
+        }
+    }
+}
+
+ class SlidingWindow implements RateLimiter {
+    Map<String, Queue<Long>> slidingWindows; // We need to maintain separate sliding windows for each key (IP address or User ID)
+    int timeWindowInSeconds;
+    int bucketCapacity;
+
+    public SlidingWindow(int timeWindowInSeconds, int bucketCapacity) {
+        this.timeWindowInSeconds = timeWindowInSeconds;
+        this.bucketCapacity = bucketCapacity;
+        slidingWindows = new ConcurrentHashMap<>();
+    }
+
+    @Override
+    public boolean grantAccess(String key) {
+        long currentTime = System.currentTimeMillis();
+        checkAndUpdateQueue(currentTime, key);
+        Queue<Long> slidingWindow = slidingWindows.get(key);
+        if(slidingWindow.size() < bucketCapacity){
+            slidingWindow.offer(currentTime);
+            return true;
+        }
+        return false;
+    }
+
+    private void checkAndUpdateQueue(long currentTime, String key) {
+        Queue<Long> slidingWindow = slidingWindows.get(key);
+        if(slidingWindow == null){
+            slidingWindow = new ConcurrentLinkedQueue<>();
+            slidingWindows.put(key, slidingWindow);
+        }
+        if(slidingWindow.isEmpty()) return;
+
+        long calculatedTime = (currentTime - slidingWindow.peek())/1000;
+        while(calculatedTime >= timeWindowInSeconds){
+            slidingWindow.poll();
+            if(slidingWindow.isEmpty()) break;
+            calculatedTime = (currentTime - slidingWindow.peek())/1000;
+        }
+    }
+}
