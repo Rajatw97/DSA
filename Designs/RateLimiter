@@ -31,6 +31,7 @@ Cons:
 1) A burst of traffic fills up the queue with old requests, and if they are not processed in time, recent requests will be rate limited.
 
 3. Fix window:
+
 It divides the timeline into fixed-size windows and assign a counter to each window. Each request, based on its arriving time, is mapped to a window.
 If the counter in the window has reached the limit, requests falling in this window should be rejected.
 Pros:
