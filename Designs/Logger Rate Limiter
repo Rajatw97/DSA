@@ -52,35 +52,44 @@ Alternate solution:
 
 import javafx.util.Pair;
  
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
 class Logger {
  
-    private Set<string> visited;
-    private Queue<pair <Integer, String>> logs; 
+    private Map<String, Integer> visited;
+    private Queue<Pair<Integer, String>> logs; 
   
     public Logger() {
-       visited = new HashSet<>();
+       visited = new ConcurrentHashMap<>();
        logs = new LinkedList<>();
     }
     
-    public boolean shouldPrintMessage(int timestamp, String message) {
+    public synchronized boolean shouldPrintMessage(int timestamp, String message) {
         // remove invalid entries
         while (!logs.isEmpty()) {
-            Pair<Integer , String> pair = logs.peek();
+            Pair<Integer, String> pair = logs.peek();
             if (timestamp - pair.getKey() >= 10) {
                 logs.poll();
-                visited.remove(pair.getValue()); // remove from hash set
+                String msg = pair.getValue();
+                visited.remove(msg); // remove from hash map
             } else {
                 break;
             }
-        }   
-        if (visited.contains(message)) {
-            return false; //  printed in last 10 seconds
         }
+        
+        // check if message was recently printed
+        if (visited.containsKey(message) && timestamp - visited.get(message) < 10) {
+            return false; // printed in last 10 seconds
+        }
+        
         // inserting the entry
-        visited.add(message);
-        logs.add(new Pair(timestamp, message));
+        visited.put(message, timestamp);
+        logs.add(new Pair<>(timestamp, message));
         return true;        
     }
+}
+
     
    
 }
