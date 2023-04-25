@@ -320,3 +320,22 @@ public void accessApplication(String key) {
         }
     }
 }
+
+Additional:
+
+1) Api crashes at 1000 request per second. How do I determine the rate at which the requests are prevented. 1000? 800? and why.
+     Run experiments as well as load tests to have a deterministic rate at which requests are dropped. We should also use that information to apply global rate limit
+     on the application. So, if the rate determined after our experiments and load test is 1000 requests / second, we can cap global rate limit at 800.
+    
+2) Api has 1:3 requests for POST and GET. How to determine rate limit with this information.
+    This means that if the rate limit for POST requests is 200 requests / second, GET should be 600 requests / second.
+    
+3) Where to deploy the rate limiter? How to reduce network calls?
+    We can deploy the rate limiter as part of the API gateway.
+    To reduce network calls, we can cache the GET requests on the client. This however, introduces some complexities. We need to figure out how to ensure that if
+    there is a change in the data, clients will discard their caches and go back to the server to fetch the updated records. If we know the rate at which data changes
+    occur, then we can build it into our implementation. One way to tackle this is to invalidate client cache say every 3 seconds. Each time client has need to serve
+    data, it first checks if the cache is still valid. If the cache is still valid and the data it's looking for is in its cache, it will serve from the cache, 
+    otherwise, it will do a network call.This approach will generally reduce the number of calls the service receives but also introduces an eventual consistency
+    that is within 3 seconds. 
+We could resort to adding more workers to help with serving the api requests. We should also apply caching on the server side. While this will generally improve the health of our servers, it does not reduce network calls.
