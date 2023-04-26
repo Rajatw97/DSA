@@ -111,6 +111,39 @@ public class LeakyBucket implements RateLimiter {
     }
 }
 
+public class FixedBucketRateLimiter implements RateLimiter {
+    private final int bucketCapacity;
+    private final long intervalInMillis;
+    private int currentCapacity;
+    private long lastUpdatedTime;
+
+    public FixedBucketRateLimiter(int bucketCapacity, long intervalInMillis) {
+        this.bucketCapacity = bucketCapacity;
+        this.intervalInMillis = intervalInMillis;
+        this.currentCapacity = maxRequests;
+        this.lastUpdatedTime = System.currentTimeMillis();
+    }
+
+    public synchronized boolean allowRequest() {
+        refill();
+        if (currentCapacity > 0) {
+            currentCapacity--;
+            return true;
+        }
+        return false;
+    }
+
+    private void refill() {
+        long currentTime = System.currentTimeMillis();
+        long additionalToken = (currentTime - lastUpdatedTime) / intervalInMillis;
+        if (additionalToken > 0) {
+            currentCapacity = (int) Math.min(currentCapacity + additionalToken, bucketCapacity);
+            lastUpdatedTime = currentTime;
+        }
+    }
+}
+
+
 public class SlidingWindow implements RateLimiter {
     Queue<Long> slidingWindow;
     int timeWindowInSeconds;
