@@ -1,0 +1,45 @@
+Q>  Design a scraper service that takes as input an array of urls of web pages. For each url, save every image link in the html document. Any other links
+on the page, follow them and recursively get the images on those pages too.
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+public class ScraperService {
+
+    private Set<String> visitedUrls;
+
+    public ScraperService() {
+        visitedUrls = new HashSet<>();
+    }
+
+    public List<String> scrapeImages(String[] urls) {
+        List<String> imageLinks = new ArrayList<>();
+        for (String url : urls) {
+            getImageLinks(url, imageLinks);
+        }
+        return imageLinks;
+    }
+
+    private void getImageLinks(String url, List<String> imageLinks) {
+        if (!visitedUrls.contains(url)) {
+            visitedUrls.add(url);
+            try {
+                Document doc = Jsoup.connect(url).get();
+                Elements imageElements = doc.select("img[src]");
+                for (Element imageElement : imageElements) {
+                    String imageLink = imageElement.attr("abs:src");
+                    imageLinks.add(imageLink);
+                }
+                Elements links = doc.select("a[href]");
+                for (Element link : links) {
+                    String href = link.attr("abs:href");
+                    getImageLinks(href, imageLinks);
+                }
+            } catch (Exception e) {
+                // handle exception
+            }
+        }
+    }
+}
