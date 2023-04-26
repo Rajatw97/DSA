@@ -1,0 +1,34 @@
+Q> Design a job scheduling service that will make a HTTP request at some predefined time in the future.
+
+
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class JobScheduler {
+
+    private Timer timer;
+
+    public JobScheduler() {
+        timer = new Timer();
+    }
+
+    public void scheduleJob(Date time, String url) {
+        timer.schedule(new HttpJob(url), time);
+    }
+
+    private class HttpJob extends TimerTask {
+
+        private String url;
+
+        public HttpJob(String url) {
+            this.url = url;
+        }
+
+        @Override
+        public void run() {
+            HttpRequest request = new HttpRequest(url);
+            request.makeRequest();
+        }
+    }
+}
