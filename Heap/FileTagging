@@ -1,0 +1,90 @@
+
+Approach 1: Sorting and returning first N 
+
+Approach 2:
+TC: O(m * log n), where m is the total number of tags and files, and n is the number of top tags to find
+public static void findTopNTags(Map<String, Set<String>> tagMap, Map<String, Integer> fileSizeMap, int n) {
+    PriorityQueue<Tag> queue = new PriorityQueue<Tag>((tag1,tag2)-> Integer.compare(tag1.getSize(), tag2.getSize()));
+    for (Map.Entry<String, Set<String>> entry : tagMap.entrySet()) {
+        int totalSize = 0;
+        for (String file : entry.getValue()) {
+            totalSize += fileSizeMap.get(file);
+        }
+        queue.offer(new Tag(entry.getKey(), totalSize));
+        if (queue.size() > n) {
+            queue.poll();
+        }
+    }
+    List<Tag> topTags = new ArrayList<Tag>();
+    while (!queue.isEmpty()) {
+        topTags.add(0, queue.poll());
+    }
+    for (Tag tag : topTags) {
+        System.out.println(tag.getName() + " - " + tag.getSize());
+    }
+}
+
+private static class Tag {
+    private String name;
+    private int size;
+    
+    public Tag(String name, int size) {
+        this.name = name;
+        this.size = size;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public int getSize() {
+        return size;
+    }
+}
+
+
+Approach 3: TreeMap : TreeMap approach has the advantage of automatically sorting the entries by the keys, which can simplify the sorting process and potentially 
+improve the efficiency of the algorithm. Additionally, TreeMap provides methods for accessing the highest and lowest key-value pairs in logarithmic time, which can
+make it easier to retrieve the top N tags with the largest total file sizes.
+TC: O(nlogn)
+
+public class Main {
+    
+    public static void main(String[] args) {
+        // create the input data
+        Map<String, Set<String>> tags = new HashMap<>();
+        tags.put("tag1", new HashSet<>(Arrays.asList("f1", "f2")));
+        tags.put("tag2", new HashSet<>(Arrays.asList("f3")));
+        Map<String, Integer> files = new HashMap<>();
+        files.put("f1", 100);
+        files.put("f2", 200);
+        files.put("f3", 10);
+        
+        // compute the total size of each tag
+        Map<String, Integer> tagSizes = new HashMap<>();
+        for (Map.Entry<String, Set<String>> entry : tags.entrySet()) {
+            int size = 0;
+            for (String file : entry.getValue()) {
+                size += files.get(file);
+            }
+            tagSizes.put(entry.getKey(), size);
+        }
+        
+        // sort the tags by size using a TreeMap
+        TreeMap<Integer, String> sortedTags = new TreeMap<>(Collections.reverseOrder());
+        for (Map.Entry<String, Integer> entry : tagSizes.entrySet()) {
+            sortedTags.put(entry.getValue(), entry.getKey());
+        }
+        
+        // output the top N tags
+        int N = 2;
+        int count = 0;
+        for (Map.Entry<Integer, String> entry : sortedTags.entrySet()) {
+            System.out.println(entry.getValue() + " (" + entry.getKey() + ")");
+            count++;
+            if (count >= N) {
+                break;
+            }
+        }
+    }
+}
