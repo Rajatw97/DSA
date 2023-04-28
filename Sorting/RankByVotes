@@ -51,7 +51,7 @@ For the variations the code change is in comparator:
             return b[0]-a[0];
         });
 
-2)
+2) Tie : Implemented above already
 
 
 Test cases: 
