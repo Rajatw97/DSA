@@ -19,7 +19,7 @@ class Solution {
             list.add(p);
             return list;
         }
-        
+       
         int digit= up.charAt(0)-'0';
         List<String> ans=new ArrayList<>();
         int start=(digit-2)*3;
