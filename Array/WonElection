@@ -1,0 +1,84 @@
+Q> Elections are going on, and there are two candidates A and B, contesting with each other. There is a queue of voters and in this queue, some of them are
+supporters of A and some of them are supporters of B. Many of them are neutral. The fate of the election will be decided on which side the neutral voters vote.
+Supporters of A and supporters of B make attempts to win the votes of neutral voters.
+
+
+  Time Complexity : O(N)
+  Space Complexity : O(N)
+	public static String electionResult(String voters) {
+     
+        int A = 0; // It stores the vote count of A.
+        int B = 0; 
+      	ArrayList<Integer> distA = new ArrayList<>();  // It stores the closest distance of the supporters of A at each index.
+		    ArrayList<Integer> distB = new ArrayList<>();
+     
+        for(int i=0;i<voters.length();i++)
+        {
+            distA.add(Integer.MAX_VALUE);
+            distB.add(Integer.MAX_VALUE);
+        }
+        
+        // Storing distance of supporters of B.
+        if(voters.charAt(0) == 'B')
+        {
+            distB.set(0,0);
+        }
+        for(int i=1;i<voters.length();i++)
+        {
+            if(voters.charAt(i) == 'B')
+            {
+                distB.set(i,0);
+            }
+            else if(distB.get(i-1)!=Integer.MAX_VALUE)
+            {
+                distB.set(i,distB.get(i-1)+1);
+            }
+        }
+        
+        // Storing distance of supporters of A.
+        if(voters.charAt(voters.length()-1) == 'A')
+        {
+            distA.set(voters.length()-1,0);
+        }
+        for(int i=voters.length()-2;i>=0;i--)
+        {
+            if(voters.charAt(i) == 'A')
+            {
+                distA.set(i,0);
+            }
+            else if(distA.get(i+1)!=Integer.MAX_VALUE)
+            {
+                distA.set(i,distA.get(i+1)+1);
+            }
+        }
+        
+         // Iterating the given string to count the votes.
+        for (int i = 0; i < voters.length(); i++) {
+
+            // If we found supporters of A, increment vote count of A.
+            if (voters.charAt(i) == 'A') {
+                A++;
+            }
+            // If we found supporters of B, increment vote count of B.
+            else if (voters.charAt(i) == 'B') {
+                B++;
+            }
+            // If we found neutral supporters, we find who is closer to that supporter.
+            else {
+                if (distA.get(i) < distB.get(i)) {
+                    A++;
+                }
+                else if (distA.get(i) > distB.get(i)) {
+                    B++;
+                }
+            }
+        }
+        if (A > B) {
+            return "A";
+        } else if (A < B) {
+            return "B";
+        }else {
+            return "Coalition";
+        }
+	}
+}
