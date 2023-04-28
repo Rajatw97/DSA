@@ -1,4 +1,18 @@
-Q. Given an integer array nums where every element appears three times except for one, which appears exactly once. Find the single element and return it.
+Q1. Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.
+
+class Solution {
+    public int singleNumber(int[] nums) {
+        int ans=0; //since XOR with 0 returns same number 
+        for(int i=0; i<nums.length; i++){
+            ans ^= nums[i];  // ans = (ans) XOR (array element at i) 
+        }
+        return ans;    
+    }
+}
+
+
+
+Q2. Given an integer array nums where every element appears three times except for one, which appears exactly once. Find the single element and return it.
   Input: nums = [2,2,3,2]
   Output: 3
 
