@@ -8,7 +8,11 @@ TC: O(26 + n * c + 26 * log 26 * c + c) = O(n)
 
 class Solution {
     public String rankTeams(String[] votes) {
+        if(votes.length==0 || votes==null)
+            return " Invalid input!";
         int len = votes[0].length();
+         if(len==1 || votes.length==1)
+            return votes[0];
         int[][] map = new int[26][len + 1];
         for(int i = 0; i < 26; i++) map[i][len] = i;
         
@@ -32,3 +36,46 @@ class Solution {
         return sb.toString();
     }
 }
+
+Variations:
+
+For the variations the code change is in comparator:
+
+ Arrays.sort(map, (a, b) ->{
+           ....
+        });
+
+1) No tie breaking needed ( naturally will print in lexographical order due to our row order)
+
+ Arrays.sort(counts, (a, b) -> {
+            return b[0]-a[0];
+        });
+
+2)
+
+
+Test cases: 
+a) General:
+1)Empty input:
+Input: rankTeams(new String[]{});
+Expected Output: ""
+
+2) Single team:
+Input: rankTeams(new String[]{"A"});
+Expected Output: "A"
+
+3) Multiple teams, single voter:
+Input: rankTeams(new String[]{"ABCDEF"});
+Expected Output: "ABCDEF"
+
+b) Tie specific:
+
+4) Multiple teams, multiple voters with ties:
+Input: rankTeams(new String[]{"ABCDEF", "ACBEDF", "ADEBCF", "ADBCEF", "BACDEF"});
+Expected Output: "ABCDEF"
+
+5)Multiple teams, multiple voters with no ties:
+Input: rankTeams(new String[]{"ACB","ABC"});
+Expected Output: "ABC"
+
+6) All Ties with lexographic order check
