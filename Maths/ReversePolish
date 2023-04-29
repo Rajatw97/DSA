@@ -1,0 +1,32 @@
+Q> Reverse Polish Notation ?
+Eg: ["2","1","3","+","*"]
+O/p:8
+void evaluate (String[] tokens) {
+  Stack<int>st;
+        for(String x: tokens){
+            if(x == "+" || x == "-" || x =="/" || x == "*"){
+                int op2 = st.top(); st.pop();
+                int op1 = st.top(); st.pop();
+                
+                if(x == "+"){
+                    st.push(op1 + op2);
+                }
+                if(x == "-"){
+                    st.push(op1 - op2);
+                }
+                if(x == "*"){
+                    st.push(op1 * op2);
+                }
+                if(x == "/"){
+                    st.push(op1 / op2);
+                }
+            }
+            else{
+                st.push(Integer.parseInt(data));
+            }
+        }
+        
+        return st.top();
+    }
+};
+}
