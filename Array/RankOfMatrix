@@ -1,0 +1,147 @@
+Q> You are given a matrix ‘ARR’ having dimensions ‘N*M’. Your task to find the rank of the matrix ‘ARR’.
+The rank of a matrix is defined as:
+(a) The maximum number of linearly independent column vectors in the matrix or 
+(b) The maximum number of linearly independent row vectors in the matrix. Both definitions are equivalent.
+Linear independence is defined as:
+In the theory of vector spaces, a set of vectors is said to be linearly dependent if there is a nontrivial linear combination of the vectors that equals the 
+zero vector. If no such linear combination exists, then the vectors are said to be linearly independent. 
+
+
+/*
+    Time Complexity O(N^2*M)
+    Space Complexity: O(N*M)
+
+    Where 'N' is the number of rows and 'M' is the number of columns
+*/
+
+import java.util.ArrayList;
+
+public class Solution {
+
+	private static ArrayList<ArrayList<Integer>> transpose(ArrayList<ArrayList<Integer>> arr, int n, int m) {
+
+		ArrayList<ArrayList<Integer> > temp = new ArrayList<ArrayList<Integer>> (m);
+
+		for (int i = 0; i < m; i++) {
+			temp.add(new ArrayList<Integer>(n));
+			for (int j = 0; j < n; j++) {
+				temp.get(i).add(arr.get(j).get(i));
+			}
+		}
+
+		return temp;
+	}
+
+
+	// Function for swapping the rows
+	private static void swapRow(ArrayList<ArrayList<Integer>> arr, int n1, int n2, int m) {
+
+		int i, j, temp;
+
+		for (i = 0; i < m; i++) {
+
+			temp = arr.get(n1).get(i);
+			arr.get(n1).set(i, arr.get(n2).get(i));
+			arr.get(n2).set(i, temp);
+		}
+	}
+
+	// Function for swapping the columns
+	private static  void swapCol(ArrayList<ArrayList<Integer>> arr, int m1, int m2, int n) {
+
+		int i, j, temp;
+
+		for (i = 0; i < n; i++) {
+
+			temp = arr.get(i).get(m1);
+			arr.get(i).set(m1, arr.get(i). get(m2));
+			arr.get(i).set(m2, temp);
+
+		}
+	}
+
+	public static int findRankOfMatrix(ArrayList<ArrayList<Integer>> arr) {
+
+		int n = arr.size();
+		int m = arr.get(0).size();
+
+		// If number of N is greater then M then do transpose of the matrix
+		if (n > m) {
+
+			arr = transpose(arr, n, m);
+			int temp = n;
+			n = m;
+			m = temp;
+		}
+
+		// Now create a variable swapCol equal to M - 1 which will be used when we have to swap the columns
+		int swapPos = m - 1;
+		int i = 0, j = 0, k = 0;
+
+		// Iterate through each row
+		for (i = 0; i < n; i++) {
+
+			// If there is a non-zero diagonal element then we have to make all the elements in the current column to zero except the diagonal element
+			if (arr.get(i).get(i) != 0) {
+
+				for (j = 0; j < n; j++) {
+					if (j != i) {
+
+						if (arr.get(j).get(i) != 0) {
+							double multiplier = (double)arr.get(j).get(i) / arr.get(i).get(i);
+							for (k = 0; k < m; k++) {
+
+								arr.get(j).set(k, arr.get(j).get(k) - (int)(multiplier * (double)arr.get(i).get(k)));
+							}
+						}
+					}
+				}
+			}
+
+			// If the diagonal element is zero
+			else {
+
+				/* Find if there exists a row with a non - zero enetry in same column
+				 If so swap these tow rows and break the loop
+				 */
+				boolean isSwapped = false;
+				for (j = i + 1; j < n; j++) {
+
+					if (arr.get(j).get(i) != 0) {
+
+						swapRow(arr, i, j, m);
+						isSwapped = true;
+						break;
+					}
+				}
+
+				// Now check if isSwapped is equal to false then swap the current column i with the column represented by swapCol and decrement the value of swapCol by one
+				if (!isSwapped) {
+
+					if (swapPos > i) {
+
+						swapCol(arr, i, swapPos, n);
+						swapPos--;
+					} else {
+						break;
+					}
+				}
+
+				// Now decrease the value of i by one so that the row can be processed again
+				i--;
+			}
+		}
+
+		// Rank will be equal to non-zero diagonal element in each row
+		int rank = 0;
+		for (i = 0; i < n; i++) {
+
+			if (arr.get(i).get(i) != 0)
+				rank++;
+			else
+				break;
+		}
+
+		return rank;
+	}
+}
