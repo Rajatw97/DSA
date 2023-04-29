@@ -38,20 +38,34 @@ class Solution {
 }
 
 Variations:
-
-For the variations the code change is in comparator:
-
- Arrays.sort(map, (a, b) ->{
-           ....
-        });
-
 1) No tie breaking needed ( naturally will print in lexographical order due to our row order)
 
- Arrays.sort(counts, (a, b) -> {
-            return b[0]-a[0];
+ public static String rankTeams(String[] votes) {
+        if(votes.length==0 || votes==null)
+            return " Invalid input!";
+        int len = votes[0].length();
+         if(len==1 || votes.length==1)
+            return votes[0];
+        int[] count = new int[26];
+        for(int i = 0; i < votes.length; i++){
+            count[votes[i].charAt(0)-'A']++;
+        }
+        Character tempArray[] = new Character[votes[0].length()];
+ 
+        for (int i = 0; i < votes[0].length(); i++) {
+            tempArray[i] = votes[0].charAt(i);
+        }
+        Arrays.sort(tempArray, (a, b) ->{
+            int index1= a-'A';
+            int index2=b-'A';
+            return count[index2]-count[index1];
         });
-
-2) Tie : Implemented above already
+     StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < tempArray.length; i++){
+            sb.append(tempArray[i]);
+        }
+        return sb.toString();
+    }
 
 
 Test cases: 
