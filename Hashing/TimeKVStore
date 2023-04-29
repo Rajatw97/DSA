@@ -12,7 +12,6 @@ class TimeMap {
     public TimeMap() {
         storage = new HashMap();
     }
-
     public void set(String key, String value, int timestamp) {
         storage.putIfAbsent(key, new TreeMap());
         storage.get(key).put(timestamp, value);
