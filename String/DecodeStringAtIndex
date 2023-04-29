@@ -22,7 +22,7 @@ The 10th letter in the string is "o".
        for (int i = str.length()-1; i >= 0; --i) {
             char c = str.charAt(i);
             K%=size;
-            if (K==0 || Character.isLetter(c)) {
+            if (K==0 || K==size && Character.isLetter(c)) {
               return Character.toString(c);
             if(Character.isDigit(c))
                 size /= (c - '0');
