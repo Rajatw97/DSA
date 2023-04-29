@@ -1,0 +1,30 @@
+Q> Given list of {page-id, size, section-id} find the largest N sections in sorted order and also the overall size of all pages.
+
+TC:O(NlogK)
+public class LargestSections {
+    public static void main(String[] args) {
+        int K = 3; // number of largest sections to find
+        List<int[]> pages = new ArrayList<>();
+        pages.add(new int[]{1, 10, 1});
+        pages.add(new int[]{2, 5, 2});
+        pages.add(new int[]{3, 15, 1});
+        int overallSize = 0;
+        PriorityQueue<int[]> minHeap = new PriorityQueue<>(K, (a, b) -> Integer.compare(a[1], b[1]));
+        for (int[] page : pages) {
+            int size = page[1];
+            overallSize += size;
+            if (minHeap.size() < K) {
+                minHeap.offer(page);
+            } else if (size > minHeap.peek()[1]) {
+                minHeap.poll();
+                minHeap.offer(page);
+            }
+        }
+        List<int[]> largestSections = new ArrayList<>(minHeap);
+        largestSections.sort((a, b) -> Integer.compare(b[1], a[1]));
+        for (int[] section : largestSections) {
+            System.out.println("Section " + section[2] + ": " + section[1]);
+        }
+        System.out.println("Overall size of all pages: " + overallSize);
+    }
+}
