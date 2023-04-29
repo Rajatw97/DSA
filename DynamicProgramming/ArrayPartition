@@ -1,0 +1,35 @@
+Q> Find no of ways to partition the array into k sub segments such that sum of each segment follows alternative modulo by 2 order.
+for example : S1 | S2 | S3 | ..... Sk
+here, s1 denotes sum of segment 1, .. Sk denotes sum of Segment kth
+now this should follow this order S1%2!=S2%2 , S2%2 !=S3%2... and so on
+
+
+
+public class ArrayPartition {
+
+    public static int countWays(int[] arr, int k) {
+        int n = arr.length;
+        int[][] dp = new int[n + 1][k + 1];
+        for (int i = 0; i <= n; i++) {
+            dp[i][0] = 1;
+        }
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= k; j++) {
+                int sum = 0;
+                for (int p = i - 1; p >= j - 1; p--) {
+                    sum += arr[p];
+                    if (sum % 2 == j % 2) {
+                        dp[i][j] += dp[p][j - 1];
+                    }
+                }
+            }
+        }
+        return dp[n][k];
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {2, 3, 5, 7, 8};
+        int k = 3;
+        System.out.println("Total ways to partition array: " + countWays(arr, k));
+    }
+}
