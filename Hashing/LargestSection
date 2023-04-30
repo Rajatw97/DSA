@@ -2,8 +2,10 @@ Q> Given list of {page-id, size, section-id} find the largest N sections in sort
 
 TC:O(NlogK)
 public class LargestSections {
-    public static void main(String[] args) {
-        int K = 3; // number of largest sections to find
+  {
+	
+	public static void main(String[] args) {
+        int K = 2; // number of largest sections to find
         List<int[]> pages = new ArrayList<>();
         pages.add(new int[]{1, 10, 1});
         pages.add(new int[]{2, 5, 2});
@@ -20,11 +22,15 @@ public class LargestSections {
                 minHeap.offer(page);
             }
         }
-        List<int[]> largestSections = new ArrayList<>(minHeap);
-        largestSections.sort((a, b) -> Integer.compare(b[1], a[1]));
+        List<int[]> largestSections = new ArrayList<>();
+        while(minHeap.size()>0){
+            largestSections.add(0, minHeap.poll()); 
+            }
         for (int[] section : largestSections) {
             System.out.println("Section " + section[2] + ": " + section[1]);
         }
         System.out.println("Overall size of all pages: " + overallSize);
     }
+}
+
 }
