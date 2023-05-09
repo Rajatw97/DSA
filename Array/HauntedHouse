@@ -1,0 +1,26 @@
+Q>There are  people who want to visit the haunted house. The  person will only go if at least  other people will go with him. 
+Additionally, that person doesn't want to go with more than  other people, since it would ruin the experience for them.
+What is the maximum number of people that can visit the haunted house at one time so that no constraint is violated?
+
+public class Solution {
+    public static void main(String[] args) {
+            int a[]=new int[300010];
+        int ans=0;
+            Scanner sc=new Scanner(System.in);
+            int n=sc.nextInt();
+            for(int i=0;i<n;i++)
+             {
+                int c,d;
+                c=sc.nextInt();
+                d=sc.nextInt();
+                a[c]+=1;
+                a[d+1]-=1;
+            }
+            for(int i=1;i<=300002;i++)a[i]+=a[i-1];   
+            for(int i=0;i<=300002;i++)
+                {
+                if(a[i]>=i+1)ans=Math.max(ans,i+1);
+            }
+        System.out.println(ans);
+    }
+}
