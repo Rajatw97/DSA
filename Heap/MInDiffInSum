@@ -1,0 +1,53 @@
+Q>You are given a 0-indexed integer array nums consisting of 3 * n elements.
+You are allowed to remove any subsequence of elements of size exactly n from nums. The remaining 2 * n elements will be divided into two
+equal parts:
+The first n elements belonging to the first part and their sum is sumfirst.
+The next n elements belonging to the second part and their sum is sumsecond.
+The difference in sums of the two parts is denoted as sumfirst - sumsecond.
+For example, if sumfirst = 3 and sumsecond = 2, their difference is 1.
+Similarly, if sumfirst = 2 and sumsecond = 3, their difference is -1.
+Return the minimum difference possible between the sums of the two parts after the removal of n elements.
+
+Time Complexity:- O(nlog(n))
+Space Complexity:- O(n)
+
+class Solution {
+    public long minimumDifference(int[] nums) {
+        PriorityQueue<Integer> pq_start = new PriorityQueue<>((a,b)->{
+            return b - a;
+        });
+        int n = nums.length, k = n/3, mod = (int)1e9 + 7;
+        long sum1 = 0;
+        long[] start_sum = new long[n];
+        
+        for(int i=0; i<n ;i++) {
+            sum1 += nums[i];
+            pq_start.add(nums[i]);
+            if(i >= k) {
+                sum1 -= pq_start.poll();
+            }
+            start_sum[i] = sum1;
+        }
+        
+        pq_start = new PriorityQueue<>((a,b)->{
+            return a - b;
+        });
+        
+        sum1 = 0;
+        int idx = n - k;
+        long ans = Long.MAX_VALUE;
+        
+        for(int i=n-1; i>=k-1; i--) {
+            if(i < idx) {
+                ans = Math.min(ans, start_sum[i] - sum1);
+            }
+            pq_start.add(nums[i]);
+            sum1 += nums[i];
+            if(i < idx) {
+                sum1 -= pq_start.poll();
+            }
+        }
+        
+        return ans;
+    }
+}
