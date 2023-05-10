@@ -1,0 +1,21 @@
+Q? Sort an array of Strings based on ASCENDING Order of the length of element.
+Input: [“ABCDE”, “ABCD”, “Z”, “A”, “AB”, “AA”, “ABC”]
+
+ bool comp(string a,  string b) {
+    if (a.length() != b.length()) 
+      return a.length() < b.length();
+    int N = a.length();
+    int M = b.length();
+    int i = 0, j = 0;
+    while(i < N && j < M) {
+        if (a[i] == b[j]) {
+            ++i;
+            ++j;
+        } else {
+            return a[i] < b[j];
+        }
+    }
+    return true;
+}
+
+// in main call Arrays.sort(arr, comp);
