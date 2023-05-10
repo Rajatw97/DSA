@@ -1,5 +1,4 @@
 Q. Given the root of a binary tree, return the maximum path sum of any path.
-
 Input: root = [-10,9,20,null,null,15,7]
 Output: 42
 
