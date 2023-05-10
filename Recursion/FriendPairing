@@ -3,7 +3,7 @@ Q.  Given n friends, each one can remain single or can be paired up with some ot
     
     Input  : n = 3
     Output : 4
-    
+   
    Approach: f(n) = f(n – 1) + (n – 1) * f(n – 2)
    
    Time & Space Complexity: O(n)
