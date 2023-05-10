@@ -1,0 +1,29 @@
+Q> Write a function that takes a sentence and reverse only alphanumeric word but other characters remain unchanged.
+For Example -
+
+**Input:**This is test!!! 
+Output: sihT si tset!!!
+
+private boolean isAllowed(char c) {
+  return ((c>='0' && c<='9') || (c>='a' && c<='z') || (c>='A' && c<='Z'));
+}
+
+private String reverse(string s) {
+  string result = "";
+  string curReversedWord="";
+  for (int i=0; i<s.length(); i++) {
+    if (isAllowed(s[i])) {
+      curReversedWord = s[i] + curReversedWord;
+    } else {
+        if (curReversedWord!="") {
+        result += curReversedWord;
+        curReversedWord = "";
+        }
+      result += s[i];
+    }
+  }
+  if (curReversedWord!="") {
+    result += curReversedWord;
+  }
+  return result;
+}
