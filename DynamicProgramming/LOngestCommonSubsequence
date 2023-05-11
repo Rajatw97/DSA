@@ -1,7 +1,6 @@
 Q. A subsequence of a string is a new string generated from the original string with some characters (can be none) deleted without changing the relative order of the remaining characters.
 For example, "ace" is a subsequence of "abcde".
 A common subsequence of two strings is a subsequence that is common to both strings.
-
 Input: text1 = "abcde", text2 = "ace" 
 Output: 3  
 Explanation: The longest common subsequence is "ace" and its length is 3.
@@ -30,5 +29,9 @@ class Solution {
     }
 }
 
-SImilar Question: Minimum Cost to make 2 Strings identical.
+SImilar Question: 
+
+1) Minimum Cost to make 2 Strings identical.
 In that just find lcs and then calculate cost : (l1-lcs)*c1 + (l2-lcs)*c2
+
+2) Longest Palindrom subsequence: lcs(string1, reverse(string2))
