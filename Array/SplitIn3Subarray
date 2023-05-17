@@ -1,0 +1,36 @@
+Q> Consider an array A of n integers. Determine if array A can be split into three consecutive parts such that sum of each part is equal. 
+If yes then print any index pair(i, j) such that sum(arr[0..i]) = sum(arr[i+1..j]) = sum(arr[j+1..n-1]), otherwise print -1. 
+Input : arr[] = {1, 3, 4, 0, 4}
+Output : (1, 2)
+Time Complexity: O(n) 
+public class GFG {
+ 
+ 
+    static int findSplit(int[] arr, int n)
+    {
+        int i;
+        int preSum = 0;
+        int ind1 = -1, ind2 = -1;
+        int S;
+        S = arr[0];
+        for (i = 1; i < n; i++)
+            S += arr[i];
+        if (S % 3 != 0)
+            return 0;
+        int S1 = S / 3;
+        int S2 = 2 * S1;
+        for (i = 0; i < n - 1; i++) {
+            preSum += arr[i];
+            if (preSum == S1 && ind1 == -1)
+                ind1 = i;
+            else if (preSum == S2 && ind1 != -1) {
+                ind2 = i;
+                break;
+            }
+        }
+        if (ind1 != -1 && ind2 != -1) {
+            System.out.print("(" + ind1 + ", " + ind2 + ")");
+            return 1;
+        }
+        return 0;
+    }
