@@ -1,0 +1,35 @@
+1. 2 pointers- Mainly sorted array
+    Pair Sum in Sorted Array 
+    Removing Duplicates- i,j move from same position , a[i]=a[j]: a[++i]=a[j] and j++
+    Valid Palindrome - From start and end
+    Container With Most Water- From start and end, currarea= min(h[start],h[end]) * end-start , maxArea=max(curr,maxarea)
+2.Fast and slow pointers
+    LinkedList Cycle Detection - condition: fast!=null && fast.next!=null
+    LinkedList Cycle Find entry point- Same as LL cycle detection, on detecting cycle move slow to head and move slow,fast 1 by 1 to find entry
+    Middle of the LinkedList- 
+    Happy Number: 12: 1sq+2sq:5!=1, no happy . slow=sq(n), fast=(sq(sq(n)), if any slow,fast=1, true else false . sq(n)= {sum+n%10, n=n/10 }
+
+3. Sliding Window- Finding subarry/substring of continous element,range rltd, fixed k size - Use 2 ptrs to define moving window
+
+    Maximum sum of distinct subarrays with length K - 2 ptrs for K len, set for distinct
+    Longest substring without repeating characters
+    Minimum size subarray sum
+
+4. Prefix sum- Cumulative sum form start to curr, basically wherever sum of sliding window is needed we use prefix sum
+
+    Find pivot index - index whose left and right sum is equal- Find totalSum, leftsum and rightsum comparison on curr index, when both equal, pivot index
+    Subarray sum equals K
+    Continuous subarray sum
+
+5. Merge intervals- Used where we need overlap needs to be merged
+
+    Merge intervals-  sort by start, merge using end of 1st with start of 2nd
+    Insert interval
+    Meeting rooms - if overlap exist, ret false
+
+6. Bindary Search- Divide and conquer, searhc space monotnoic increasing/decreasing
+
+Binary Search : calc mid and traverse subpart
+Search a 2D Matrix : convert 2-d to 1-d using row=mid/n, col=mid%n
+Search in Rotated Sorted Array= check left half sorted or right (comapre mid with 1st and alst elem) , do bin search in sorted half
+Capacity to ship Packages within D Days - Find max wt and sum of wieght and do binary search in that
