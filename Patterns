@@ -27,9 +27,54 @@
     Insert interval
     Meeting rooms - if overlap exist, ret false
 
-6. Bindary Search- Divide and conquer, searhc space monotnoic increasing/decreasing
+6. Binary Search- Divide and conquer, searhc space monotnoic increasing/decreasing
 
-Binary Search : calc mid and traverse subpart
-Search a 2D Matrix : convert 2-d to 1-d using row=mid/n, col=mid%n
-Search in Rotated Sorted Array= check left half sorted or right (comapre mid with 1st and alst elem) , do bin search in sorted half
-Capacity to ship Packages within D Days - Find max wt and sum of wieght and do binary search in that
+    Binary Search : calc mid and traverse subpart
+    Search a 2D Matrix : convert 2-d to 1-d using row=mid/n, col=mid%n
+    Search in Rotated Sorted Array= check left half sorted or right (comapre mid with 1st and alst elem) , do bin search in sorted half
+    Capacity to ship Packages within D Days - Find max wt and sum of wieght and do binary search in that
+
+7. Sort
+
+        Bubble sort- Core is in each iteration max element goes to right, arr[i]>arr[i+1], swap them
+        Selection sort- Core is in each iteration find minimum element and swap to initial position
+        Insertion sort- in each iteration we keep left array sorted and try to brin curr element to its correct position
+        Merge sort- Divide and conquer. find mid, recurse from left-> , mid+1->right, merge function
+        Quick sort- Pick pivot: partition such that left<pivot, right> pivot, recursively call for left->pivot-1, pivot+1>right
+
+        | Algorithm      | Best Case      | Average Case   | Worst Case     | Space Complexity |
+        | -------------- | -------------- | -------------- | -------------- | ---------------- |
+        | Bubble Sort    | **O(n)**       | **O(n²)**      | **O(n²)**      | **O(1)**         |
+        | Selection Sort | **O(n²)**      | **O(n²)**      | **O(n²)**      | **O(1)**         |
+        | Insertion Sort | **O(n)**       | **O(n²)**      | **O(n²)**      | **O(1)**         |
+        | Merge Sort     | **O(n log n)** | **O(n log n)** | **O(n log n)** | **O(n)**         |
+        | Quick Sort     | **O(n log n)** | **O(n log n)** | **O(n²)**      | **O(log n)**     |
+
+
+8. HashMap- find frequency/duplicate/fast lookup
+
+        Count Frequency & Two Sum(Unsorted array)
+        Word Pattern - "him is is him", pattern: abba , him->a, is-> b . match
+        Valid Anagram- "Eat", "tea"- jumbled order in 2 words, hashmap and compare 
+        Group Anagrams- ["eat","tea","ant"]->[["eat","Tea"],["ant"]]- sort key, add arralist value
+
+9. Stack- LIFO - push()-pop(), directory, website back button
+
+        Valid Parenthesis- ({[]})-if opening: push in stack , if closing :pop || stack empty, doesnt match return
+        Next Greater Element - [4,1,2]:[1,3,4,2]->[-1,3,-1]- Use decreasing monotonic stack,{ while(stack not empty && curr>sst.peek(){pop()} push(curr)}
+        Simplify Path- path: "/home/user/../doc" -> if(..)-pop else push. form string of stack elements
+
+10. Queue- FIFO- enqueue()-dequeue()-peek(), circular/priority/dequeue, LRU cache/LB algo/Level order traversals
+
+        Implement Queue using Stacks- Use 2 stacks, enq- push to 1st, deq- pop from first, push to 2nd if 2nd is empty, empty-both empty
+        Binary Tree Level Order Traversal- Add root to q, traverse- find queue size, in loop pop queue, add left/right child
+        Kth Largest Element in Array- Minheap-Priorityqueue, traverse and get kth or maintain k size window-> traverse: add to queue, if q.size>k- q.poll()
+
+11. Heap- Min & Max Heap- complete binary tree, parent node is small(min heap)/large(maxheap)- inser/del-O(logn),access-o(1), offer()- heapify_up, poll()- heapify_down
+    Parent-i, left-2i+1, right-2i+2 parent: i=i-1/2
+    top k elements,median of stream
+
+        Top K Frequent Elements- hashmap for freq, form minheap based on freq of window k
+        Kth Smallest Element in a Sorted Matrix- form max heap, add element if q..size()>k, remove from front-q.poll() : (m*n)*logK
+    
+
