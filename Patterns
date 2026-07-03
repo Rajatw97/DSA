@@ -76,5 +76,33 @@
 
         Top K Frequent Elements- hashmap for freq, form minheap based on freq of window k
         Kth Smallest Element in a Sorted Matrix- form max heap, add element if q..size()>k, remove from front-q.poll() : (m*n)*logK
-    
+
+12. K way merge - maintain min heap of current smallest element of all arrays , size of min heap=k(diff array)
+
+        Merge K Sorted Arrays in one Sorted Array- store val,array it belong, index in min heap by val. then on pop from arr insert next elem from that array
+        Merge K sorted list(O(n*logk)- Similar min heap but ptrs involved
+        Find K pairs with smallest sums-[1,7,11][2,4,6]- [1,2],[1,4][,[1,6] - generate all paris keep in min heap by sum
+
+13. Tree- BST- kind of sorted, AVL: right ht-left ht<=1 , BFS/DFS, Traversal- inorder,preorder,postorder
+
+    Inorder- LROR - inorder(root.left),print,inorder(root.right)
+    Preorder- ROLR- print, preorder(root.left),preorder(root.right)
+    Postorder- LRRO- postorder(root.left), postorder(root.right), print
+
+    Depth of binary tree- root=null, ret 0 . depth(root.left),depth(root.right) return 1+(max(left,right)
+    2 Same tree- either root is null or val not same then false else recursei and compare left &&  right
+
+14.  DFS
+
+    Invert binary tree - swap curr childrens,recurse root.left,recurse root.right
+    Sum of left leaves - root.left!=null && root.left.left.!=null &&root.left.right!=null, sum+=root.left.val,sum+= recurse left , sum+=recurse right
+    Path sum- if leaf(root.left=null&root.right=null) check target 0, recurse(root.left,target-curr node val),  recurse(root.right,target-curr node val), ret left||right
+    Balanced binary tree- traverse left and right, if(left==-1 and right ==-1) ret -1, check if diff >1 ret -1 else ret 1+max(left,right)
+
+15. BFS
+
+    Binary Tree Level Order Traversal - use queue,add root traverse queue based on queue size, pop curr element, add left,right if exist
+    Binary tree ZigZag level order traversal - queue with alt entry of left and right based on a flag u can toggle after each level processing
+    Minimum depth of binary tree- nearest leaf node-  same bfs just afte queue pop chceck if leaf node and maintain level counter
+    Maximum level sum of a binary tree- at each level find max sum- after poll add to levelsum and outside loop compare if maxSum thne update
 
