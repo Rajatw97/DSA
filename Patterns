@@ -106,3 +106,23 @@
     Minimum depth of binary tree- nearest leaf node-  same bfs just afte queue pop chceck if leaf node and maintain level counter
     Maximum level sum of a binary tree- at each level find max sum- after poll add to levelsum and outside loop compare if maxSum thne update
 
+16. Graph- Adjancy matrix or Adjancy List, whenever relation matters. Types- undirected/directed, weighted/un-w, connected/disconnected
+
+    1. Flood fill(O(m*n)- Given i,j with color=2, change all adjacent neigbours. Chack boundary condition + newcolor!=color, change the color, dfs in all 4 directions
+    2. Rotting orange- 0,1,2- minimum minutes for all to rot. Whenever min go for bfs using queue. initially count freshorange, then do bfs and maintain elvel count
+                        + decr freshcount on encountering fresh in all 4 directions. At the end check for fresh=0,ret level else -1
+
+17. Dijkstra- Shortest path from a node to all other nodes in weighted non-negative graph only, use greedy approach and priority queue(minHeap).
+keep src dist 0 and other infinity, form priority queue-min heap and check dist new ?dist curr +wt then update and push to queue for all neighbours of curr
+
+18. Topological sort- stack, directed acylcic graph, order of vertices is maintained, anything roder rltd is done thr topo sort
+    Maintain visited array,dfs using stack is used
+
+    1. BFS based topological sort- For each node track incoming edge i.e. Indegree of each node. Push only 0 in degree nodes first. pop node and add its
+    neigbour to queue but reduce indegree of neighbour by 1
+
+    2. Course Scheduling- same topo sort , check cycle too
+
+
+
+
