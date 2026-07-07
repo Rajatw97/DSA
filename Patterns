@@ -123,6 +123,24 @@ keep src dist 0 and other infinity, form priority queue-min heap and check dist 
 
     2. Course Scheduling- same topo sort , check cycle too
 
+19. Trie- prefix tree, each node repesents character- Prefix search, suggestion- https://drive.google.com/file/d/1Uw9217zQty47-CddBkey-A9kf_vKeHwU/view
+
+20. Greedy- Choose best solution at current stage
+
+    Jump game-num[2,3,1,1,4], find if can reahc end or not. For each elem, maxEleme=max(maxElem, jump[i]+i]), if maxElem>last index, ret true
+    Jump game- Min no of jumps to reach last
+    Gas station- cost, gas- check clockwise we can travel- if total gas<totalt cose, -1 . Need starting point
+
+21. DP- tabular/recursive
+
+    Rob house- either curr + next to adjacent or next. rob=curr+dp(i+2), skip=dp(i+1), max=max(skip,rob)
+    Minimum Path Sum- DP 2-d array, 2 loops- base condition, i==0&&j==0, ret grid[i][j] else up=if value exist use else infinitiy, left=same, dp[i][i+j]=min(up,left). ret end pt
+
+22. BackTrack- Try a possibility, doesnt work go back
+
+    Generate subset- [1,2]-[],[1][2][1,2]
+
+
 
 
 
