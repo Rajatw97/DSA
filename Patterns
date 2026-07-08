@@ -4,18 +4,19 @@
     Valid Palindrome - From start and end
     Container With Most Water- From start and end, currarea= min(h[start],h[end]) * end-start , maxArea=max(curr,maxarea)
 2.Fast and slow pointers
-    LinkedList Cycle Detection - condition: fast!=null && fast.next!=null
+    LinkedList Cycle Detection - condition: fast!=null && fast.next!=null , slow=slow.next, fast=fast.next.next and if a[slow]=a[fast[+] its a cycle
     LinkedList Cycle Find entry point- Same as LL cycle detection, on detecting cycle move slow to head and move slow,fast 1 by 1 to find entry
     Middle of the LinkedList- 
     Happy Number: 12: 1sq+2sq:5!=1, no happy . slow=sq(n), fast=(sq(sq(n)), if any slow,fast=1, true else false . sq(n)= {sum+n%10, n=n/10 }
 
 3. Sliding Window- Finding subarry/substring of continous element,range rltd, fixed k size - Use 2 ptrs to define moving window
 
-    Maximum sum of distinct subarrays with length K - 2 ptrs for K len, set for distinct
-    Longest substring without repeating characters
-    Minimum size subarray sum
+    Maximum sum of distinct subarrays with length K - 2 ptrs for K len for window, add right to window, check window size and shrink left, then check main condition. Map for distinct
+    Longest substring without repeating characters- same as above, maintian window + set, keep adding char till not rpeeated, once repeated found keep moving left.
+        once window is moved, check for max len
+    Minimum size subarray sum- target = 7 ,nums = [2,3,1,2,4,3]:Expand the window by moving right. Whenever windowSum >= target, try to shrink the window from the left while updating the minimum length.
 
-4. Prefix sum- Cumulative sum form start to curr, basically wherever sum of sliding window is needed we use prefix sum
+4. Prefix sum- Cumulative sum from start to curr, basically wherever sum of sliding window is needed we use prefix sum
 
     Find pivot index - index whose left and right sum is equal- Find totalSum, leftsum and rightsum comparison on curr index, when both equal, pivot index
     Subarray sum equals K
