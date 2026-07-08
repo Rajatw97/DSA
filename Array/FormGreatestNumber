@@ -1,4 +1,8 @@
-
+X = 54
+Y = 546
+XY = 54546
+YX = 54654
+XY < YX. ret YX
 class GFG {
  
     static void printLargest( String[] arr)
