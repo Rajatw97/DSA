@@ -138,9 +138,12 @@ keep src dist 0 and other infinity, form priority queue-min heap and check dist 
 
 22. BackTrack- Try a possibility, doesnt work go back
 
-    Generate subset- [1,2]-[],[1][2][1,2]
+    Generate subset- [1,2]-[],[1][2][1,2]- add curr , call backtrack for next relement, remove current .O(n*2^n)
+    Rat maze- Based on 1/0 in 2d matrix- start(0,0), traverse all 4 dir, if (not visited && not 0 ** not out of bound) move, if end, add to path and backtrack and make visited false
 
+23. Bitwise
 
+        Non repeating element- XOR of all the elements 
 
 
 
