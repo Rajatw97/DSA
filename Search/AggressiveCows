@@ -5,6 +5,21 @@ Time Complexity: O(N*log(M)).
 Reason: For binary search in a space of M, O(log(M))  and for each search, we iterate over max N stalls to check. O(N).
 Space Complexity: O(1)
 
+
+Here we are doing binary search on aswer , min=a[0], max=a[n] in sorted array so we do bianry search on that and move accordingly to reduce space set
+Algo:
+Sort the stall positions so cows can be placed from left to right.
+Binary search on the answer (minimum distance between cows).
+low = 1
+high = lastStall - firstStall
+For every candidate distance mid, check if it's possible to place all cows while maintaining at least mid distance.
+Place the first cow in the first stall.
+Greedily place each next cow in the first stall that is at least mid away from the last placed cow.
+If all cows are placed, mid is feasible.
+Update binary search
+If feasible → try a larger distance (low = mid + 1).
+Otherwise → try a smaller distance (high = mid - 1).
+When the loop ends, high stores the largest minimum distance possible.
 import java.util.*;
 class TUF {
     static boolean isPossible(int a[], int n, int cows, int minDist) {
