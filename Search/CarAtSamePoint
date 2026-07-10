@@ -1,37 +1,78 @@
 Q> Given n drivers on a road with position of ith driver defined as Xi and maximum speed of vehicle Si. Find the minimum time taken for the cars
 to arrive at the same point and the meeting point as well?
 Cars can move in both the direction(+ve and -ve).
+Binary search on time (low = 0, high = 1e9).
+For each mid time:
 
-bool check(long double t, vector <long double> &pos, vector <long double> &speed){
-  long double minPos = 1000005;
-  
-  for(int i=0;i<pos.size();i++){
-    if(pos[i]>minPos){
-      if(pos[i]-t*speed[i]>minPos){
-        return false;
-      }
-    }else{
-      minPos = min(minPos, pos[i]+t*speed[i]);
+Calculate the reachable interval for every car:
+
+[position - speed × mid, position + speed × mid]
+Find:
+left = maximum of all left endpoints
+right = minimum of all right endpoints
+If left <= right:
+All intervals overlap, so cars can meet.
+Try a smaller time (high = mid).
+Otherwise:
+Cars cannot meet.
+Try a larger time (low = mid).
+After binary search, high is the minimum meeting time.
+The meeting point can be any value in the overlap interval (commonly left).
+
+public class MeetingPoint {
+
+    // Check if all cars can meet within time t
+    static boolean canMeet(double t, int[] pos, int[] speed) {
+
+        double left =int.minimum;
+        double right = int.max;;
+
+        for (int i = 0; i < pos.length; i++) {
+
+            left = Math.max(left, pos[i] - speed[i] * t);
+            right = Math.min(right, pos[i] + speed[i] * t);
+
+        }
+
+        return left <= right;
     }
-  }
-  return true;
-}
 
+    static void minimumMeetingTime(int[] pos, int[] speed) {
 
-long double GetMinTime(vector <long double> pos, vector <long double> speed){
-  long double maxTime = 0;
-  for(auto it: speed){
-    maxTime = max(maxTime, (long double)2000000/it);
-  }
-  long double l = 0, h = maxTime;
-  
-  while(h-l>0.00000001){
-    long double m = (long double)(l+h)/(long double)2;
-    cout<<m<<endl;
-    if(check(m,pos,speed)){
-      h = m;
-    }else
-      l = m;
-  }
-  return l;
+        double low = 0;
+        double high = infinity;
+
+        // Binary Search on Time
+        while (low<high) {
+
+            double mid = low + (high - low) / 2.0;
+
+            if (canMeet(mid, pos, speed))
+                high = mid;
+            else
+                low = mid;
+        }
+
+        // Find the meeting point
+        double left = int.min;
+        double right = int.max;
+
+        for (int i = 0; i < pos.length; i++) {
+
+            left = Math.max(left, pos[i] - speed[i] * high);
+            right = Math.min(right, pos[i] + speed[i] * high);
+
+        }
+
+        System.out.printf("Minimum Time : %.6f%n", high);
+        System.out.printf("Meeting Point: %.6f%n", left);
+    }
+
+    public static void main(String[] args) {
+
+        int[] position = {0, 10};
+        int[] speed = {1, 1};
+
+        minimumMeetingTime(position, speed);
+    }
 }
