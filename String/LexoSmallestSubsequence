@@ -2,7 +2,16 @@ Q> Given a string S of length N, the task is to find the lexicographically small
 
 TC:O(N)
 Space:O(N)
-
+S = "bcabc"
+K = 3
+bca
+bcb
+bcc
+bac
+cab
+cac
+abc
+smallest:abc
 
 class Solution
 {
