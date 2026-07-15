@@ -1,3 +1,18 @@
+his is the classic Connect 4 game.
+
+Rules
+The board has 6 rows × 7 columns.
+There are 2 players:
+Red (R)
+Black (B)
+Players play alternately.
+On each turn, a player chooses a column.
+The checker falls to the lowest empty cell in that column.
+The first player to get 4 consecutive checkers wins.
+Consecutive means:
+Horizontal
+Vertical
+
 public class Connect4 {
 
 	public static void main(String[] args) {
