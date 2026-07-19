@@ -1,6 +1,44 @@
-import java.util.*;
 
-import java.util.*;
+USD → EUR = 0.9
+EUR → INR = 90
+INR → USD = 0.013
+Can I start with 1 USD and come back with more than 1 USD?
+
+Instead of asking
+"Shortest path?"
+We are asking
+"Is there any cycle whose multiplication of rates is greater than 1?"
+
+Sol1:
+boolean dfs(int start, int curr, double amount) {
+
+    if(curr == start && amount > 1)
+        return true;
+    visited[curr] = true;
+    for(each neighbour){
+        if(!visited[neighbour]){
+            if(dfs(start,neighbour,amount * exchangeRate))
+                return true;
+        }
+    }
+    visited[curr] = false;
+    return false;
+}
+
+ public static void main(String[] args) {
+    for(each currency){
+        if(dfs(currency, currency, 1))
+            return true;
+    }
+}
+
+Issue: 100 currencies, DFS explores all possible cycles.number of possible cycles grows exponentially.
+
+Optimisation: Instead of checking every cycle individually,
+
+Convert the multiplication of exchange rates into addition using logarithms.
+Convert a profitable cycle (product > 1) into a negative-weight cycle.
+Detect the negative cycle in O(V × E) using Bellman-Ford.
 
 public class ArbitrageDetection {
 
@@ -35,26 +73,19 @@ public class ArbitrageDetection {
 
             // Relax V-1 times
             for (int i = 1; i < V; i++) {
-
                 for (Edge e : edges) {
-
                     if (dist[e.src] + e.weight < dist[e.dest]) {
-
                         dist[e.dest] = dist[e.src] + e.weight;
                     }
                 }
             }
-
             // One more relaxation
             for (Edge e : edges) {
-
                 if (dist[e.src] + e.weight < dist[e.dest]) {
-
                     System.out.println("Arbitrage Opportunity Exists!");
                     return true;
                 }
             }
-
             System.out.println("No Arbitrage Opportunity");
             return false;
         }
@@ -63,12 +94,10 @@ public class ArbitrageDetection {
     public static void main(String[] args) {
 
         Graph g = new Graph(3);
-
         // Currency:
         // 0 = USD
         // 1 = EUR
         // 2 = INR
-
         g.addEdge(0, 1, 0.9);
         g.addEdge(1, 2, 90);
         g.addEdge(2, 0, 0.013);
