@@ -1,0 +1,7 @@
+| Graph Type               | Edge Weight         | Cycles? | Algorithm                         |
+| ------------------------ | ------------------- | ------- | --------------------------------- |
+| Unweighted               | All 1               | Yes/No  | **BFS**                           |
+| Directed Acyclic Graph   | Any (even negative) | No      | **Topological Sort + Relaxation** |
+| Weighted Graph           | Positive            | Yes/No  | **Dijkstra**                      |
+| Weighted Graph           | Negative edges      | Yes     | **Bellman-Ford**                  |
+| All-pairs shortest paths | Any                 | Any     | **Floyd-Warshall**                |
