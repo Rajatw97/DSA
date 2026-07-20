@@ -2,22 +2,40 @@ Q> Leetcode 312
 https://leetcode.com/problems/burst-balloons/
 
 class Solution {
- public int maxCoins(int[] iNums) {
-    int[] nums = new int[iNums.length + 2];
-    int n = 1;
-    for (int x : iNums) if (x > 0) nums[n++] = x;
-    nums[0] = nums[n++] = 1;
 
+    public int maxCoins(int[] nums) {
 
-    int[][] dp = new int[n][n];
-    for (int k = 2; k < n; ++k)
-        for (int left = 0; left < n - k; ++left) {
-            int right = left + k;
-            for (int i = left + 1; i < right; ++i)
-                dp[left][right] = Math.max(dp[left][right], 
-                nums[left] * nums[i] * nums[right] + dp[left][i] + dp[i][right]);
+        int n = nums.length;
+
+        // Add virtual balloons
+        int[] arr = new int[n + 2];
+        arr[0] = 1;
+        arr[n + 1] = 1;
+
+        for (int i = 0; i < n; i++)
+            arr[i + 1] = nums[i];
+
+        int[][] dp = new int[n + 2][n + 2];
+
+        // length = distance between left and right
+        for (int len = 2; len < n + 2; len++) {
+
+            for (int left = 0; left + len < n + 2; left++) {
+
+                int right = left + len;
+
+                for (int last = left + 1; last < right; last++) {
+
+                    dp[left][right] = Math.max(
+                        dp[left][right],
+                        dp[left][last]
+                        + dp[last][right]
+                        + arr[left] * arr[last] * arr[right]
+                    );
+                }
+            }
         }
 
-    return dp[0][n - 1];
-}
+        return dp[0][n + 1];
+    }
 }
