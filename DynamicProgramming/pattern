@@ -41,3 +41,22 @@ Coins ↓    Amount →
 5        0
 
 Count rltd problem become 1(first coln),0(first row) only
+
+interval template:
+for (int len = 2; len < n; len++) {
+
+    for (int left = 0; left + len < n; left++) {
+
+        int right = left + len;
+
+        for (int k = left + 1; k < right; k++) {
+
+            dp[left][right] = Math.max(
+                dp[left][right],
+                dp[left][k] +
+                dp[k][right] +
+                cost(left, k, right)
+            );
+        }
+    }
+}
