@@ -1,0 +1,13 @@
+| If the question says...                      | Think...                                          |
+| -------------------------------------------- | ------------------------------------------------- |
+| Take or don't take each element once         | **0/1 Knapsack**                                  |
+| Unlimited copies of an item                  | **Unbounded Knapsack**                            |
+| Can we make a target sum?                    | **Subset Sum (0/1 Knapsack)**                     |
+| Count ways to make a sum                     | **Count Subset / Coin Change** (depends on reuse) |
+| Maximize profit with a capacity              | **Knapsack**                                      |
+| Two strings or arrays, find something common | **LCS**                                           |
+| One array, increasing/decreasing sequence    | **LIS**                                           |
+| Grid with movement constraints               | **Grid DP**                                       |
+| Split/cut an interval optimally              | **Interval DP**                                   |
+| Visit every node/subset                      | **Bitmask DP**                                    |
+| Count numbers with digit constraints         | **Digit DP**                                      |
