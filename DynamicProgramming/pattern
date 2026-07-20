@@ -11,3 +11,31 @@
 | Split/cut an interval optimally              | **Interval DP**                                   |
 | Visit every node/subset                      | **Bitmask DP**                                    |
 | Count numbers with digit constraints         | **Digit DP**                                      |
+
+
+Bounded:
+Coins ↓    Amount →
+
+         0    1    2    3    4
+
+0        1    0    0    0    0
+
+1        1
+
+2        1
+
+5        1
+
+Unbounded:
+
+Coins ↓    Amount →
+
+         0    1    2    3    4
+
+0        0    ∞    ∞    ∞    ∞
+
+1        0
+
+2        0
+
+5        0
