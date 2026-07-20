@@ -2,21 +2,26 @@ Q> Given n dice each with m faces, numbered from 1 to m, find the number of ways
 
 //Time: O(d*target*f)
 //Space: O(d*target)
-   class Solution {
+class Solution {
+
+    private static final int MOD = 1_000_000_007;
+
     public int numRollsToTarget(int dice, int faces, int target) {
-    
-        if(target > faces*dice) return 0;
-        int[][] dp = new int[dice+1][target+1];
+
+        if (target < dice || target > dice * faces)
+            return 0;
+
+        int[][] dp = new int[dice + 1][target + 1];
         dp[0][0] = 1;
-        
-        for(int i=1;i<=dice;i++){
-            for(int j=0;j<=target;j++){
-                for(int k=1;k<=faces;k++){
-                    if(j-k<0) continue; //because [j-k] needs to be within the bounds of dp, that is, it needs to be greater than or equal to 0 
-                    dp[i][j] = (dp[i][j] + dp[i-1][j-k]);
+
+        for (int i = 1; i <= dice; i++) {
+            for (int sum = 1; sum <= target; sum++) {
+                for (int face = 1; face <= faces && face <= sum; face++) {
+                    dp[i][sum] = (dp[i][sum] + dp[i - 1][sum - face]) % MOD;
                 }
             }
-        } 
-        return dp[d][target];
+        }
+
+        return dp[dice][target];
     }
 }
