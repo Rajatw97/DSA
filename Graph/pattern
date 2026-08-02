@@ -5,3 +5,17 @@
 | Weighted Graph           | Positive            | Yes/No  | **Dijkstra**                      |
 | Weighted Graph           | Negative edges      | Yes     | **Bellman-Ford**                  |
 | All-pairs shortest paths | Any                 | Any     | **Floyd-Warshall**                |
+
+
+| If the problem says... | Think...        | Use                                |
+| ---------------------- | --------------- | ---------------------------------- |
+| Prerequisites          | Dependencies    | **Indegree + Kahn's Algorithm**    |
+| Course schedule        | Ordering        | **Indegree**                       |
+| Build order            | Dependencies    | **Indegree**                       |
+| Can finish all tasks?  | Cycle detection | **Indegree**                       |
+| Root of DAG            | Starting point  | **Indegree = 0**                   |
+| Multiple parents       | Invalid tree    | **Indegree > 1**                   |
+| Everyone knows X       | Celebrity       | **Indegree = n−1, Outdegree = 0**  |
+| Visit every edge once  | Euler Path      | **Compare indegree and outdegree** |
+| Terminal state         | End node        | **Outdegree = 0**                  |
+
