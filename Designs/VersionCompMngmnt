@@ -8,6 +8,9 @@ public void addNewVersion(int ver, boolean isCompatibleWithPrev) {}
 public boolean isCompatible(int srcVer, int targetVer){}
    1 -> 2 -> 3 -> 4 -> 5 -> 6
    T    T    F    T    T
+
+very incompatibility starts a new compatibility group, and two versions are compatible if and only if they belong to the same group.
+This is why the solution achieves O(1) compatibility checks after O(1) work per added version.
    
  class Main{
    psvm(){
@@ -26,19 +29,17 @@ public boolean isCompatible(int srcVer, int targetVer){}
        }
        
   public class VersionCompatibilityManagement {
-    private Map<Integer, Integer> backwardsCompatibility = new HashMap<>();
-    private Integer latestList = 0;
+     private int currentGroup = 0;
+     private Map<Integer, Integer> versionGroup = new HashMap<>();
     
-    public void addNewVersion(int ver, boolean isCompatibleWithPrev) {
-        if (!isCompatibleWithPrev) {
-            latestList++;
-        }
-        backwardsCompatibility.put(ver, latestList);
+    public void addNewVersion(int version, boolean compatibleWithPrev) {
+    if (!compatibleWithPrev) {
+        currentGroup++;
     }
-    public boolean isCompatible(int srcVer, int targetVer) {
-        if (!backwardsCompatibility.containsKey(srcVer)) throw new RuntimeException("Unknown version " + srcVer);
-        if (!backwardsCompatibility.containsKey(targetVer)) throw new RuntimeException("Unknown version " + targetVer);
+    versionGroup.put(version, currentGroup);
+   }
 
-        return backwardsCompatibility.get(srcVer).equals(backwardsCompatibility.get(targetVer));
-    }
+   public boolean isCompatible(int v1, int v2) {
+    return versionGroup.get(v1).equals(versionGroup.get(v2));
+}
 }
